@@ -44,15 +44,15 @@ export type ApplySessionSettingMutationParams = {
 };
 
 const buildFallbackError = (field: SessionSettingField) =>
-  field === "model" ? "Failed to set model." : "Failed to set thinking level.";
+  field === "model" ? "모델을 설정하지 못했습니다." : "추론 수준을 설정하지 못했습니다.";
 
 const buildErrorPrefix = (field: SessionSettingField) =>
-  field === "model" ? "Model update failed" : "Thinking update failed";
+  field === "model" ? "모델 업데이트 실패" : "추론 업데이트 실패";
 
 const buildWebchatBlockedMessage = (field: SessionSettingField) =>
   field === "model"
-    ? "Model update not applied: this gateway blocks sessions.patch for WebChat clients; message sending still works."
-    : "Thinking level update not applied: this gateway blocks sessions.patch for WebChat clients; message sending still works.";
+    ? "모델 업데이트가 적용되지 않았습니다: 이 게이트웨이는 WebChat 클라이언트의 sessions.patch를 차단합니다. 메시지 전송은 계속 동작합니다."
+    : "추론 수준 업데이트가 적용되지 않았습니다: 이 게이트웨이는 WebChat 클라이언트의 sessions.patch를 차단합니다. 메시지 전송은 계속 동작합니다.";
 
 export const applySessionSettingMutation = async ({
   agents,

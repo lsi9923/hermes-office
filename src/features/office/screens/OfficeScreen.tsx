@@ -390,18 +390,18 @@ const buildIdentityFileDraft = (identity: AgentIdentityValues) => {
 
 const resolveOfficeMutationGuardMessage = (guardReason?: string) => {
   if (guardReason === "not-connected") {
-    return "Connect to the gateway before changing the office fleet.";
+    return "오피스 팀을 변경하려면 먼저 게이트웨이에 연결하세요.";
   }
   if (guardReason === "create-block-active") {
-    return "Finish the active agent creation before starting another fleet change.";
+    return "진행 중인 에이전트 생성이 끝난 뒤 다른 팀 변경을 시작하세요.";
   }
   if (guardReason === "rename-block-active") {
-    return "Finish the active rename before changing the office fleet.";
+    return "진행 중인 이름 변경이 끝난 뒤 오피스 팀을 변경하세요.";
   }
   if (guardReason === "delete-block-active") {
-    return "Finish the active deletion before changing the office fleet.";
+    return "진행 중인 삭제가 끝난 뒤 오피스 팀을 변경하세요.";
   }
-  return "The office fleet is busy right now.";
+  return "현재 오피스 팀 변경 작업이 진행 중입니다.";
 };
 
 const PHONE_BOOTH_ASSISTANT_FALLBACK_RE =
@@ -434,7 +434,7 @@ const safeJsonStringify = (value: unknown) => {
   try {
     return JSON.stringify(value, null, 2) ?? String(value);
   } catch (error) {
-    return `[unserializable payload: ${error instanceof Error ? error.message : "unknown error"}]`;
+    return `[직렬화할 수 없는 페이로드: ${error instanceof Error ? error.message : "알 수 없는 오류"}]`;
   }
 };
 
@@ -488,7 +488,7 @@ const formatOpenClawEventLogEntry = (event: EventFrame): OpenClawLogEntry => {
       const text = extractText(payload.message);
       const thinking = extractThinking(payload.message ?? payload);
       const toolLines = extractToolLines(payload.message ?? payload);
-      summary = `chat session=${payload.sessionKey || "-"} run=${payload.runId || "-"} state=${payload.state} role=${String(role ?? "-")} stopReason=${payload.stopReason ?? "-"} | ${baseSummary}`;
+      summary = `채팅 세션=${payload.sessionKey || "-"} 실행=${payload.runId || "-"} 상태=${payload.state} 역할=${String(role ?? "-")} 중지이유=${payload.stopReason ?? "-"} | ${baseSummary}`;
       if (text) {
         messageText = stripUiMetadata(text).trim() || text.trim();
       }
@@ -514,7 +514,7 @@ const formatOpenClawEventLogEntry = (event: EventFrame): OpenClawLogEntry => {
             ? data.delta
             : "";
       const extractedThinking = extractThinking(data ?? payload);
-      summary = `agent session=${payload.sessionKey || "-"} run=${payload.runId || "-"} stream=${payload.stream || "-"} phase=${phase} reasoning=${String(isReasoningRuntimeAgentStream(payload.stream ?? ""))} | ${baseSummary}`;
+      summary = `에이전트 세션=${payload.sessionKey || "-"} 실행=${payload.runId || "-"} 스트림=${payload.stream || "-"} 단계=${phase} 추론=${String(isReasoningRuntimeAgentStream(payload.stream ?? ""))} | ${baseSummary}`;
       if (extractedThinking) {
         thinkingText = extractedThinking.trim();
       } else if (text.trim()) {
@@ -569,7 +569,7 @@ const mapAgentToOffice = (agent: AgentState): OfficeAgent => {
   if (agent.status === "error") {
     return {
       id: agent.agentId,
-      name: agent.name || "Unknown",
+      name: agent.name || "이름 없음",
       subtitle: agent.role ?? null,
       status: "error",
       color: stringToColor(agent.agentId),
@@ -580,7 +580,7 @@ const mapAgentToOffice = (agent: AgentState): OfficeAgent => {
   const isWorking = agent.status === "running" || Boolean(agent.runId);
   return {
     id: agent.agentId,
-    name: agent.name || "Unknown",
+    name: agent.name || "이름 없음",
     subtitle: agent.role ?? null,
     status: isWorking ? "working" : "idle",
     color: stringToColor(agent.agentId),
@@ -598,7 +598,7 @@ const mapRemotePresenceAgentToOffice = (agent: {
   const isWorking = agent.state === "working" || agent.state === "meeting";
   return {
     id: stableId,
-    name: agent.name || "Unknown",
+    name: agent.name || "이름 없음",
     status: agent.state === "error" ? "error" : isWorking ? "working" : "idle",
     color: stringToColor(stableId),
     item: getDeterministicItem(stableId),
@@ -1990,14 +1990,14 @@ export function OfficeScreen({
   const runCompanyBuilderAiTask = useCallback(
     async (prompt: string, statusText: string) => {
       if (status !== "connected") {
-        throw new Error("Connect to a runtime before using the company builder.");
+        throw new Error("회사 빌더를 사용하려면 먼저 런타임에 연결하세요.");
       }
       const livePlannerAgent = resolveCompanyPlanningAgent({
         agents: stateRef.current.agents,
         preferredAgentId: selectedChatAgentId ?? state.selectedAgentId,
       });
       if (!livePlannerAgent) {
-        throw new Error("Create or load at least one agent before using AI suggestions.");
+        throw new Error("AI 제안을 사용하려면 에이전트를 최소 1개 만들거나 불러오세요.");
       }
       setCompanyBuilderStatusLine(statusText);
       return runOpenClawPlanningPrompt({
@@ -2018,7 +2018,7 @@ export function OfficeScreen({
       try {
         const improvedBrief = await runCompanyBuilderAiTask(
           buildImproveCompanyBriefPrompt(brief),
-          "Improving your company brief with the connected runtime.",
+          "연결된 런타임으로 회사 설명을 다듬는 중입니다.",
         );
         setCompanyBuilderInput((current) => ({
           ...current,
@@ -2028,7 +2028,7 @@ export function OfficeScreen({
         return improvedBrief;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to improve the company brief.";
+          error instanceof Error ? error.message : "회사 설명을 다듬지 못했습니다.";
         setCompanyBuilderError(message);
         throw error;
       } finally {
@@ -2045,7 +2045,7 @@ export function OfficeScreen({
       try {
         const response = await runCompanyBuilderAiTask(
           buildGenerateCompanyPlanPrompt(brief),
-          "Generating your AI company structure with the connected runtime.",
+          "연결된 런타임으로 AI 회사 구조를 생성하는 중입니다.",
         );
         const parsedPlan = parseCompanyPlanFromAssistantText(response);
         const nextInput: CompanyBuilderInput = {
@@ -2056,7 +2056,7 @@ export function OfficeScreen({
         return parsedPlan;
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to generate the company plan.";
+          error instanceof Error ? error.message : "회사 계획을 생성하지 못했습니다.";
         setCompanyBuilderError(message);
         throw error;
       } finally {
@@ -2088,7 +2088,7 @@ export function OfficeScreen({
   const handleCreateCompanyFromPlan = useCallback(
     async (params: { input: CompanyBuilderInput; plan: CompanyBuilderPlan }) => {
       if (status !== "connected") {
-        const message = "Connect to a runtime before creating the company.";
+        const message = "회사를 생성하려면 먼저 런타임에 연결하세요.";
         setCompanyBuilderError(message);
         throw new Error(message);
       }
@@ -2104,7 +2104,8 @@ export function OfficeScreen({
       };
       const logDeleteError = (message: string, error: unknown) => {
         if (
-          message.startsWith("Failed to move agent workspace/state into trash.") &&
+          (message.startsWith("Failed to move agent workspace/state into trash.") ||
+            message.startsWith("에이전트 작업공간/상태를 휴지통으로 옮기지 못했습니다.")) &&
           shouldSkipWorkspaceCleanupError(error)
         ) {
           return;
@@ -2201,7 +2202,7 @@ export function OfficeScreen({
         setCompanyBuilderOpen(false);
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to create the company.";
+          error instanceof Error ? error.message : "회사를 만들지 못했습니다.";
         setCompanyBuilderError(message);
         throw error;
       } finally {
@@ -2222,16 +2223,16 @@ export function OfficeScreen({
   const createAgentStatusLine = useMemo(() => {
     if (!createAgentBlock) return null;
     if (createAgentBlock.phase === "queued") {
-      return "Waiting for active runs to finish before creating the new agent.";
+      return "실행 중인 작업이 끝나면 새 에이전트를 만듭니다.";
     }
-    return `Creating ${createAgentBlock.agentName}.`;
+    return `${createAgentBlock.agentName} 생성 중입니다.`;
   }, [createAgentBlock]);
   const deleteAgentStatusLine = useMemo(() => {
     if (!deleteAgentBlock) return null;
     if (deleteAgentBlock.phase === "queued") {
-      return `Waiting for active runs to finish before deleting ${deleteAgentBlock.agentName}.`;
+      return `실행 중인 작업이 끝나면 ${deleteAgentBlock.agentName} 에이전트를 삭제합니다.`;
     }
-    return `Deleting ${deleteAgentBlock.agentName}.`;
+    return `${deleteAgentBlock.agentName} 삭제 중입니다.`;
   }, [deleteAgentBlock]);
   const handleCreateAgentFromIdentity = useCallback(
     async (identity: AgentIdentityValues) => {
@@ -2300,9 +2301,9 @@ export function OfficeScreen({
                 const message =
                   error instanceof Error
                     ? error.message
-                    : "Failed to apply default permissions.";
+                    : "기본 권한을 적용하지 못했습니다.";
                 setError(
-                  `Agent created, but default permissions could not be applied: ${message}`,
+                  `에이전트는 생성됐지만 기본 권한을 적용하지 못했습니다: ${message}`,
                 );
               }
             }
@@ -2359,7 +2360,7 @@ export function OfficeScreen({
             name: nextName,
           });
           if (!renamed) {
-            throw new Error("Saved the wizard files, but could not rename the live agent.");
+            throw new Error("마법사 파일은 저장했지만 실행 중인 에이전트 이름은 바꾸지 못했습니다.");
           }
         }
         handleAvatarProfileSave(params.agentId, params.profile);
@@ -2369,7 +2370,7 @@ export function OfficeScreen({
         openAgentEditor(params.agentId, "IDENTITY.md");
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to finish creating the agent.";
+          error instanceof Error ? error.message : "에이전트 생성을 마무리하지 못했습니다.";
         setCreateAgentModalError(message);
       } finally {
         setCreateAgentBusy(false);
@@ -2402,13 +2403,13 @@ export function OfficeScreen({
       );
       if (!agent) return;
       const confirmed = window.confirm(
-        `Delete ${agent.name}? This removes the agent record from OpenClaw and clears its scheduled automations. Claw3D will not touch workspace files.`,
+        `${agent.name} 에이전트를 삭제할까요? OpenClaw의 에이전트 기록과 예약 자동화만 지웁니다. Claw3D는 작업 폴더 파일을 건드리지 않습니다.`,
       );
       if (!confirmed) return;
 
       await runAgentConfigMutationLifecycle({
         kind: "delete-agent",
-        label: `Delete ${agent.name}`,
+        label: `${agent.name} 삭제`,
         isLocalGateway: false,
         deps: {
           enqueueConfigMutation,
@@ -2503,7 +2504,7 @@ export function OfficeScreen({
       });
       setCreateAgentBusy(false);
       setCreateAgentWizardOpen(false);
-      setError("Agent creation timed out.");
+      setError("에이전트 생성 시간이 초과되었습니다.");
       void loadAgents({ forceSettings: true });
     }, remaining);
     return () => {
@@ -2577,7 +2578,7 @@ export function OfficeScreen({
               createOpenClawLogEntry({
                 eventName: "history-refresh",
                 eventKind: "derived",
-                summary: `session=${requestedSessionKey} reason=${params.reason} lastUser=${formatOpenClawValue(lastUser)} lastAssistant=${formatOpenClawValue(derived.lastAssistant)}`,
+                summary: `세션=${requestedSessionKey} 이유=${params.reason} 마지막사용자=${formatOpenClawValue(lastUser)} 마지막어시스턴트=${formatOpenClawValue(derived.lastAssistant)}`,
                 messageText: lastUser || null,
                 streamText: derived.lastAssistant ?? null,
                 payload: {
@@ -2593,7 +2594,7 @@ export function OfficeScreen({
           });
           if (debugEnabled) {
             console.info(
-              "[office-debug] Refreshed transport session history.",
+              "[office-debug] 전송 세션 기록을 새로고침했습니다.",
               {
                 agentId: targetAgentId,
                 requestedSessionKey,
@@ -2609,7 +2610,7 @@ export function OfficeScreen({
               createOpenClawLogEntry({
                 eventName: "history-refresh",
                 eventKind: "error",
-                summary: `session=${requestedSessionKey} reason=${params.reason} refresh failed`,
+                summary: `세션=${requestedSessionKey} 이유=${params.reason} 새로고침 실패`,
                 payload: {
                   sessionKey: requestedSessionKey,
                   reason: params.reason,
@@ -2621,7 +2622,7 @@ export function OfficeScreen({
           });
           if (!isGatewayDisconnectLikeError(error)) {
             console.error(
-              "Failed to refresh transport session history.",
+              "전송 세션 기록을 새로고침하지 못했습니다.",
               error,
             );
           }
@@ -2797,7 +2798,7 @@ export function OfficeScreen({
         [
           {
             id: agent.agentId,
-            name: agent.name || "Agent",
+            name: agent.name || "에이전트",
             text: previewText,
             ts: previewTs,
             kind: "reply" as const,
@@ -2834,12 +2835,12 @@ export function OfficeScreen({
               patch.status === "running" || Boolean(patch.runId);
             if (isNowWorking !== wasWorking) {
               prevWorkingRef.current[agentId] = isNowWorking;
-              const text = isNowWorking ? "started working" : "went idle";
+              const text = isNowWorking ? "작업을 시작했습니다" : "대기 상태가 되었습니다";
               setFeedEvents((prev) =>
                 [
                   {
                     id: agentId,
-                    name: agent.name || "Agent",
+                    name: agent.name || "에이전트",
                     text,
                     ts: Date.now(),
                     kind: "status" as const,
@@ -3616,7 +3617,7 @@ export function OfficeScreen({
         dispatch({
           type: "appendOutput",
           agentId,
-          line: buildTextMessageOutputLine(`Message to ${request.recipient} sent.`),
+          line: buildTextMessageOutputLine(`${request.recipient}에게 메시지를 보냈습니다.`),
         });
       }
       setOfficeTriggerState((previous) =>
@@ -3680,7 +3681,7 @@ export function OfficeScreen({
         updateRemoteChatSession(agentId, (session) => ({
           ...session,
           sending: false,
-          error: `Remote message must be ${MAX_REMOTE_MESSAGE_CHARS} characters or fewer.`,
+          error: `원격 메시지는 ${MAX_REMOTE_MESSAGE_CHARS}자 이하여야 합니다.`,
         }));
         return;
       }
@@ -3725,7 +3726,7 @@ export function OfficeScreen({
           assistantText?: string | null;
         };
         if (!response.ok) {
-          throw new Error(payload.error || "Failed to deliver the remote office message.");
+          throw new Error(payload.error || "원격 오피스 메시지를 전달하지 못했습니다.");
         }
         const assistantText =
           typeof payload.assistantText === "string" ? payload.assistantText.trim() : "";
@@ -3738,7 +3739,7 @@ export function OfficeScreen({
             {
               id: randomUUID(),
               role: "system",
-              text: "Delivered to the remote agent.",
+              text: "원격 에이전트에게 전달되었습니다.",
               timestampMs: Date.now(),
             },
             ...(assistantText
@@ -3757,7 +3758,7 @@ export function OfficeScreen({
         const messageText =
           error instanceof Error
             ? error.message
-            : "Failed to deliver the remote office message.";
+            : "원격 오피스 메시지를 전달하지 못했습니다.";
         updateRemoteChatSession(agentId, (session) => ({
           ...session,
           sending: false,
@@ -3767,7 +3768,7 @@ export function OfficeScreen({
             {
               id: randomUUID(),
               role: "system",
-              text: `Delivery failed: ${messageText}`,
+              text: `전달 실패: ${messageText}`,
               timestampMs: Date.now(),
             },
           ],
@@ -3785,7 +3786,7 @@ export function OfficeScreen({
         updateRemoteChatSession(agentId, (session) => ({
           ...session,
           handoffing: false,
-          error: `Remote handoff must be ${MAX_REMOTE_MESSAGE_CHARS} characters or fewer.`,
+          error: `원격 인수인계는 ${MAX_REMOTE_MESSAGE_CHARS}자 이하여야 합니다.`,
         }));
         return;
       }
@@ -3843,7 +3844,7 @@ export function OfficeScreen({
         });
         const payload = (await response.json()) as { error?: string };
         if (!response.ok) {
-          throw new Error(payload.error || "Failed to deliver the remote handoff.");
+          throw new Error(payload.error || "원격 인계를 전달하지 못했습니다.");
         }
         updateRemoteChatSession(agentId, (session) => ({
           ...session,
@@ -3854,14 +3855,14 @@ export function OfficeScreen({
             {
               id: randomUUID(),
               role: "system",
-              text: "Handoff delivered to the remote agent.",
+              text: "원격 에이전트에 인계를 전달했습니다.",
               timestampMs: Date.now(),
             },
           ],
         }));
       } catch (error) {
         const messageText =
-          error instanceof Error ? error.message : "Failed to deliver the remote handoff.";
+          error instanceof Error ? error.message : "원격 인계를 전달하지 못했습니다.";
         updateRemoteChatSession(agentId, (session) => ({
           ...session,
           handoffing: false,
@@ -4101,7 +4102,7 @@ export function OfficeScreen({
       } | null;
       if (!response.ok) {
         throw new Error(
-          result?.error?.trim() || "Failed to transcribe voice input.",
+          result?.error?.trim() || "음성 입력을 텍스트로 변환하지 못했습니다.",
         );
       }
       if (result?.ignored) {
@@ -4109,7 +4110,7 @@ export function OfficeScreen({
       }
       const transcript = result?.transcript?.trim() ?? "";
       if (!transcript) {
-        throw new Error("OpenClaw returned an empty transcript.");
+        throw new Error("OpenClaw가 빈 음성 변환 결과를 반환했습니다.");
       }
       return transcript;
     },
@@ -4122,7 +4123,7 @@ export function OfficeScreen({
       payload: VoiceSendPayload,
     ) => {
       if (!agent) {
-        throw new Error("Target agent not found.");
+        throw new Error("대상 에이전트를 찾지 못했습니다.");
       }
       const transcript = await transcribeVoicePayload(payload);
       if (!transcript) return;
@@ -4134,7 +4135,7 @@ export function OfficeScreen({
   const handleVoiceSend = useCallback(
     async (payload: VoiceSendPayload) => {
       if (!focusedChatAgent) {
-        throw new Error("Select an agent before using push-to-talk.");
+        throw new Error("음성 입력을 사용하려면 먼저 에이전트를 선택하세요.");
       }
       await sendVoicePayloadToAgent(focusedChatAgent, payload);
     },
@@ -4152,7 +4153,7 @@ export function OfficeScreen({
     enabled: status === "connected" && Boolean(mainAgent),
     onVoiceSend: async (payload) => {
       if (!mainAgent) {
-        throw new Error("Main agent not found.");
+        throw new Error("메인 에이전트를 찾지 못했습니다.");
       }
       await sendVoicePayloadToAgent(mainAgent, payload);
     },
@@ -4302,30 +4303,30 @@ export function OfficeScreen({
     return map;
   }, [state.agents]);
   const openClawLiveStateText = useMemo(() => {
-    const lines = ["== LIVE OPENCLAW STATE =="];
+    const lines = ["== 실시간 OpenClaw 상태 =="];
     if (state.agents.length === 0) {
-      lines.push("No agents loaded yet.");
+      lines.push("아직 불러온 에이전트가 없습니다.");
       return lines.join("\n");
     }
 
     for (const agent of state.agents) {
       lines.push("");
-      lines.push(`[${agent.agentId}] ${agent.name || "Agent"}`);
+      lines.push(`[${agent.agentId}] ${agent.name || "에이전트"}`);
       lines.push(
         `status=${agent.status} runId=${agent.runId ?? "-"} session=${agent.sessionKey}`,
       );
       lines.push(
-        `lastActivity=${agent.lastActivityAt ? formatOpenClawTimestamp(agent.lastActivityAt) : "-"} lastAssistant=${agent.lastAssistantMessageAt ? formatOpenClawTimestamp(agent.lastAssistantMessageAt) : "-"}`,
+        `마지막활동=${agent.lastActivityAt ? formatOpenClawTimestamp(agent.lastActivityAt) : "-"} 마지막어시스턴트=${agent.lastAssistantMessageAt ? formatOpenClawTimestamp(agent.lastAssistantMessageAt) : "-"}`,
       );
       lines.push(
-        `latestPreview=${formatOpenClawValue(agent.latestPreview)} lastUser=${formatOpenClawValue(agent.lastUserMessage)}`,
+        `최신미리보기=${formatOpenClawValue(agent.latestPreview)} 마지막사용자=${formatOpenClawValue(agent.lastUserMessage)}`,
       );
       if (agent.thinkingTrace?.trim()) {
-        lines.push("thinking>");
+        lines.push("추론>");
         lines.push(agent.thinkingTrace.trim());
       }
       if (agent.streamText?.trim()) {
-        lines.push("assistant_stream>");
+        lines.push("어시스턴트_스트림>");
         lines.push(agent.streamText.trim());
       }
       const recentOutput = agent.outputLines
@@ -4333,7 +4334,7 @@ export function OfficeScreen({
         .map((line) => line.trimEnd())
         .filter(Boolean);
       if (recentOutput.length > 0) {
-        lines.push("recent_output>");
+        lines.push("최근_출력>");
         lines.push(...recentOutput);
       }
     }
@@ -4380,28 +4381,28 @@ export function OfficeScreen({
       ? remoteOfficePresenceUrl.trim().length > 0
       : remoteOfficeGatewayUrl.trim().length > 0);
   const remoteOfficeStatusText = !remoteOfficeVisible
-    ? "Remote office disabled."
+    ? "원격 오피스가 꺼져 있습니다."
     : remoteOfficeError
       ? remoteOfficeError
       : !remoteOfficeLoaded
-        ? "Loading remote office."
+        ? "원격 오피스를 불러오는 중입니다."
         : remoteOfficeAgents.length > 0
-          ? `${remoteOfficeAgents.length} agents visible.`
+          ? `에이전트 ${remoteOfficeAgents.length}개 표시 중.`
           : remoteOfficeSourceKind === "openclaw_gateway"
-            ? "Connected to remote gateway. No agents visible yet."
+            ? "원격 게이트웨이에 연결되었습니다. 아직 표시할 에이전트가 없습니다."
           : remoteOfficeTokenConfigured
-            ? "Connected. No agents visible yet."
-            : "No agents visible yet.";
+            ? "연결되었습니다. 아직 표시할 에이전트가 없습니다."
+            : "아직 표시할 에이전트가 없습니다.";
   const remoteMessagingAvailable =
     remoteOfficeSourceKind === "openclaw_gateway" &&
     remoteOfficeGatewayUrl.trim().length > 0;
   const remoteMessagingDisabledReason = remoteMessagingAvailable
     ? null
     : remoteOfficeSourceKind !== "openclaw_gateway"
-      ? "Remote messaging currently works only with the remote gateway source."
+      ? "원격 메시지는 현재 원격 게이트웨이 소스에서만 사용할 수 있습니다."
       : remoteOfficeGatewayUrl.trim().length === 0
-      ? "Remote messaging requires a remote gateway URL in office settings."
-      : "Remote messaging is unavailable until the remote gateway is configured.";
+      ? "원격 메시지를 사용하려면 오피스 설정에 원격 게이트웨이 URL이 필요합니다."
+      : "원격 게이트웨이가 설정될 때까지 원격 메시지를 사용할 수 없습니다.";
   const normalizedOpenClawConsoleSearch = openClawConsoleSearch
     .trim()
     .toLowerCase();
@@ -4700,21 +4701,21 @@ export function OfficeScreen({
     status === "connected" && agentsLoaded && state.agents.length === 0;
   const emptyFleetMessage =
     state.error?.trim() ||
-    "Connected to the gateway, but no agents were loaded into the office.";
+    "게이트웨이에 연결되었지만 오피스에 불러온 에이전트가 없습니다.";
 
   return (
     <main className="relative h-full w-full overflow-hidden bg-black">
       {showGatewayLoadingOverlay ? (
         <div
           className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center bg-[#120a05]/76"
-          aria-label="Connecting to runtime"
+          aria-label="런타임 연결 중"
           role="status"
         >
           <div className="rounded-xl border border-amber-700/45 bg-[#1a1008] px-8 py-6 shadow-2xl">
             <RunningAvatarLoader
               size={28}
               trackWidth={76}
-              label="Connecting to your runtime..."
+              label="런타임에 연결하는 중..."
               labelClassName="text-amber-100/80"
             />
           </div>
@@ -4795,7 +4796,7 @@ export function OfficeScreen({
           onVoiceRepliesSpeedChange={setVoiceRepliesSpeed}
           onVoiceRepliesPreview={(voiceId, voiceName) => {
             void previewVoiceReply({
-              text: `Hi, how can I help you? My name is ${voiceName}.`,
+              text: `안녕하세요, 무엇을 도와드릴까요? 제 이름은 ${voiceName}입니다.`,
               provider: voiceRepliesPreference.provider,
               voiceId,
               speed: voiceRepliesSpeed,
@@ -4935,7 +4936,7 @@ export function OfficeScreen({
               setKanbanInstallProgress({
                 active: true,
                 percent: 8,
-                message: "Starting task-manager installation.",
+                message: "task-manager 설치를 시작하는 중입니다.",
                 error: null,
               });
               void (async () => {
@@ -4955,7 +4956,7 @@ export function OfficeScreen({
                   setKanbanInstallProgress({
                     active: true,
                     percent: 100,
-                    message: "Refreshing task-manager state in Claw3D.",
+                    message: "Claw3D에서 task-manager 상태를 새로고침하는 중입니다.",
                     error: null,
                   });
                   setKanbanInstallPromptOpen(false);
@@ -4972,7 +4973,7 @@ export function OfficeScreen({
                     error:
                       error instanceof Error
                         ? error.message
-                        : "Failed to install task-manager.",
+                        : "task-manager 설치에 실패했습니다.",
                   }));
                 }
               })();
@@ -4991,7 +4992,7 @@ export function OfficeScreen({
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber-200/80">
-                  Office fleet status
+                  오피스 팀 상태
                 </p>
                 <p className="mt-1 text-sm text-amber-50">{emptyFleetMessage}</p>
               </div>
@@ -5003,7 +5004,7 @@ export function OfficeScreen({
                     handleOpenCreateAgentWizard();
                   }}
                 >
-                  Add Agent
+                  에이전트 추가
                 </button>
                 <button
                   type="button"
@@ -5012,7 +5013,7 @@ export function OfficeScreen({
                     handleOpenCompanyBuilder();
                   }}
                 >
-                  Build Company
+                  회사 만들기
                 </button>
                 <button
                   type="button"
@@ -5021,7 +5022,7 @@ export function OfficeScreen({
                     void loadAgents({ forceSettings: true });
                   }}
                 >
-                  Retry
+                  다시 시도
                 </button>
               </div>
             </div>
@@ -5033,7 +5034,7 @@ export function OfficeScreen({
         <div className="pointer-events-none fixed left-1/2 top-5 z-40 -translate-x-1/2 px-4">
           <div className="pointer-events-auto rounded-lg border border-red-400/30 bg-black/85 px-4 py-3 shadow-2xl backdrop-blur">
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-red-200/75">
-              Fleet mutation
+              팀 변경
             </div>
             <div className="mt-1 text-sm text-red-50">{deleteAgentStatusLine}</div>
           </div>
@@ -5168,10 +5169,10 @@ export function OfficeScreen({
       {showOpenClawConsole ? (
         <section className="pointer-events-auto fixed bottom-3 left-3 z-30 flex w-[520px] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded border border-cyan-500/25 bg-black/78 shadow-2xl backdrop-blur">
           <div className="flex items-center justify-between border-b border-cyan-500/15 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-200/80">
-            <span>Agent Event Console</span>
+            <span>에이전트 이벤트 콘솔</span>
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-cyan-100/45">
-                agents {state.agents.length} | events{" "}
+                에이전트 {state.agents.length} | 이벤트{" "}
                 {filteredOpenClawLogEntries.length}/{openClawLogEntries.length}
               </span>
               <button
@@ -5182,24 +5183,24 @@ export function OfficeScreen({
                 className="rounded border border-cyan-500/20 px-2 py-0.5 text-[9px] text-cyan-100/70 transition-colors hover:border-cyan-400/45 hover:text-cyan-50"
               >
                 {openClawConsoleCopyStatus === "copied"
-                  ? "Copied"
+                  ? "복사됨"
                   : openClawConsoleCopyStatus === "error"
-                    ? "Copy Failed"
-                    : "Copy JSON"}
+                    ? "복사 실패"
+                    : "JSON 복사"}
               </button>
               <button
                 type="button"
                 onClick={handleDownloadOpenClawConsoleJson}
                 className="rounded border border-cyan-500/20 px-2 py-0.5 text-[9px] text-cyan-100/70 transition-colors hover:border-cyan-400/45 hover:text-cyan-50"
               >
-                Download JSON
+                JSON 다운로드
               </button>
               <button
                 type="button"
                 onClick={handleClearOpenClawConsole}
                 className="rounded border border-cyan-500/20 px-2 py-0.5 text-[9px] text-cyan-100/70 transition-colors hover:border-cyan-400/45 hover:text-cyan-50"
               >
-                Clear
+                비우기
               </button>
               <button
                 type="button"
@@ -5208,7 +5209,7 @@ export function OfficeScreen({
                 }
                 className="rounded border border-cyan-500/20 px-2 py-0.5 text-[9px] text-cyan-100/70 transition-colors hover:border-cyan-400/45 hover:text-cyan-50"
               >
-                {openClawConsoleCollapsed ? "Expand" : "Minimize"}
+                {openClawConsoleCollapsed ? "펼치기" : "최소화"}
               </button>
             </div>
           </div>
@@ -5222,7 +5223,7 @@ export function OfficeScreen({
                   onChange={(event) =>
                     setOpenClawConsoleSearch(event.target.value)
                   }
-                  placeholder="Search logs, payloads, thinking, user text."
+                  placeholder="로그, 페이로드, 추론, 사용자 텍스트 검색"
                   className="min-w-0 flex-1 rounded border border-cyan-500/20 bg-black/35 px-2 py-1 text-[10px] normal-case tracking-normal text-cyan-50 placeholder:text-cyan-100/30 focus:border-cyan-400/40 focus:outline-none"
                 />
                 {openClawConsoleSearch ? (
@@ -5231,7 +5232,7 @@ export function OfficeScreen({
                     onClick={() => setOpenClawConsoleSearch("")}
                     className="rounded border border-cyan-500/20 px-2 py-1 text-[9px] uppercase tracking-[0.16em] text-cyan-100/70 transition-colors hover:border-cyan-400/45 hover:text-cyan-50"
                   >
-                    Reset
+                    초기화
                   </button>
                 ) : null}
               </div>
@@ -5239,7 +5240,7 @@ export function OfficeScreen({
             {openClawLiveStateMatchesSearch ? (
               <div className="rounded border border-cyan-500/10 bg-cyan-950/10 p-2">
                 <div className="mb-1 text-[9px] uppercase tracking-[0.16em] text-cyan-300/70">
-                  Live OpenClaw State
+                  실시간 OpenClaw 상태
                 </div>
                 <pre className="whitespace-pre-wrap break-words text-cyan-100/80">
                   {renderOpenClawHighlightedText(
@@ -5250,17 +5251,17 @@ export function OfficeScreen({
               </div>
             ) : (
               <div className="rounded border border-cyan-500/10 bg-cyan-950/10 p-2 text-cyan-100/45">
-                Live OpenClaw state does not match the current search.
+                현재 검색어와 일치하는 실시간 OpenClaw 상태가 없습니다.
               </div>
             )}
             <div className="text-[9px] uppercase tracking-[0.16em] text-cyan-300/70">
-              Raw OpenClaw Gateway Events
+              원본 OpenClaw 게이트웨이 이벤트
             </div>
             {filteredOpenClawLogEntries.length === 0 ? (
               <div className="rounded border border-cyan-500/10 bg-cyan-950/10 p-2 text-cyan-100/45">
                 {openClawLogEntries.length === 0
-                  ? "No OpenClaw gateway events received yet."
-                  : "No OpenClaw events match the current search."}
+                  ? "아직 받은 OpenClaw 게이트웨이 이벤트가 없습니다."
+                  : "현재 검색어와 일치하는 OpenClaw 이벤트가 없습니다."}
               </div>
             ) : (
               filteredOpenClawLogEntries.map((entry) => {
@@ -5308,7 +5309,7 @@ export function OfficeScreen({
                     {entry.messageText ? (
                       <div className="mt-2 rounded border border-amber-400/20 bg-amber-950/25 px-2 py-1 text-amber-100">
                         <div className="text-[9px] uppercase tracking-[0.16em] text-amber-300/75">
-                          User / Message Text
+                          사용자 / 메시지 텍스트
                         </div>
                         <div className="mt-1 whitespace-pre-wrap break-words">
                           {renderOpenClawHighlightedText(
@@ -5321,7 +5322,7 @@ export function OfficeScreen({
                     {entry.thinkingText ? (
                       <div className="mt-2 rounded border border-fuchsia-400/15 bg-fuchsia-950/15 px-2 py-1 text-fuchsia-100/90">
                         <div className="text-[9px] uppercase tracking-[0.16em] text-fuchsia-300/70">
-                          Thinking
+                          추론
                         </div>
                         <div className="mt-1 whitespace-pre-wrap break-words">
                           {renderOpenClawHighlightedText(
@@ -5334,7 +5335,7 @@ export function OfficeScreen({
                     {entry.streamText ? (
                       <div className="mt-2 rounded border border-cyan-400/15 bg-cyan-950/18 px-2 py-1 text-cyan-50/90">
                         <div className="text-[9px] uppercase tracking-[0.16em] text-cyan-300/70">
-                          Stream
+                          스트림
                         </div>
                         <div className="mt-1 whitespace-pre-wrap break-words">
                           {renderOpenClawHighlightedText(
@@ -5347,7 +5348,7 @@ export function OfficeScreen({
                     {entry.toolText ? (
                       <div className="mt-2 rounded border border-violet-400/15 bg-violet-950/15 px-2 py-1 text-violet-100/90">
                         <div className="text-[9px] uppercase tracking-[0.16em] text-violet-300/70">
-                          Tool Output
+                          도구 출력
                         </div>
                         <div className="mt-1 whitespace-pre-wrap break-words">
                           {renderOpenClawHighlightedText(
@@ -5359,7 +5360,7 @@ export function OfficeScreen({
                     ) : null}
                     <details className="mt-2">
                       <summary className="cursor-pointer text-[9px] uppercase tracking-[0.16em] text-cyan-300/55">
-                        Raw Payload
+                        원본 페이로드
                       </summary>
                       <pre className="mt-1 whitespace-pre-wrap break-words text-cyan-100/45">
                         {renderOpenClawHighlightedText(
@@ -5401,7 +5402,7 @@ export function OfficeScreen({
                 {!chatRosterCollapsed ? (
                   <>
                     <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-white/60">
-                      Agents
+                      에이전트
                     </span>
                     <span className="font-mono text-[10px] text-white/40">
                       {chatRosterEntries.length}
@@ -5417,8 +5418,8 @@ export function OfficeScreen({
                 type="button"
                 onClick={() => setChatRosterCollapsed((current) => !current)}
                 className="mx-2 mt-2 inline-flex items-center justify-center rounded border border-white/10 bg-white/5 px-2 py-2 text-white/65 transition hover:border-white/20 hover:bg-white/10 hover:text-white"
-                aria-label={chatRosterCollapsed ? "Expand agent list" : "Collapse agent list"}
-                title={chatRosterCollapsed ? "Expand agent list" : "Collapse agent list"}
+                aria-label={chatRosterCollapsed ? "에이전트 목록 펼치기" : "에이전트 목록 접기"}
+                title={chatRosterCollapsed ? "에이전트 목록 펼치기" : "에이전트 목록 접기"}
               >
                 {chatRosterCollapsed ? (
                   <ChevronRight className="h-4 w-4" />
@@ -5450,7 +5451,7 @@ export function OfficeScreen({
                   </div>
                 ) : chatRosterEntries.length === 0 ? (
                   <div className="px-3 py-4 font-mono text-[11px] text-white/30">
-                    No agents.
+                    에이전트가 없습니다.
                   </div>
                 ) : (
                   chatRosterEntries.map((agent) => {
@@ -5475,11 +5476,11 @@ export function OfficeScreen({
                         </span>
                         {agent.kind === "remote" ? (
                           <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-300/60">
-                            Remote
+                            원격
                           </span>
                         ) : null}
                         <span className="sr-only">
-                          {agent.kind === "remote" ? "Remote agent" : "Local agent"}
+                          {agent.kind === "remote" ? "원격 에이전트" : "로컬 에이전트"}
                         </span>
                       </button>
                     );
@@ -5604,7 +5605,7 @@ export function OfficeScreen({
                 />
               ) : (
                 <div className="flex flex-1 items-center justify-center font-mono text-[12px] text-white/30">
-                  Select an agent to chat.
+                  채팅할 에이전트를 선택하세요.
                 </div>
               )}
             </div>
@@ -5619,12 +5620,12 @@ export function OfficeScreen({
           {chatOpen ? (
             <>
               <ChevronDown className="h-3.5 w-3.5" />
-              <span>HIDE CHAT</span>
+              <span>채팅 숨기기</span>
             </>
           ) : (
             <>
               <MessageSquare className="h-3.5 w-3.5" />
-              <span>CHAT</span>
+              <span>채팅</span>
               {runningCount > 0 ? (
                 <span className="rounded bg-amber-500/20 px-1 text-[10px] text-amber-400">
                   {runningCount}
@@ -5657,20 +5658,20 @@ export function OfficeScreen({
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] uppercase tracking-[0.18em] text-white/55">
-                Main agent
+                메인 에이전트
               </span>
               <span className="text-[12px] font-medium text-white">
                 {mainVoiceError
                   ? mainVoiceError
                   : mainVoiceState === "recording"
-                    ? "Listening. Release Option to send."
+                    ? "듣는 중입니다. 보내려면 Option 키를 놓으세요."
                     : mainVoiceState === "transcribing"
-                      ? "Transcribing your voice note."
+                      ? "음성 메모를 텍스트로 변환하는 중입니다."
                       : mainVoiceState === "requesting"
-                        ? "Requesting microphone access."
+                        ? "마이크 권한을 요청하는 중입니다."
                         : !mainVoiceSupported
-                          ? "Voice shortcuts are not supported in this browser."
-                          : "Voice shortcut ready."}
+                          ? "이 브라우저에서는 음성 단축키를 지원하지 않습니다."
+                          : "음성 단축키 준비 완료."}
               </span>
             </div>
           </div>
@@ -5679,12 +5680,12 @@ export function OfficeScreen({
 
       {debugEnabled ? (
         <section className="fixed bottom-3 right-3 z-50 max-h-[45vh] w-[560px] overflow-auto rounded border border-slate-700 bg-black/90 p-3 font-mono text-[11px] text-slate-100">
-          <div className="mb-2 font-semibold text-cyan-300">office debug</div>
+          <div className="mb-2 font-semibold text-cyan-300">오피스 디버그</div>
           <div className="mb-2 text-slate-400">
-            status: {status} | agents: {state.agents.length}
+            상태: {status} | 에이전트: {state.agents.length}
           </div>
           {debugRows.length === 0 ? (
-            <div className="text-slate-500">No debug data yet.</div>
+            <div className="text-slate-500">아직 디버그 데이터가 없습니다.</div>
           ) : (
             <div className="space-y-2">
               {debugRows.map((row) => (
@@ -5755,7 +5756,7 @@ export function OfficeScreen({
       <AgentCreateWizardModal
         key={`create-agent-${createAgentWizardNonce}`}
         open={createAgentWizardOpen}
-        suggestedName={`Agent ${state.agents.length + 1}`}
+        suggestedName={`에이전트 ${state.agents.length + 1}`}
         busy={createAgentBusy}
         submitError={createAgentModalError}
         statusLine={createAgentStatusLine}

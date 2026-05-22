@@ -134,7 +134,7 @@ export const resolveExecApprovalViaStudio = async (params: {
       } catch (waitError) {
         if (!params.isDisconnectLikeError(waitError)) {
           (params.logWarn ?? ((message, error) => console.warn(message, error)))(
-            "Failed to wait for run after exec approval resolve.",
+            "실행 승인 처리 후 실행 대기를 완료하지 못했습니다.",
             waitError
           );
         }
@@ -149,7 +149,7 @@ export const resolveExecApprovalViaStudio = async (params: {
       removeLocalApproval(id);
       return;
     }
-    const message = err instanceof Error ? err.message : "Failed to resolve exec approval.";
+    const message = err instanceof Error ? err.message : "실행 승인을 처리하지 못했습니다.";
     setLocalApprovalState(false, message);
   }
 };

@@ -5,12 +5,12 @@ import { useMemo } from "react";
 import type { AgentState } from "@/features/agents/state/store";
 
 const formatRelativeTime = (timestampMs: number | null) => {
-  if (!timestampMs) return "No output yet";
+  if (!timestampMs) return "아직 출력 없음";
   const deltaMs = Date.now() - timestampMs;
-  if (deltaMs < 60_000) return "Just now";
-  if (deltaMs < 3_600_000) return `${Math.max(1, Math.floor(deltaMs / 60_000))}m ago`;
-  if (deltaMs < 86_400_000) return `${Math.max(1, Math.floor(deltaMs / 3_600_000))}h ago`;
-  return `${Math.max(1, Math.floor(deltaMs / 86_400_000))}d ago`;
+  if (deltaMs < 60_000) return "방금 전";
+  if (deltaMs < 3_600_000) return `${Math.max(1, Math.floor(deltaMs / 60_000))}분 전`;
+  if (deltaMs < 86_400_000) return `${Math.max(1, Math.floor(deltaMs / 3_600_000))}시간 전`;
+  return `${Math.max(1, Math.floor(deltaMs / 86_400_000))}일 전`;
 };
 
 export function InboxPanel({
@@ -34,21 +34,21 @@ export function InboxPanel({
     <section className="flex h-full min-h-0 flex-col">
       <div className="border-b border-cyan-500/10 px-4 py-3">
         <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/70">
-          Results Center
+          결과 센터
         </div>
         <div className="mt-1 font-mono text-[11px] text-white/40">
-          Latest assistant output from every desk.
+          각 데스크의 최신 어시스턴트 출력을 보여줍니다.
         </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
         {sortedAgents.length === 0 ? (
           <div className="px-2 py-6 font-mono text-[11px] text-white/35">
-            No agents are connected yet.
+            아직 연결된 에이전트가 없습니다.
           </div>
         ) : (
           sortedAgents.map((agent) => {
-            const preview = agent.latestPreview?.trim() || "No completed assistant output yet.";
+            const preview = agent.latestPreview?.trim() || "아직 완료된 어시스턴트 출력이 없습니다.";
             const isRunning = agent.status === "running";
             return (
               <button
@@ -68,7 +68,7 @@ export function InboxPanel({
                   </span>
                   {agent.hasUnseenActivity ? (
                     <span className="rounded bg-cyan-500/15 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-cyan-300">
-                      New
+                      새 항목
                     </span>
                   ) : null}
                 </div>

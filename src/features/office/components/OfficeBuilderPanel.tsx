@@ -40,10 +40,10 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
       }),
     });
     if (!response.ok) {
-      setMessage("save failed");
+      setMessage("저장 실패");
       return;
     }
-    setMessage(`saved ${versionId}`);
+    setMessage(`${versionId} 저장됨`);
   };
 
   const publishLatest = async () => {
@@ -57,10 +57,10 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
       }),
     });
     if (!response.ok) {
-      setMessage("publish failed");
+      setMessage("게시 실패");
       return;
     }
-    setMessage("published");
+    setMessage("게시됨");
   };
 
   const debug = useMemo(
@@ -77,34 +77,34 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
   return (
     <div className="flex h-full w-full gap-3">
       <aside className="ui-panel w-72 shrink-0 overflow-y-auto p-3">
-        <div className="font-mono text-[11px] text-muted-foreground">builder controls</div>
+        <div className="font-mono text-[11px] text-muted-foreground">빌더 제어</div>
         <div className="mt-3 flex flex-col gap-2">
           <button type="button" className="ui-btn-secondary px-2 py-1 text-left text-xs" onClick={store.undo}>
-            undo
+            실행 취소
           </button>
           <button type="button" className="ui-btn-secondary px-2 py-1 text-left text-xs" onClick={store.redo}>
-            redo
+            다시 실행
           </button>
           <button
             type="button"
             className="ui-btn-secondary px-2 py-1 text-left text-xs"
             onClick={() => store.rotateSelected(90)}
           >
-            rotate selected
+            선택 항목 회전
           </button>
           <button
             type="button"
             className="ui-btn-secondary px-2 py-1 text-left text-xs"
             onClick={() => store.flipSelected("x")}
           >
-            flip selected x
+            선택 항목 X 뒤집기
           </button>
           <button
             type="button"
             className="ui-btn-secondary px-2 py-1 text-left text-xs"
             onClick={() => store.flipSelected("y")}
           >
-            flip selected y
+            선택 항목 Y 뒤집기
           </button>
           <button
             type="button"
@@ -122,7 +122,7 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
               })
             }
           >
-            add light
+            조명 추가
           </button>
           <button
             type="button"
@@ -138,7 +138,7 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
               })
             }
           >
-            add emitter
+            이펙트 발생기 추가
           </button>
           <button
             type="button"
@@ -153,24 +153,24 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
               })
             }
           >
-            add interaction point
+            상호작용 지점 추가
           </button>
           <button type="button" className="ui-btn-primary px-2 py-1 text-left text-xs" onClick={saveVersion}>
-            save version
+            버전 저장
           </button>
           <button type="button" className="ui-btn-primary px-2 py-1 text-left text-xs" onClick={publishLatest}>
-            publish active
+            활성 버전 게시
           </button>
         </div>
         <div className="mt-4 border-t border-border/50 pt-3">
-          <div className="font-mono text-[11px] text-muted-foreground">simulation toggles</div>
+          <div className="font-mono text-[11px] text-muted-foreground">시뮬레이션 토글</div>
           <div className="mt-2 flex flex-col gap-2 text-xs">
             <label className="flex items-center justify-between">
-              <span>debug</span>
+              <span>디버그</span>
               <input type="checkbox" checked={showDebug} onChange={(event) => setShowDebug(event.target.checked)} />
             </label>
             <label className="flex items-center justify-between">
-              <span>lighting</span>
+              <span>조명</span>
               <input
                 type="checkbox"
                 checked={lightingEnabled}
@@ -178,7 +178,7 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
               />
             </label>
             <label className="flex items-center justify-between">
-              <span>ambience</span>
+              <span>분위기</span>
               <input
                 type="checkbox"
                 checked={ambienceEnabled}
@@ -186,7 +186,7 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
               />
             </label>
             <label className="flex items-center justify-between">
-              <span>thought bubbles</span>
+              <span>생각 말풍선</span>
               <input
                 type="checkbox"
                 checked={thoughtEnabled}
@@ -195,7 +195,7 @@ export function OfficeBuilderPanel({ initialMap, workspaceId, officeId }: Office
             </label>
           </div>
         </div>
-        <div className="mt-4 text-xs text-muted-foreground">selected {selectedIds.length}</div>
+        <div className="mt-4 text-xs text-muted-foreground">선택 {selectedIds.length}개</div>
         {message ? <div className="mt-2 text-xs text-muted-foreground">{message}</div> : null}
       </aside>
       <div className="ui-panel min-h-0 flex-1 overflow-hidden p-2">

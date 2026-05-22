@@ -37,7 +37,7 @@ export const AgentAvatar = ({
       <Image
         className="pointer-events-none h-full w-full select-none"
         src={src}
-        alt={`Avatar for ${name}`}
+        alt={`${name} 아바타`}
         width={size}
         height={size}
         unoptimized

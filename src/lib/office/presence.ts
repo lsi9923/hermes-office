@@ -100,7 +100,7 @@ export const fetchRemoteOfficePresenceSnapshot = async (params: {
 }): Promise<OfficePresenceSnapshot> => {
   const presenceUrl = params.presenceUrl.trim();
   if (!presenceUrl) {
-    throw new Error("Remote office presence URL is not configured.");
+    throw new Error("원격 오피스 프레즌스 URL이 설정되어 있지 않습니다.");
   }
   const controller = new AbortController();
   const timeoutMs = Math.max(1_000, params.timeoutMs ?? 15_000);
@@ -121,13 +121,13 @@ export const fetchRemoteOfficePresenceSnapshot = async (params: {
       signal: controller.signal,
     });
     if (!response.ok) {
-      throw new Error(`Remote office presence request failed with status ${response.status}.`);
+      throw new Error(`원격 오피스 프레즌스 요청이 상태 ${response.status}로 실패했습니다.`);
     }
     const payload = (await response.json()) as unknown;
     return normalizeOfficePresenceSnapshot(payload, "remote");
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
-      throw new Error(`Remote office presence request timed out after ${timeoutMs}ms.`);
+      throw new Error(`원격 오피스 프레즌스 요청이 ${timeoutMs}ms 후 시간 초과되었습니다.`);
     }
     throw error;
   } finally {

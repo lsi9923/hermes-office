@@ -60,12 +60,12 @@ export const useAgentFilesEditor = (params: {
         savedAgentFilesRef.current = emptyState;
         setAgentFiles(emptyState);
         setAgentFilesDirty(false);
-        setAgentFilesError("Agent ID is missing for this agent.");
+        setAgentFilesError("이 에이전트의 ID가 없습니다.");
         return;
       }
 
       if (!client) {
-        setAgentFilesError("Gateway client is not available.");
+        setAgentFilesError("게이트웨이 클라이언트를 사용할 수 없습니다.");
         return;
       }
 
@@ -97,7 +97,7 @@ export const useAgentFilesEditor = (params: {
       setAgentFiles(nextState);
       setAgentFilesDirty(false);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to load agent files.";
+      const message = err instanceof Error ? err.message : "에이전트 파일을 불러오지 못했습니다.";
       setAgentFilesError(message);
     } finally {
       setAgentFilesLoading(false);
@@ -111,12 +111,12 @@ export const useAgentFilesEditor = (params: {
     try {
       const trimmedAgentId = agentId?.trim();
       if (!trimmedAgentId) {
-        setAgentFilesError("Agent ID is missing for this agent.");
+        setAgentFilesError("이 에이전트의 ID가 없습니다.");
         return false;
       }
 
       if (!client) {
-        setAgentFilesError("Gateway client is not available.");
+        setAgentFilesError("게이트웨이 클라이언트를 사용할 수 없습니다.");
         return false;
       }
 
@@ -146,7 +146,7 @@ export const useAgentFilesEditor = (params: {
       setAgentFilesDirty(false);
       return true;
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to save agent files.";
+      const message = err instanceof Error ? err.message : "에이전트 파일을 저장하지 못했습니다.";
       setAgentFilesError(message);
       return false;
     } finally {
@@ -162,12 +162,12 @@ export const useAgentFilesEditor = (params: {
       try {
         const trimmedAgentId = agentId?.trim();
         if (!trimmedAgentId) {
-          setAgentFilesError("Agent ID is missing for this agent.");
+          setAgentFilesError("이 에이전트의 ID가 없습니다.");
           return false;
         }
 
         if (!client) {
-          setAgentFilesError("Gateway client is not available.");
+          setAgentFilesError("게이트웨이 클라이언트를 사용할 수 없습니다.");
           return false;
         }
 
@@ -193,7 +193,7 @@ export const useAgentFilesEditor = (params: {
         setAgentFilesDirty(false);
         return true;
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to initialize agent files.";
+        const message = err instanceof Error ? err.message : "에이전트 파일을 초기화하지 못했습니다.";
         setAgentFilesError(message);
         return false;
       } finally {

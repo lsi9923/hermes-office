@@ -67,7 +67,7 @@ export const loadOfficeLayoutSnapshot = (gatewayUrl: string) => {
 export const saveOfficeLayoutSnapshot = (snapshot: OfficeLayoutSnapshot) => {
   const key = normalizeGatewayKey(snapshot.gatewayUrl);
   if (!key) {
-    throw new Error("Gateway URL is required to save office layout snapshot.");
+    throw new Error("오피스 배치 스냅샷을 저장하려면 게이트웨이 URL이 필요합니다.");
   }
   const store = readStore();
   store.snapshots[key] = snapshot;

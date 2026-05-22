@@ -472,7 +472,7 @@ export const summarizeToolLabel = (
   const toolIsRead = toolName === "READ";
   if (toolIsRead && parsed.kind === "call" && argSummary) {
     return {
-      summaryText: `read ${argSummary}`,
+      summaryText: `${argSummary} 읽기`,
       body: "",
       inlineOnly: true,
     };

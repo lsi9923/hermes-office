@@ -20,10 +20,10 @@ export const PERSONALITY_FILE_NAMES = [
 export type PersonalityFileName = (typeof PERSONALITY_FILE_NAMES)[number];
 
 export const PERSONALITY_FILE_LABELS: Record<PersonalityFileName, string> = {
-  "SOUL.md": "Persona",
-  "AGENTS.md": "Directives",
-  "USER.md": "Context",
-  "IDENTITY.md": "Identity",
+  "SOUL.md": "페르소나",
+  "AGENTS.md": "지시사항",
+  "USER.md": "사용자 맥락",
+  "IDENTITY.md": "정체성",
 };
 
 export const isAgentFileName = (value: string): value is AgentFileName =>
@@ -32,42 +32,42 @@ export const isAgentFileName = (value: string): value is AgentFileName =>
 export const AGENT_FILE_META: Record<AgentFileName, { title: string; hint: string }> = {
   "AGENTS.md": {
     title: "AGENTS.md",
-    hint: "Operating instructions, priorities, and rules.",
+    hint: "작동 지침, 우선순위, 규칙입니다.",
   },
   "SOUL.md": {
     title: "SOUL.md",
-    hint: "Persona, tone, and boundaries.",
+    hint: "페르소나, 말투, 경계입니다.",
   },
   "IDENTITY.md": {
     title: "IDENTITY.md",
-    hint: "Name, vibe, and emoji.",
+    hint: "이름, 분위기, 이모지입니다.",
   },
   "USER.md": {
     title: "USER.md",
-    hint: "User profile and preferences.",
+    hint: "사용자 프로필과 선호입니다.",
   },
   "TOOLS.md": {
     title: "TOOLS.md",
-    hint: "Local tool notes and conventions.",
+    hint: "로컬 도구 메모와 규칙입니다.",
   },
   "HEARTBEAT.md": {
     title: "HEARTBEAT.md",
-    hint: "Small checklist for heartbeat runs.",
+    hint: "하트비트 실행용 짧은 체크리스트입니다.",
   },
   "MEMORY.md": {
     title: "MEMORY.md",
-    hint: "Durable memory for this agent.",
+    hint: "이 에이전트의 장기 기억입니다.",
   },
 };
 
 export const AGENT_FILE_PLACEHOLDERS: Record<AgentFileName, string> = {
-  "AGENTS.md": "How should this agent work? Priorities, rules, and habits.",
-  "SOUL.md": "Tone, personality, boundaries, and how it should sound.",
-  "IDENTITY.md": "Name, vibe, emoji, and a one-line identity.",
-  "USER.md": "How should it address you? Preferences and context.",
-  "TOOLS.md": "Local tool notes, conventions, and shortcuts.",
-  "HEARTBEAT.md": "A tiny checklist for periodic runs.",
-  "MEMORY.md": "Durable facts, decisions, and preferences to remember.",
+  "AGENTS.md": "이 에이전트가 어떻게 일해야 하나요? 우선순위, 규칙, 습관을 적어주세요.",
+  "SOUL.md": "말투, 성격, 경계, 응답 방식입니다.",
+  "IDENTITY.md": "이름, 분위기, 이모지, 한 줄 정체성입니다.",
+  "USER.md": "사용자를 어떻게 불러야 하나요? 선호와 맥락을 적어주세요.",
+  "TOOLS.md": "로컬 도구 메모, 규칙, 단축 팁입니다.",
+  "HEARTBEAT.md": "주기 실행을 위한 짧은 체크리스트입니다.",
+  "MEMORY.md": "기억해야 할 사실, 결정, 선호입니다.",
 };
 
 export const createAgentFilesState = () =>

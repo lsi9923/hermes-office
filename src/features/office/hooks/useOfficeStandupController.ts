@@ -192,7 +192,7 @@ export const useOfficeStandupController = (params: {
       .catch((err) => {
         if (!cancelled) {
           setError(
-            err instanceof Error ? err.message : "Failed to load standup state."
+            err instanceof Error ? err.message : "스탠드업 상태를 불러오지 못했습니다."
           );
         }
       })
@@ -209,7 +209,7 @@ export const useOfficeStandupController = (params: {
       if (!pageVisible()) return;
       void refreshMeeting().catch((err) => {
         setError(
-          err instanceof Error ? err.message : "Failed to refresh standup meeting."
+          err instanceof Error ? err.message : "스탠드업 미팅을 새로고침하지 못했습니다."
         );
       });
     }, isMeetingActive(meeting) ? 8000 : 60000);
@@ -223,7 +223,7 @@ export const useOfficeStandupController = (params: {
       if (!pageVisible()) return;
       void Promise.all([refreshConfig(), refreshMeeting()]).catch((err) => {
         setError(
-          err instanceof Error ? err.message : "Failed to refresh standup state."
+          err instanceof Error ? err.message : "스탠드업 상태를 새로고침하지 못했습니다."
         );
       });
     };
@@ -347,7 +347,7 @@ export const useOfficeStandupController = (params: {
       }
       void startMeeting("scheduled").catch((err) => {
         setError(
-          err instanceof Error ? err.message : "Failed to start the scheduled standup."
+          err instanceof Error ? err.message : "예약된 스탠드업을 시작하지 못했습니다."
         );
       });
     }, 60000);
@@ -372,7 +372,7 @@ export const useOfficeStandupController = (params: {
       .then((payload) => setMeeting(payload.meeting))
       .catch((err) => {
         setError(
-          err instanceof Error ? err.message : "Failed to start standup speaking."
+          err instanceof Error ? err.message : "스탠드업 발표를 시작하지 못했습니다."
         );
       });
   }, [meeting]);
@@ -399,7 +399,7 @@ export const useOfficeStandupController = (params: {
         .then((payload) => setMeeting(payload.meeting))
         .catch((err) => {
           setError(
-            err instanceof Error ? err.message : "Failed to advance standup progress."
+            err instanceof Error ? err.message : "스탠드업 진행을 넘기지 못했습니다."
           );
         });
     }, remaining + 50);

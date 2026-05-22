@@ -50,10 +50,10 @@ export async function runOpenClawPlanningPrompt(params: {
 }): Promise<string> {
   const trimmedPrompt = params.prompt.trim();
   if (!trimmedPrompt) {
-    throw new Error("Planning prompt is required.");
+    throw new Error("계획 프롬프트가 필요합니다.");
   }
   if (params.agent.status === "running") {
-    throw new Error(`Wait for ${params.agent.name} to finish the current run first.`);
+    throw new Error(`${params.agent.name}의 현재 실행이 끝날 때까지 기다리세요.`);
   }
 
   await sendChatMessageViaStudio({
@@ -82,10 +82,10 @@ export async function runOpenClawPlanningPrompt(params: {
       if (derived.lastAssistant?.trim()) {
         return derived.lastAssistant.trim();
       }
-      throw new Error("The planning agent finished, but no assistant response was available.");
+      throw new Error("계획 에이전트가 완료되었지만 어시스턴트 응답이 없습니다.");
     }
     await sleep(800);
   }
 
-  throw new Error("Timed out while waiting for the planning agent response.");
+  throw new Error("계획 에이전트 응답을 기다리다 시간이 초과되었습니다.");
 }

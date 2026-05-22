@@ -49,8 +49,8 @@ export async function runCompanyBootstrapOperation(params: {
   if (deletableAgentIds.length > 0 && params.deleteExistingAgent) {
     params.setStatusLine(
       deletableAgentIds.length === 1
-        ? "Replacing your current agent."
-        : `Replacing your current ${deletableAgentIds.length} agents.`,
+        ? "현재 에이전트를 교체하는 중입니다."
+        : `현재 에이전트 ${deletableAgentIds.length}개를 교체하는 중입니다.`,
     );
     for (const agentId of deletableAgentIds) {
       await params.deleteExistingAgent(agentId);
@@ -64,10 +64,10 @@ export async function runCompanyBootstrapOperation(params: {
     const firstBlueprint = remainingBlueprints.shift();
     if (firstBlueprint) {
       if (params.clearReusedAgentState) {
-        params.setStatusLine("Clearing the previous main agent state.");
+        params.setStatusLine("기존 메인 에이전트 상태를 정리하는 중입니다.");
         await params.clearReusedAgentState(reusableAgentId);
       }
-      params.setStatusLine(`Reconfiguring main as ${firstBlueprint.agentName}.`);
+      params.setStatusLine(`메인을 ${firstBlueprint.agentName}(으)로 재구성하는 중입니다.`);
       await params.renameAgent?.(reusableAgentId, firstBlueprint.agentName);
       await params.writeAgentFiles(reusableAgentId, firstBlueprint.files);
       params.saveAvatar(reusableAgentId);
@@ -79,7 +79,7 @@ export async function runCompanyBootstrapOperation(params: {
   }
 
   for (const blueprint of remainingBlueprints) {
-    params.setStatusLine(`Creating ${blueprint.agentName}.`);
+    params.setStatusLine(`${blueprint.agentName} 생성 중입니다.`);
     const created = await params.createAgent(blueprint.agentName);
     createdAgents.push({
       agentId: created.id,
@@ -89,7 +89,7 @@ export async function runCompanyBootstrapOperation(params: {
     params.saveAvatar(created.id);
   }
 
-  params.setStatusLine("Syncing the new company into the office.");
+  params.setStatusLine("새 회사를 오피스에 동기화하는 중입니다.");
   await params.loadAgents();
 
   for (const createdAgent of createdAgents) {
@@ -105,13 +105,13 @@ export async function runCompanyBootstrapOperation(params: {
   if (reusableAgentId && params.resetAgentSession) {
     const reusableAgent = params.findAgentById(reusableAgentId);
     if (reusableAgent?.sessionKey) {
-      params.setStatusLine("Refreshing the first role session.");
+      params.setStatusLine("첫 역할 세션을 새로고침하는 중입니다.");
       await params.resetAgentSession(reusableAgentId, reusableAgent.sessionKey);
     }
   }
 
   params.persistSnapshot(params.input, params.plan);
-  params.setOfficeTitle(`${params.plan.companyName} HQ`);
+  params.setOfficeTitle(`${params.plan.companyName} 본부`);
   if (createdAgents[0]?.agentId) {
     params.selectAgent(createdAgents[0].agentId);
   }

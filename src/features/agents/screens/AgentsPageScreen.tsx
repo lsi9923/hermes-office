@@ -185,7 +185,7 @@ const resolveControlUiUrl = (params: {
 };
 
 const resolveNextNewAgentName = (agents: AgentState[]) => {
-  const baseName = "New Agent";
+  const baseName = "새 에이전트";
   const existingNames = new Set(
     agents.map((agent) => agent.name.trim().toLowerCase()).filter((name) => name.length > 0)
   );
@@ -202,7 +202,7 @@ const resolveNextNewAgentName = (agents: AgentState[]) => {
     if (existingIds.has(slugifyAgentName(candidate))) continue;
     return candidate;
   }
-  throw new Error("Unable to allocate a unique agent name.");
+  throw new Error("고유한 에이전트 이름을 만들지 못했습니다.");
 };
 
 const AgentsPageScreen = () => {
@@ -406,9 +406,9 @@ const AgentsPageScreen = () => {
   const settingsSkillScopeWarning = useMemo(() => {
     if (!inspectSidebarAgent) return null;
     if (inspectSidebarAgent.agentId === settingsDefaultAgentId) {
-      return "Setup actions are shared across agents. Installs run in this shared workspace.";
+      return "설정 작업은 모든 에이전트가 공유합니다. 설치는 이 공유 작업공간에서 실행됩니다.";
     }
-    return `Setup actions are shared across agents. Installs currently run in ${settingsDefaultAgentId} (shared workspace), not ${inspectSidebarAgent.agentId}.`;
+    return `설정 작업은 모든 에이전트가 공유합니다. 설치는 현재 ${inspectSidebarAgent.agentId}가 아니라 ${settingsDefaultAgentId}(공유 작업공간)에서 실행됩니다.`;
   }, [inspectSidebarAgent, settingsDefaultAgentId]);
   const focusedPendingExecApprovals = useMemo(() => {
     if (!focusedAgentId) return unscopedPendingExecApprovals;
@@ -422,7 +422,7 @@ const AgentsPageScreen = () => {
     try {
       return resolveNextNewAgentName(state.agents);
     } catch {
-      return "New Agent";
+      return "새 에이전트";
     }
   }, [state.agents]);
   const faviconSeed = useMemo(() => {
@@ -1069,7 +1069,7 @@ const AgentsPageScreen = () => {
       setCreateAgentBlock(null);
       setCreateAgentModalOpen(false);
       void loadAgents();
-      setError("Agent creation timed out.");
+      setError("에이전트 생성 시간이 초과되었습니다.");
     };
     if (timeoutNow) {
       handleTimeout();
@@ -1305,19 +1305,19 @@ const AgentsPageScreen = () => {
   const connectionPanelVisible = showConnectionPanel;
   const hasAnyAgents = agents.length > 0;
   const configMutationStatusLine = activeConfigMutation
-    ? `Applying config change: ${activeConfigMutation.label}`
+    ? `설정 변경 적용 중: ${activeConfigMutation.label}`
     : queuedConfigMutationCount > 0
       ? queuedBlockedByRunningAgents
-        ? `Queued ${queuedConfigMutationCount} config change${queuedConfigMutationCount === 1 ? "" : "s"}; waiting for ${runningAgentCount} running agent${runningAgentCount === 1 ? "" : "s"} to finish`
+        ? `설정 변경 ${queuedConfigMutationCount}개 대기 중입니다. 실행 중인 에이전트 ${runningAgentCount}개가 끝나기를 기다립니다.`
         : status !== "connected"
-          ? `Queued ${queuedConfigMutationCount} config change${queuedConfigMutationCount === 1 ? "" : "s"}; waiting for gateway connection`
-          : `Queued ${queuedConfigMutationCount} config change${queuedConfigMutationCount === 1 ? "" : "s"}`
+          ? `설정 변경 ${queuedConfigMutationCount}개 대기 중입니다. 게이트웨이 연결을 기다립니다.`
+          : `설정 변경 ${queuedConfigMutationCount}개 대기 중`
       : null;
   const createBlockStatusLine = createAgentBlock
     ? createAgentBlock.phase === "queued"
-      ? "Waiting for active runs to finish"
+      ? "실행 중인 작업이 끝나기를 기다리는 중"
       : createAgentBlock.phase === "creating"
-      ? "Submitting config change"
+      ? "설정 변경 제출 중"
       : null
     : null;
   const restartingMutationStatusLine = resolveConfigMutationStatusLine({
@@ -1336,13 +1336,13 @@ const AgentsPageScreen = () => {
     : null;
   const restartingMutationAriaLabel = restartingMutationBlock
     ? restartingMutationBlock.kind === "delete-agent"
-      ? "Deleting agent and restarting gateway"
-      : "Renaming agent and restarting gateway"
+      ? "에이전트를 삭제하고 게이트웨이를 재시작하는 중"
+      : "에이전트 이름을 바꾸고 게이트웨이를 재시작하는 중"
     : null;
   const restartingMutationHeading = restartingMutationBlock
     ? restartingMutationBlock.kind === "delete-agent"
-      ? "Agent delete in progress"
-      : "Agent rename in progress"
+      ? "에이전트 삭제 진행 중"
+      : "에이전트 이름 변경 진행 중"
     : null;
 
   useEffect(() => {
@@ -1374,7 +1374,7 @@ const AgentsPageScreen = () => {
               Claw3D
             </div>
             <div className="mt-3 text-sm text-muted-foreground">
-              {status === "connecting" ? "Connecting to gateway…" : "Booting Studio…"}
+              {status === "connecting" ? "게이트웨이에 연결 중..." : "스튜디오 부팅 중..."}
             </div>
           </div>
         </div>
@@ -1403,7 +1403,7 @@ const AgentsPageScreen = () => {
                   className="ui-btn-secondary px-3 py-1.5 font-mono text-[10px] font-semibold tracking-[0.06em]"
                   onClick={handleBackToChat}
                 >
-                  Back to chat
+                  채팅으로 돌아가기
                 </button>
               </div>
             ) : null}
@@ -1459,7 +1459,7 @@ const AgentsPageScreen = () => {
             <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               Claw3D
             </div>
-            <div className="mt-3 text-sm text-muted-foreground">Loading agents…</div>
+            <div className="mt-3 text-sm text-muted-foreground">에이전트 불러오는 중...</div>
           </div>
         </div>
       </div>
@@ -1471,7 +1471,7 @@ const AgentsPageScreen = () => {
       {state.loading ? (
         <div className="pointer-events-none fixed bottom-4 left-0 right-0 z-50 flex justify-center px-3">
           <div className="glass-panel ui-card px-6 py-3 font-mono text-[11px] tracking-[0.08em] text-muted-foreground">
-            Loading agents…
+            에이전트 불러오는 중...
           </div>
         </div>
       ) : null}
@@ -1531,7 +1531,7 @@ const AgentsPageScreen = () => {
                     className="ui-btn-secondary w-full px-3 py-1.5 font-mono text-[10px] font-semibold tracking-[0.06em]"
                     onClick={handleBackToChat}
                   >
-                    Back to chat
+                    채팅으로 돌아가기
                   </button>
                 </div>
                 <nav className="py-3">
@@ -1567,16 +1567,16 @@ const AgentsPageScreen = () => {
                 <div className="flex items-start justify-between border-b border-border/60 px-6 py-4">
                   <div>
                     <div className="text-lg font-semibold text-foreground">
-                      {inspectSidebarAgent?.name ?? settingsRouteAgentId ?? "Agent settings"}
+                      {inspectSidebarAgent?.name ?? settingsRouteAgentId ?? "에이전트 설정"}
                     </div>
                     <div className="mt-1 font-mono text-[11px] text-muted-foreground">
-                      Model: {settingsHeaderModel}{" "}
+                      모델: {settingsHeaderModel}{" "}
                       <span className="mx-2 text-border">|</span>
-                      Thinking: {settingsHeaderThinking}
+                      추론: {settingsHeaderThinking}
                     </div>
                   </div>
                   <div className="rounded-md border border-border/70 bg-surface-1 px-3 py-1 font-mono text-[11px] text-muted-foreground">
-                    [{personalityHasUnsavedChanges ? "Unsaved" : "Saved ✓"}]
+                    [{personalityHasUnsavedChanges ? "저장 안 됨" : "저장됨 ✓"}]
                   </div>
                 </div>
                 <div className="min-h-0 flex-1 overflow-hidden">
@@ -1699,8 +1699,8 @@ const AgentsPageScreen = () => {
                     )
                   ) : (
                     <EmptyStatePanel
-                      title="Agent not found."
-                      description="Back to chat and select an available agent."
+                      title="에이전트를 찾지 못했습니다."
+                      description="채팅으로 돌아가 사용 가능한 에이전트를 선택하세요."
                       fillHeight
                       className="items-center p-6 text-center text-sm"
                     />
@@ -1718,7 +1718,7 @@ const AgentsPageScreen = () => {
                     data-active={mobilePane === "fleet" ? "true" : "false"}
                     onClick={() => setMobilePane("fleet")}
                   >
-                    Fleet
+                    에이전트
                   </button>
                   <button
                     type="button"
@@ -1726,7 +1726,7 @@ const AgentsPageScreen = () => {
                     data-active={mobilePane === "chat" ? "true" : "false"}
                     onClick={() => setMobilePane("chat")}
                   >
-                    Chat
+                    채팅
                   </button>
                 </div>
               </div>
@@ -1801,13 +1801,13 @@ const AgentsPageScreen = () => {
                   </div>
                 ) : (
                   <EmptyStatePanel
-                    title={hasAnyAgents ? "No agents match this filter." : "No agents available."}
+                    title={hasAnyAgents ? "이 필터와 일치하는 에이전트가 없습니다." : "사용 가능한 에이전트가 없습니다."}
                     description={
                       hasAnyAgents
                         ? undefined
                         : status === "connected"
-                          ? "Use New Agent in the sidebar to add your first agent."
-                          : "Connect to your gateway to load agents into the studio."
+                          ? "사이드바의 새 에이전트로 첫 에이전트를 추가하세요."
+                          : "에이전트를 스튜디오에 불러오려면 게이트웨이에 연결하세요."
                     }
                     fillHeight
                     className="items-center p-6 text-center text-sm"
@@ -1854,17 +1854,17 @@ const AgentsPageScreen = () => {
           data-testid="agent-create-restart-modal"
           role="dialog"
           aria-modal="true"
-          aria-label="Creating agent"
+          aria-label="에이전트 생성 중"
         >
           <div className="ui-panel w-full max-w-md p-6">
             <div className="font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Agent create in progress
+              에이전트 생성 진행 중
             </div>
             <div className="mt-2 text-base font-semibold text-foreground">
               {createAgentBlock.agentName}
             </div>
             <div className="mt-3 text-sm text-muted-foreground">
-              Studio is temporarily locked until creation finishes.
+              생성이 끝날 때까지 스튜디오가 잠시 잠깁니다.
             </div>
             {createBlockStatusLine ? (
               <div className="ui-card mt-4 px-3 py-2 font-mono text-[11px] tracking-[0.06em] text-foreground">
@@ -1890,7 +1890,7 @@ const AgentsPageScreen = () => {
               {restartingMutationBlock.agentName}
             </div>
             <div className="mt-3 text-sm text-muted-foreground">
-              Studio is temporarily locked until the gateway restarts.
+              게이트웨이가 재시작될 때까지 스튜디오가 잠시 잠깁니다.
             </div>
             {restartingMutationStatusLine ? (
               <div className="ui-card mt-4 px-3 py-2 font-mono text-[11px] tracking-[0.06em] text-foreground">

@@ -1,10 +1,3 @@
-/**
- * OnboardingWizard — Step-based onboarding flow for new Claw3D users.
- *
- * Renders a modal overlay with step navigation, progress indicator,
- * and content slots for each onboarding phase.  Designed to be mounted
- * at the app root and dismissed once complete or skipped.
- */
 import { useCallback, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 
@@ -23,29 +16,20 @@ import { CompanyStep } from "@/features/onboarding/components/CompanyStep";
 import { CompleteStep } from "@/features/onboarding/components/CompleteStep";
 
 export type OnboardingWizardProps = {
-  /** Whether the gateway is currently connected. */
   gatewayConnected: boolean;
-  /** Number of agents discovered. */
   agentCount: number;
-  /** Gateway URL (for the connect step). */
   gatewayUrl: string;
-  /** Gateway token (for the connect step). */
   token: string;
-  /** Callbacks for the connect step. */
   onGatewayUrlChange: (value: string) => void;
   onTokenChange: (value: string) => void;
   onConnect: () => void;
-  /** Called when the user finishes or dismisses the wizard. */
   onComplete: () => void;
-  /** Opens the reusable company builder. */
   onOpenCompanyBuilder: () => void;
   initialStep?: OnboardingStepId;
   initialCompletedSteps?: OnboardingStepId[];
   createdCompanyName?: string | null;
   companyCreated?: boolean;
-  /** Connection error message, if any. */
   connectionError: string | null;
-  /** Whether we're currently connecting. */
   connecting: boolean;
 };
 
@@ -75,16 +59,13 @@ export const OnboardingWizard = ({
   const currentStepDef = ONBOARDING_STEPS[stepIndex];
   const totalSteps = ONBOARDING_STEPS.length;
 
-  const markComplete = useCallback(
-    (stepId: OnboardingStepId) => {
-      setCompletedSteps((prev) => {
-        const next = new Set(prev);
-        next.add(stepId);
-        return next;
-      });
-    },
-    [],
-  );
+  const markComplete = useCallback((stepId: OnboardingStepId) => {
+    setCompletedSteps((prev) => {
+      const next = new Set(prev);
+      next.add(stepId);
+      return next;
+    });
+  }, []);
 
   const goNext = useCallback(() => {
     markComplete(currentStep);
@@ -102,7 +83,6 @@ export const OnboardingWizard = ({
   }, [currentStep]);
 
   const canGoNext = useMemo(() => {
-    // Connect step requires gateway connection before proceeding
     if (currentStep === "connect" && !gatewayConnected) return false;
     return true;
   }, [currentStep, gatewayConnected]);
@@ -151,11 +131,10 @@ export const OnboardingWizard = ({
   return (
     <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="relative mx-4 flex h-[min(92vh,640px)] w-full max-w-[560px] flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0d1117] shadow-2xl">
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold text-white">
-              {currentStepDef?.title ?? "Onboarding"}
+              {currentStepDef?.title ?? "온보딩"}
             </h2>
             <p className="mt-0.5 text-xs text-white/60">
               {currentStepDef?.description}
@@ -165,14 +144,13 @@ export const OnboardingWizard = ({
             type="button"
             className="flex h-8 w-8 items-center justify-center rounded-md text-white/50 transition-colors hover:bg-white/10 hover:text-white"
             onClick={onComplete}
-            aria-label="Close onboarding"
-            title="Skip onboarding"
+            aria-label="온보딩 닫기"
+            title="온보딩 건너뛰기"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Progress bar */}
         <div className="flex gap-1.5 px-6 pt-4">
           {ONBOARDING_STEPS.map((step, idx) => (
             <div
@@ -188,10 +166,10 @@ export const OnboardingWizard = ({
           ))}
         </div>
 
-        {/* Step content */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">{renderStepContent()}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
+          {renderStepContent()}
+        </div>
 
-        {/* Footer navigation */}
         <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
           <div>
             {stepIndex > 0 ? (
@@ -201,7 +179,7 @@ export const OnboardingWizard = ({
                 onClick={goPrev}
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
-                Back
+                뒤로
               </button>
             ) : null}
           </div>
@@ -215,7 +193,7 @@ export const OnboardingWizard = ({
                 className="inline-flex items-center gap-1.5 rounded-md bg-amber-500 px-4 py-2 text-xs font-semibold text-[#1a1206] transition-colors hover:bg-amber-400"
                 onClick={onComplete}
               >
-                Enter Office
+                오피스 입장
               </button>
             ) : (
               <button
@@ -225,8 +203,8 @@ export const OnboardingWizard = ({
                 disabled={!canGoNext}
               >
                 {currentStep === "connect" && !gatewayConnected
-                  ? "Connect first"
-                  : "Next"}
+                  ? "먼저 연결"
+                  : "다음"}
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             )}

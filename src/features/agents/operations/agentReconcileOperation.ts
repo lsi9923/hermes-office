@@ -113,7 +113,7 @@ export const runAgentReconcileOperation = async (params: {
       if (!params.isDisconnectLikeError(err)) {
         commands.push({
           kind: "logWarn",
-          message: "Failed to reconcile running agent.",
+          message: "실행 중인 에이전트를 조정하지 못했습니다.",
           error: err,
         });
       }

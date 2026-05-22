@@ -124,7 +124,7 @@ export function createSpecialLatestUpdateOperation(
     } catch (err) {
       if (!deps.isDisconnectLikeError(err)) {
         const message =
-          err instanceof Error ? err.message : "Failed to load latest cron/heartbeat update.";
+          err instanceof Error ? err.message : "최신 Cron/하트비트 업데이트를 불러오지 못했습니다.";
         deps.logError(message);
       }
     } finally {

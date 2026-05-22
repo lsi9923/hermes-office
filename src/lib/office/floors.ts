@@ -36,8 +36,8 @@ export type FloorDefinition = {
 export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   {
     id: "lobby",
-    label: "Lobby",
-    shortLabel: "Lobby",
+    label: "로비",
+    shortLabel: "로비",
     provider: "demo",
     kind: "lobby",
     zone: "building",
@@ -47,7 +47,7 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "openclaw-ground",
-    label: "OpenClaw Floor",
+    label: "OpenClaw 층",
     shortLabel: "OpenClaw",
     provider: "openclaw",
     kind: "runtime",
@@ -58,7 +58,7 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "hermes-first",
-    label: "Hermes Floor",
+    label: "Hermes 층",
     shortLabel: "Hermes",
     provider: "hermes",
     kind: "runtime",
@@ -69,8 +69,8 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "local-runtime",
-    label: "Local Runtime Floor",
-    shortLabel: "Local",
+    label: "로컬 런타임 층",
+    shortLabel: "로컬",
     provider: "local",
     kind: "runtime",
     zone: "building",
@@ -80,7 +80,7 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "claw3d-runtime",
-    label: "Claw3D Runtime Floor",
+    label: "Claw3D 런타임 층",
     shortLabel: "Claw3D",
     provider: "claw3d",
     kind: "runtime",
@@ -91,8 +91,8 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "custom-second",
-    label: "Custom Floor",
-    shortLabel: "Custom",
+    label: "사용자 지정 층",
+    shortLabel: "사용자 지정",
     provider: "custom",
     kind: "runtime",
     zone: "building",
@@ -102,8 +102,8 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "training",
-    label: "Training Floor",
-    shortLabel: "Training",
+    label: "훈련 층",
+    shortLabel: "훈련",
     provider: "demo",
     kind: "training",
     zone: "building",
@@ -113,8 +113,8 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "traders-floor",
-    label: "Trader's Floor",
-    shortLabel: "Traders",
+    label: "트레이더 층",
+    shortLabel: "트레이더",
     provider: "demo",
     kind: "market",
     zone: "building",
@@ -124,8 +124,8 @@ export const OFFICE_FLOORS: readonly FloorDefinition[] = [
   },
   {
     id: "campus",
-    label: "Outside / Campus",
-    shortLabel: "Campus",
+    label: "외부 / 캠퍼스",
+    shortLabel: "캠퍼스",
     provider: "demo",
     kind: "campus",
     zone: "outside",

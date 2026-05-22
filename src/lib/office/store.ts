@@ -234,7 +234,7 @@ export const publishOfficeVersion = (params: {
       entry.id === params.officeVersionId
   );
   if (!match) {
-    throw new Error("Office version not found.");
+    throw new Error("오피스 버전을 찾지 못했습니다.");
   }
   const now = new Date().toISOString();
   const current = store.published.find((entry) => entry.workspaceId === params.workspaceId);

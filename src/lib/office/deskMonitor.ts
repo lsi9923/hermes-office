@@ -148,7 +148,7 @@ const derivePseudoEditor = (task: string): { fileName: string; language: string;
         '<head>',
         '  <meta charset="UTF-8" />',
         '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-        '  <title>Working Draft</title>',
+        '  <title>작업 초안</title>',
         '</head>',
         '<body>',
         `  <!-- ${task.trim()} -->`,
@@ -162,10 +162,10 @@ const derivePseudoEditor = (task: string): { fileName: string; language: string;
     language: "tsx",
     lines: [
       'export function Workbench() {',
-      toCommentLine(task.trim() || "Working on the requested task."),
+      toCommentLine(task.trim() || "요청한 작업을 처리하는 중입니다."),
       '  return (',
       '    <section>',
-      '      <div>Implementing monitor preview...</div>',
+      '      <div>모니터 미리보기를 구현하는 중...</div>',
       '    </section>',
       '  );',
       '}',
@@ -232,8 +232,8 @@ const summarizeMode = (params: {
   if (agent.status === "error") {
     return {
       mode: "error",
-      title: "Run error",
-      subtitle: agent.latestPreview ?? "The agent hit an error.",
+      title: "실행 오류",
+      subtitle: agent.latestPreview ?? "에이전트에서 오류가 발생했습니다.",
     };
   }
   if (browserUrl) {
@@ -264,14 +264,14 @@ const summarizeMode = (params: {
   ) {
     return {
       mode: "coding",
-      title: "Working",
-      subtitle: agent.latestPreview ?? "Live agent activity.",
+      title: "작업 중",
+      subtitle: agent.latestPreview ?? "실시간 에이전트 활동입니다.",
     };
   }
   return {
     mode: "idle",
-    title: "Idle",
-    subtitle: agent.latestPreview ?? "No recent live activity.",
+    title: "대기",
+    subtitle: agent.latestPreview ?? "최근 실시간 활동이 없습니다.",
   };
 };
 

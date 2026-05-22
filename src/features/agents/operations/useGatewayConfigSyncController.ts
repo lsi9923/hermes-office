@@ -171,7 +171,7 @@ export function useGatewayConfigSyncController(
         setGatewayModelsError(null);
       } catch (err) {
         if (cancelled) return;
-        const message = err instanceof Error ? err.message : "Failed to load models.";
+        const message = err instanceof Error ? err.message : "모델 목록을 불러오지 못했습니다.";
         setGatewayModelsError(message);
         setGatewayModels([]);
         if (!isDisconnectLikeError(err)) {

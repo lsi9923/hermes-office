@@ -110,7 +110,7 @@ export type PackagedSkillInstallResult = {
 const resolveAgentId = (agentId: string): string => {
   const trimmed = agentId.trim();
   if (!trimmed) {
-    throw new Error("Agent id is required to load skill status.");
+    throw new Error("스킬 상태를 불러오려면 에이전트 ID가 필요합니다.");
   }
   return trimmed;
 };
@@ -193,10 +193,10 @@ export const installSkill = async (
   params: SkillInstallRequest
 ): Promise<SkillInstallResult> => {
   return client.call<SkillInstallResult>("skills.install", {
-    name: resolveRequiredValue(params.name, "Skill name is required to install dependencies."),
+    name: resolveRequiredValue(params.name, "의존성을 설치하려면 스킬 이름이 필요합니다."),
     installId: resolveRequiredValue(
       params.installId,
-      "Install option id is required to install dependencies."
+      "의존성을 설치하려면 설치 옵션 ID가 필요합니다."
     ),
     ...(typeof params.timeoutMs === "number" ? { timeoutMs: params.timeoutMs } : {}),
   });
@@ -207,7 +207,7 @@ export const updateSkill = async (
   params: SkillUpdateRequest
 ): Promise<SkillUpdateResult> => {
   return client.call<SkillUpdateResult>("skills.update", {
-    skillKey: resolveRequiredValue(params.skillKey, "Skill key is required to update skill setup."),
+    skillKey: resolveRequiredValue(params.skillKey, "스킬 설정을 업데이트하려면 스킬 키가 필요합니다."),
     ...(typeof params.enabled === "boolean" ? { enabled: params.enabled } : {}),
     ...(typeof params.apiKey === "string" ? { apiKey: params.apiKey } : {}),
   });

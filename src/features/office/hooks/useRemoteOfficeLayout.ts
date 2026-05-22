@@ -47,7 +47,7 @@ export const useRemoteOfficeLayout = ({
             "error" in payload &&
             typeof payload.error === "string"
               ? payload.error
-              : "Failed to load remote office layout.";
+              : "원격 오피스 배치를 불러오지 못했습니다.";
           throw new Error(errorMessage);
         }
         if (cancelled) return;
@@ -64,7 +64,7 @@ export const useRemoteOfficeLayout = ({
         setError(
           loadError instanceof Error
             ? loadError.message
-            : "Failed to load remote office layout.",
+            : "원격 오피스 배치를 불러오지 못했습니다.",
         );
       } finally {
         if (!cancelled) {

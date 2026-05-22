@@ -153,7 +153,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       if (!resolvedAgentId) {
         if (requestId === skillsLoadRequestIdRef.current) {
           setSettingsSkillsReport(null);
-          setSettingsSkillsError("Failed to load skills: missing agent id.");
+          setSettingsSkillsError("스킬을 불러오지 못했습니다: 에이전트 ID가 없습니다.");
         }
         return;
       }
@@ -169,7 +169,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         if (requestId !== skillsLoadRequestIdRef.current) {
           return;
         }
-        const message = err instanceof Error ? err.message : "Failed to load skills.";
+        const message = err instanceof Error ? err.message : "스킬을 불러오지 못했습니다.";
         setSettingsSkillsReport(null);
         setSettingsSkillsError(message);
         if (!isGatewayDisconnectLikeError(err)) {
@@ -229,7 +229,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       const resolvedAgentId = agentId.trim();
       if (!resolvedAgentId) {
         setSettingsCronJobs([]);
-        setSettingsCronError("Failed to load schedules: missing agent id.");
+        setSettingsCronError("일정을 불러오지 못했습니다: 에이전트 ID가 없습니다.");
         return;
       }
       setSettingsCronLoading(true);
@@ -239,7 +239,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         const filtered = filterCronJobsForAgent(result.jobs, resolvedAgentId);
         setSettingsCronJobs(sortCronJobsByUpdatedAt(filtered));
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to load schedules.";
+        const message = err instanceof Error ? err.message : "일정을 불러오지 못했습니다.";
         setSettingsCronJobs([]);
         setSettingsCronError(message);
         if (!isGatewayDisconnectLikeError(err)) {
@@ -335,7 +335,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
           executeMutation: async () => {
             const timeoutLabel =
               input.kind === "delete-agent"
-                ? "Delete agent request timed out."
+                ? "에이전트 삭제 요청 시간이 초과되었습니다."
                 : "Rename agent request timed out.";
             await Promise.race([
               input.executeMutation(),
@@ -376,8 +376,8 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
     onTimeout: () => {
       const timeoutMessage =
         restartingMutationBlock?.kind === "delete-agent"
-          ? "Gateway restart timed out after deleting the agent."
-          : "Gateway restart timed out after renaming the agent.";
+          ? "에이전트를 삭제한 뒤 게이트웨이 재시작 시간이 초과되었습니다."
+          : "에이전트 이름을 바꾼 뒤 게이트웨이 재시작 시간이 초과되었습니다.";
       setRestartingMutationBlock(null);
       params.setError(timeoutMessage);
     },
@@ -449,7 +449,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       const agent = params.agents.find((entry) => entry.agentId === decision.normalizedAgentId);
       if (!agent) return;
       const confirmed = window.confirm(
-        `Delete ${agent.name}? This removes the agent record from OpenClaw and clears its scheduled automations. Claw3D will not touch workspace files.`
+        `${agent.name} 에이전트를 삭제할까요? OpenClaw의 에이전트 기록과 예약 자동화만 지웁니다. Claw3D는 작업 폴더 파일을 건드리지 않습니다.`
       );
       if (!confirmed) return;
 
@@ -457,7 +457,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         kind: "delete-agent",
         agentId: decision.normalizedAgentId,
         agentName: agent.name,
-        label: `Delete ${agent.name}`,
+        label: `${agent.name} 삭제`,
         executeMutation: async () => {
           await deleteAgentRecordViaStudio({
             client: params.client,
@@ -504,7 +504,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
           onJobs: setSettingsCronJobs,
         });
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to create automation.";
+        const message = err instanceof Error ? err.message : "자동화를 만들지 못했습니다.";
         if (!isGatewayDisconnectLikeError(err)) {
           console.error(message);
         }
@@ -546,7 +546,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         await runCronJobNow(params.client, resolvedJobId);
         await loadCronJobsForSettingsAgent(resolvedAgentId);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to run schedule.";
+        const message = err instanceof Error ? err.message : "일정을 실행하지 못했습니다.";
         setSettingsCronError(message);
         console.error(message);
       } finally {
@@ -584,7 +584,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         }
         await loadCronJobsForSettingsAgent(resolvedAgentId);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to delete schedule.";
+        const message = err instanceof Error ? err.message : "일정을 삭제하지 못했습니다.";
         setSettingsCronError(message);
         console.error(message);
       } finally {
@@ -719,7 +719,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       try {
         await params.enqueueConfigMutation({
           kind: "update-agent-skills",
-          label: `Update skills for ${agent?.name ?? decision.normalizedAgentId}`,
+          label: `${agent?.name ?? decision.normalizedAgentId} 스킬 업데이트`,
           run: async () => {
             await input.run(decision.normalizedAgentId);
             await params.loadAgents();
@@ -728,7 +728,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
           },
         });
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to update skills.";
+        const message = err instanceof Error ? err.message : "스킬을 업데이트하지 못했습니다.";
         setSettingsSkillsError(message);
         if (!isGatewayDisconnectLikeError(err)) {
           console.error(message);
@@ -808,7 +808,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
             )
           );
           if (normalizedSkillNames.length === 0) {
-            throw new Error("Cannot set selected skills mode: choose at least one skill.");
+            throw new Error("선택 스킬 모드를 설정하려면 스킬을 하나 이상 선택하세요.");
           }
           await updateGatewayAgentSkillsAllowlist({
             client: params.client,
@@ -882,7 +882,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
           },
         });
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to update skill setup.";
+        const message = err instanceof Error ? err.message : "스킬 설정을 업데이트하지 못했습니다.";
         setSettingsSkillsError(message);
         setSkillMessage(normalizedSkillKey, {
           kind: "error",
@@ -904,7 +904,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         agentId,
         decisionKind: "install-skill",
         skillKey,
-        label: `Install dependencies for ${name.trim() || skillKey.trim()}`,
+        label: `${name.trim() || skillKey.trim()} 의존성 설치`,
         run: async () => {
           const result = await installSkill(params.client, {
             name,
@@ -912,7 +912,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
             timeoutMs: SKILL_INSTALL_TIMEOUT_MS,
           });
           return {
-            successMessage: result.message || "Installed",
+            successMessage: result.message || "설치 완료",
           };
         },
       });
@@ -928,12 +928,12 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       const report = settingsSkillsReport;
       const normalizedSkillKey = skill.skillKey.trim();
       if (!normalizedSkillKey) {
-        const message = "Skill key is required to remove the skill.";
+        const message = "스킬을 제거하려면 스킬 키가 필요합니다.";
         setSettingsSkillsError(message);
         return;
       }
       if (!report) {
-        const message = "Cannot remove skill: skills are not loaded.";
+        const message = "스킬을 제거할 수 없습니다: 스킬 목록을 아직 불러오지 않았습니다.";
         setSettingsSkillsError(message);
         setSkillMessage(normalizedSkillKey, {
           kind: "error",
@@ -943,7 +943,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       }
       const normalizedSource = skill.source.trim();
       if (!canRemoveSkillSource(normalizedSource)) {
-        const message = `Skill source cannot be removed from Studio: ${normalizedSource || "unknown"}.`;
+        const message = `스튜디오에서 제거할 수 없는 스킬 소스입니다: ${normalizedSource || "알 수 없음"}.`;
         setSettingsSkillsError(message);
         setSkillMessage(normalizedSkillKey, {
           kind: "error",
@@ -956,7 +956,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         agentId,
         decisionKind: "remove-skill",
         skillKey: normalizedSkillKey,
-        label: `Remove ${normalizedSkillKey}`,
+        label: `${normalizedSkillKey} 제거`,
         run: async () => {
           const result = await removeSkillFromGateway({
             client: params.client,
@@ -968,8 +968,8 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
           });
           return {
             successMessage: result.removed
-              ? "Skill removed from gateway files"
-              : "Skill files were already removed",
+              ? "게이트웨이 파일에서 스킬을 제거했습니다"
+              : "스킬 파일은 이미 제거되어 있습니다",
           };
         },
       });
@@ -982,7 +982,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
       const normalizedSkillKey = skillKey.trim();
       const apiKey = (settingsSkillApiKeyDrafts[normalizedSkillKey] ?? "").trim();
       if (!apiKey) {
-        const message = "API key cannot be empty.";
+        const message = "API 키는 비워둘 수 없습니다.";
         setSettingsSkillsError(message);
         setSkillMessage(normalizedSkillKey, {
           kind: "error",
@@ -994,7 +994,7 @@ export function useAgentSettingsMutationController(params: UseAgentSettingsMutat
         agentId,
         decisionKind: "save-skill-api-key",
         skillKey: normalizedSkillKey,
-        label: `Save API key for ${normalizedSkillKey}`,
+        label: `${normalizedSkillKey} API 키 저장`,
         refreshConfigSnapshot: true,
         run: async () => {
           await updateSkill(params.client, {

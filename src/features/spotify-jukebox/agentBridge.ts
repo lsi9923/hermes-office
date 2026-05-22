@@ -66,20 +66,20 @@ export const executeBrowserJukeboxCommand = async (
   switch (command.kind) {
     case "pause":
       await useJukeboxStore.getState().pause();
-      return { ok: true, reply: "Paused the office jukebox." };
+      return { ok: true, reply: "오피스 주크박스를 일시정지했습니다." };
     case "resume":
       await useJukeboxStore.getState().resume();
-      return { ok: true, reply: "Resumed the office jukebox." };
+      return { ok: true, reply: "오피스 주크박스를 다시 재생했습니다." };
     case "next":
       await useJukeboxStore.getState().next();
-      return { ok: true, reply: "Skipped to the next track on the office jukebox." };
+      return { ok: true, reply: "오피스 주크박스에서 다음 트랙으로 넘겼습니다." };
     case "previous":
       await useJukeboxStore.getState().previous();
-      return { ok: true, reply: "Went back to the previous track on the office jukebox." };
+      return { ok: true, reply: "오피스 주크박스에서 이전 트랙으로 돌아갔습니다." };
     case "play": {
       if (!command.query) {
         await useJukeboxStore.getState().resume();
-        return { ok: true, reply: "Started the office jukebox." };
+        return { ok: true, reply: "오피스 주크박스를 시작했습니다." };
       }
       const results = await searchTracks(token, command.query);
       useJukeboxStore.setState({
@@ -91,10 +91,10 @@ export const executeBrowserJukeboxCommand = async (
       }
       await useJukeboxStore.getState().play(results[0].uri);
       const top = results[0];
-      const artist = top.artists[0]?.name ?? "Unknown artist";
+      const artist = top.artists[0]?.name ?? "알 수 없는 아티스트";
       return {
         ok: true,
-        reply: `Playing ${artist} - "${top.name}" on the office jukebox.`,
+        reply: `오피스 주크박스에서 ${artist} - "${top.name}" 재생 중입니다.`,
       };
     }
   }

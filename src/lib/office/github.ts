@@ -141,17 +141,17 @@ const runJsonCommand = <T>(command: string, args: string[], label: string): T =>
   const result = runCommand(command, args);
   if (result.status !== 0) {
     throw new Error(
-      extractCommandMessage(result.stderr, result.stdout, `Failed to run ${label}.`),
+      extractCommandMessage(result.stderr, result.stdout, `${label} 실행에 실패했습니다.`),
     );
   }
   const trimmed = result.stdout.trim();
   if (!trimmed) {
-    throw new Error(`Empty JSON response from ${label}.`);
+    throw new Error(`${label}에서 빈 JSON 응답이 왔습니다.`);
   }
   try {
     return JSON.parse(trimmed) as T;
   } catch {
-    throw new Error(`Invalid JSON response from ${label}.`);
+    throw new Error(`${label}에서 올바르지 않은 JSON 응답이 왔습니다.`);
   }
 };
 
@@ -159,7 +159,7 @@ const runTextCommand = (command: string, args: string[], label: string): string 
   const result = runCommand(command, args);
   if (result.status !== 0) {
     throw new Error(
-      extractCommandMessage(result.stderr, result.stdout, `Failed to run ${label}.`),
+      extractCommandMessage(result.stderr, result.stdout, `${label} 실행에 실패했습니다.`),
     );
   }
   return result.stdout;
@@ -172,14 +172,14 @@ const getGitHubAuthState = (): { authState: GitHubAuthState; viewerLogin: string
       return {
         authState: "missing-gh",
         viewerLogin: null,
-        message: extractCommandMessage(version.stderr, version.stdout, "GitHub CLI is not installed."),
+        message: extractCommandMessage(version.stderr, version.stdout, "GitHub CLI가 설치되어 있지 않습니다."),
       };
     }
   } catch {
     return {
       authState: "missing-gh",
       viewerLogin: null,
-      message: "GitHub CLI is not installed.",
+      message: "GitHub CLI가 설치되어 있지 않습니다.",
     };
   }
 
@@ -194,7 +194,7 @@ const getGitHubAuthState = (): { authState: GitHubAuthState; viewerLogin: string
     return {
       authState: "unauthenticated",
       viewerLogin: null,
-      message: error instanceof Error ? error.message : "GitHub CLI is not authenticated.",
+      message: error instanceof Error ? error.message : "GitHub CLI 인증이 필요합니다.",
     };
   }
 };
@@ -517,7 +517,7 @@ export const submitGitHubPullRequestReview = (params: {
 }) => {
   const auth = getGitHubAuthState();
   if (auth.authState !== "ready") {
-    throw new Error(auth.message ?? "GitHub CLI is not ready.");
+    throw new Error(auth.message ?? "GitHub CLI가 준비되지 않았습니다.");
   }
 
   const args = ["pr", "review", String(params.number), "--repo", params.repo];
@@ -532,9 +532,9 @@ export const submitGitHubPullRequestReview = (params: {
   const body =
     params.body?.trim() ||
     (params.action === "COMMENT"
-      ? "Reviewed in Claw3D."
+      ? "Claw3D에서 리뷰했습니다."
       : params.action === "REQUEST_CHANGES"
-        ? "Please address the requested updates from Claw3D."
+        ? "Claw3D에서 요청한 수정 사항을 확인해주세요."
         : "");
   if (body) {
     args.push("--body", body);
@@ -546,7 +546,7 @@ export const submitGitHubPullRequestReview = (params: {
       extractCommandMessage(
         result.stderr,
         result.stdout,
-        "Failed to submit the GitHub review.",
+        "GitHub 리뷰를 제출하지 못했습니다.",
       ),
     );
   }
@@ -555,10 +555,10 @@ export const submitGitHubPullRequestReview = (params: {
     ok: true,
     message:
       params.action === "APPROVE"
-        ? "Pull request approved."
+        ? "풀 리퀘스트를 승인했습니다."
         : params.action === "REQUEST_CHANGES"
-          ? "Requested changes on pull request."
-          : "Review comment submitted.",
+          ? "풀 리퀘스트에 변경 요청을 남겼습니다."
+          : "리뷰 코멘트를 제출했습니다.",
   };
 };
 
@@ -579,7 +579,7 @@ const resolvePullRequestHeadOid = (repo: string, number: number): string => {
     "gh pr view headRefOid",
   ).trim();
   if (!oid) {
-    throw new Error("Unable to determine the latest pull request commit.");
+    throw new Error("최신 풀 리퀘스트 커밋을 확인하지 못했습니다.");
   }
   return oid;
 };
@@ -595,12 +595,12 @@ export const submitGitHubInlineComment = (params: {
 }) => {
   const auth = getGitHubAuthState();
   if (auth.authState !== "ready") {
-    throw new Error(auth.message ?? "GitHub CLI is not ready.");
+    throw new Error(auth.message ?? "GitHub CLI가 준비되지 않았습니다.");
   }
 
   const trimmedBody = params.body.trim();
   if (!trimmedBody) {
-    throw new Error("Comment body is required.");
+    throw new Error("코멘트 본문이 필요합니다.");
   }
 
   const commitId = params.commitId?.trim() || resolvePullRequestHeadOid(params.repo, params.number);
@@ -630,13 +630,13 @@ export const submitGitHubInlineComment = (params: {
       extractCommandMessage(
         result.stderr,
         result.stdout,
-        "Failed to submit the GitHub inline comment.",
+        "GitHub 인라인 코멘트를 제출하지 못했습니다.",
       ),
     );
   }
 
   return {
     ok: true,
-    message: "Inline comment submitted.",
+    message: "인라인 코멘트를 제출했습니다.",
   };
 };

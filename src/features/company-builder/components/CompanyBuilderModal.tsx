@@ -190,12 +190,12 @@ export function CompanyBuilderModal({
           <div>
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
               <Sparkles className="h-4 w-4" />
-              Company Builder
+              회사 빌더
             </div>
-            <h2 className="mt-1 text-lg font-semibold">Design an AI company from one prompt</h2>
+            <h2 className="mt-1 text-lg font-semibold">프롬프트 하나로 AI 회사 설계</h2>
             <p className="mt-1 text-sm text-white/55">
-              Uses your connected runtime
-              {plannerAgentName ? ` via ${plannerAgentName}.` : "."}
+              연결된 런타임 사용
+              {plannerAgentName ? `: ${plannerAgentName}` : ""}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -212,7 +212,7 @@ export function CompanyBuilderModal({
               }}
               disabled={!canClear}
             >
-              Clear
+              비우기
             </button>
             <button
               type="button"
@@ -227,7 +227,7 @@ export function CompanyBuilderModal({
               disabled={!canGenerate}
             >
               <Sparkles className="h-3.5 w-3.5" />
-              Generate
+              생성
             </button>
             <button
               type="button"
@@ -238,7 +238,7 @@ export function CompanyBuilderModal({
               disabled={!canPreviewChart}
             >
               <GitBranch className="h-3.5 w-3.5" />
-              Org Chart
+              조직도
             </button>
             <button
               type="button"
@@ -254,14 +254,14 @@ export function CompanyBuilderModal({
               disabled={!canCreate}
             >
               <Wand2 className="h-3.5 w-3.5" />
-              Create Company
+              회사 생성
             </button>
             <button
               type="button"
               className="rounded-md border border-white/10 p-2 text-white/60 transition hover:bg-white/5 hover:text-white"
               onClick={onClose}
               disabled={busy}
-              aria-label="Close company builder"
+              aria-label="회사 빌더 닫기"
             >
               <X className="h-4 w-4" />
             </button>
@@ -275,7 +275,7 @@ export function CompanyBuilderModal({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/60">
-                      Source prompt
+                      원본 프롬프트
                     </p>
                     <button
                       type="button"
@@ -287,13 +287,13 @@ export function CompanyBuilderModal({
                       disabled={busy}
                     >
                       <Wand2 className="h-3 w-3" />
-                      {input.businessDescription.trim() ? "Edit prompt" : "Describe company"}
+                      {input.businessDescription.trim() ? "프롬프트 편집" : "회사 설명"}
                     </button>
                   </div>
                   <div className="text-sm leading-6 text-white/70">
                     {input.businessDescription.trim()
                       ? input.businessDescription
-                      : "Describe what the company should do and Claw3D will immediately turn it into an improved brief."}
+                      : "회사가 무엇을 해야 하는지 설명하면 Claw3D가 바로 개선된 브리프로 바꿉니다."}
                   </div>
                 </div>
               </div>
@@ -302,16 +302,16 @@ export function CompanyBuilderModal({
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/60">
-                      Improved Brief
+                      개선된 브리프
                     </p>
                     <p className="mt-1 text-[11px] text-white/45">
-                      This is the text used for company generation.
+                      회사 생성에 사용할 텍스트입니다.
                     </p>
                   </div>
                 </div>
                 <textarea
                   className={`${textareaClassName} mt-3 min-h-[340px]`}
-                  placeholder="AI will rewrite the brief here."
+                  placeholder="AI가 여기에 브리프를 다시 작성합니다."
                   value={input.improvedBrief}
                   onChange={(event) =>
                     setInput((current) => ({
@@ -326,23 +326,23 @@ export function CompanyBuilderModal({
               <div className="space-y-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/60">
-                    Company Actions
+                    회사 작업
                   </p>
                   <p className="mt-1 text-[11px] text-white/45">
-                    Generate the org, then create it in your connected runtime.
+                    조직을 생성한 뒤 연결된 런타임에 만듭니다.
                   </p>
                 </div>
                 {replacesExistingAgents ? (
                   <div className="rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-100/85">
-                    Your current {agentCount === 1 ? "agent will" : `${agentCount} agents will`} be
-                    deleted and replaced by this company when you create it. This action is
-                    irreversible and will delete the old agents&apos; workspaces.
+                    회사를 만들면 현재 {agentCount === 1 ? "에이전트" : `에이전트 ${agentCount}개`}가
+                    삭제되고 이 회사로 교체됩니다. 이 작업은 되돌릴 수 없으며 기존
+                    에이전트의 작업 공간도 삭제됩니다.
                   </div>
                 ) : null}
                 {!canUseAi ? (
                   <p className="text-xs text-amber-200/80">
-                    Connect to a runtime and keep at least one available planning agent in the fleet
-                    to use AI suggestions.
+                    AI 제안을 사용하려면 런타임에 연결하고 사용 가능한 계획 담당
+                    에이전트를 최소 1개 유지하세요.
                   </p>
                 ) : null}
                 {statusLine ? <p className="text-xs text-cyan-100/75">{statusLine}</p> : null}
@@ -356,7 +356,7 @@ export function CompanyBuilderModal({
               <div className="space-y-5">
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="flex flex-col gap-2 text-xs text-white/60">
-                    Company name
+                    회사 이름
                     <input
                       className={inputClassName}
                       value={plan.companyName}
@@ -374,7 +374,7 @@ export function CompanyBuilderModal({
                     />
                   </label>
                   <label className="flex flex-col gap-2 text-xs text-white/60">
-                    Shared rules
+                    공유 규칙
                     <input
                       className={inputClassName}
                       value={joinCommaList(plan.sharedRules)}
@@ -394,7 +394,7 @@ export function CompanyBuilderModal({
                 </div>
 
                 <label className="flex flex-col gap-2 text-xs text-white/60">
-                  Company summary
+                  회사 요약
                   <textarea
                     className={`${textareaClassName} min-h-[110px]`}
                     value={plan.summary}
@@ -414,9 +414,9 @@ export function CompanyBuilderModal({
 
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-white">Org structure</p>
+                    <p className="text-sm font-semibold text-white">조직 구조</p>
                     <p className="text-xs text-white/55">
-                      Edit the team before creating agents in your connected runtime.
+                      연결된 런타임에 에이전트를 만들기 전에 팀을 편집하세요.
                     </p>
                   </div>
                   <button
@@ -436,7 +436,7 @@ export function CompanyBuilderModal({
                     disabled={busy}
                   >
                     <Plus className="h-3.5 w-3.5" />
-                    Add role
+                    역할 추가
                   </button>
                 </div>
 
@@ -456,13 +456,13 @@ export function CompanyBuilderModal({
                           </div>
                           <div className="min-w-0">
                             <div className="text-xs uppercase tracking-[0.14em] text-white/45">
-                              Role {index + 1}
+                              역할 {index + 1}
                             </div>
                             <div className="mt-2 text-sm font-semibold text-white">
-                              {role.title || "Untitled role"}
+                              {role.title || "제목 없는 역할"}
                             </div>
                             <div className="mt-1 text-xs text-white/45">
-                              3D avatar preview generated for this role.
+                              이 역할에 대해 생성된 3D 아바타 미리보기입니다.
                             </div>
                           </div>
                         </div>
@@ -632,7 +632,7 @@ export function CompanyBuilderModal({
                           />
                         </label>
                         <label className="flex flex-col gap-2 text-xs text-white/60">
-                          Tool notes
+                          도구 메모
                           <input
                             className={inputClassName}
                             value={joinCommaList(role.tools)}
@@ -654,7 +654,7 @@ export function CompanyBuilderModal({
                           />
                         </label>
                         <label className="flex flex-col gap-2 text-xs text-white/60">
-                          Heartbeat checklist
+                          하트비트 체크리스트
                           <input
                             className={inputClassName}
                             value={joinCommaList(role.heartbeat)}
@@ -684,11 +684,10 @@ export function CompanyBuilderModal({
               <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
                 <div className="max-w-md space-y-3">
                   <Sparkles className="mx-auto h-8 w-8 text-cyan-300/70" />
-                  <p className="text-lg font-semibold text-white">No company generated yet</p>
+                  <p className="text-lg font-semibold text-white">아직 생성된 회사가 없습니다</p>
                   <p className="text-sm text-white/55">
-                    Start by describing the company. Claw3D will create the improved brief
-                    automatically, then you can generate and edit the org structure before anything
-                    is created.
+                    회사 설명부터 시작하세요. Claw3D가 개선된 브리프를 자동으로
+                    만들고, 실제 생성 전에 조직 구조를 생성하고 편집할 수 있습니다.
                   </p>
                 </div>
               </div>
@@ -701,10 +700,10 @@ export function CompanyBuilderModal({
           <div className="w-full max-w-md rounded-2xl border border-cyan-500/20 bg-[#08111a] px-6 py-6 text-center shadow-2xl">
             <RunningAvatarLoader size={40} trackWidth={104} />
             <p className="mt-4 text-sm font-semibold text-white">
-              {statusLine?.trim() || "Working on your company."}
+              {statusLine?.trim() || "회사를 작업하는 중입니다."}
             </p>
             <p className="mt-2 text-xs leading-5 text-white/55">
-              Claw3D is using your connected runtime right now. Please wait until this finishes.
+              Claw3D가 연결된 런타임을 사용 중입니다. 완료될 때까지 기다려주세요.
             </p>
             <div className="mt-5 flex gap-2">
               {Array.from({ length: 4 }, (_, index) => (
@@ -722,11 +721,11 @@ export function CompanyBuilderModal({
         <div className="fixed inset-0 z-[100115] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
           <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0b1119] p-6 shadow-2xl">
             <div className="space-y-2">
-              <p className="text-sm font-semibold text-white">Replace current agents?</p>
+              <p className="text-sm font-semibold text-white">현재 에이전트를 교체할까요?</p>
               <p className="text-sm leading-6 text-white/65">
-                Your current {agentCount === 1 ? "agent will" : `${agentCount} agents will`} be
-                deleted and replaced by this new company. This action is irreversible and will
-                delete the old agents&apos; workspaces. Are you sure you want to continue?
+                현재 {agentCount === 1 ? "에이전트" : `에이전트 ${agentCount}개`}가
+                삭제되고 새 회사로 교체됩니다. 이 작업은 되돌릴 수 없으며 기존
+                에이전트의 작업 공간도 삭제됩니다. 계속할까요?
               </p>
             </div>
             <div className="mt-6 flex items-center justify-end gap-3">
@@ -738,7 +737,7 @@ export function CompanyBuilderModal({
                 }}
                 disabled={busy}
               >
-                Cancel
+                취소
               </button>
               <button
                 type="button"
@@ -749,7 +748,7 @@ export function CompanyBuilderModal({
                 }}
                 disabled={busy}
               >
-                Create Company
+                회사 생성
               </button>
             </div>
           </div>
@@ -761,10 +760,10 @@ export function CompanyBuilderModal({
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-200/70">
-                  Org Chart Preview
+                  조직도 미리보기
                 </p>
                 <p className="mt-2 text-sm text-white/60">
-                  Hover any avatar to inspect the role brief, responsibilities, and collaborators.
+                  아바타에 마우스를 올리면 역할 브리프, 책임, 협업 대상을 확인할 수 있습니다.
                 </p>
               </div>
               <button
@@ -774,7 +773,7 @@ export function CompanyBuilderModal({
                   setOrgChartOpen(false);
                 }}
                 disabled={busy}
-                aria-label="Close org chart preview"
+                aria-label="조직도 미리보기 닫기"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -802,12 +801,12 @@ export function CompanyBuilderModal({
                         className="h-full w-full"
                       />
                     </div>
-                    <p className="mt-3 text-xs uppercase tracking-[0.14em] text-cyan-100/65">Role 1</p>
+                    <p className="mt-3 text-xs uppercase tracking-[0.14em] text-cyan-100/65">역할 1</p>
                     <p className="mt-1 text-lg font-semibold text-white">
-                      {plan.roles[0].title || "Untitled role"}
+                      {plan.roles[0].title || "제목 없는 역할"}
                     </p>
                     <p className="mt-1 text-sm text-white/60">
-                      {plan.roles[0].purpose || "No purpose yet."}
+                      {plan.roles[0].purpose || "아직 목적이 없습니다."}
                     </p>
                   </button>
                   {plan.roles.length > 1 ? (
@@ -838,13 +837,13 @@ export function CompanyBuilderModal({
                               />
                             </div>
                             <p className="mt-3 text-xs uppercase tracking-[0.14em] text-white/45">
-                              Role {index + 2}
+                              역할 {index + 2}
                             </p>
                             <p className="mt-1 text-base font-semibold text-white">
-                              {role.title || "Untitled role"}
+                              {role.title || "제목 없는 역할"}
                             </p>
                             <p className="mt-1 text-sm text-white/60">
-                              {role.purpose || "No purpose yet."}
+                              {role.purpose || "아직 목적이 없습니다."}
                             </p>
                           </button>
                         ))}
@@ -857,30 +856,30 @@ export function CompanyBuilderModal({
                     <div className="space-y-4">
                       <div>
                         <p className="text-xs uppercase tracking-[0.14em] text-cyan-100/65">
-                          Active Role
+                          활성 역할
                         </p>
                         <p className="mt-2 text-xl font-semibold text-white">
-                          {hoveredOrgRole.title || "Untitled role"}
+                          {hoveredOrgRole.title || "제목 없는 역할"}
                         </p>
                         <p className="mt-2 text-sm leading-6 text-white/70">
-                          {hoveredOrgRole.soul || "No soul notes yet."}
+                          {hoveredOrgRole.soul || "아직 성격 메모가 없습니다."}
                         </p>
                       </div>
                       <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-100/65">
-                          Purpose
+                          목적
                         </p>
                         <p className="mt-2 text-sm leading-6 text-white/75">
-                          {hoveredOrgRole.purpose || "No purpose yet."}
+                          {hoveredOrgRole.purpose || "아직 목적이 없습니다."}
                         </p>
                       </div>
-                      {renderRoleFacts("Responsibilities", hoveredOrgRole.responsibilities)}
-                      {renderRoleFacts("Collaborators", hoveredOrgRole.collaborators)}
-                      {renderRoleFacts("Tools", hoveredOrgRole.tools)}
-                      {renderRoleFacts("Heartbeat", hoveredOrgRole.heartbeat)}
+                      {renderRoleFacts("책임", hoveredOrgRole.responsibilities)}
+                      {renderRoleFacts("협업 대상", hoveredOrgRole.collaborators)}
+                      {renderRoleFacts("도구", hoveredOrgRole.tools)}
+                      {renderRoleFacts("하트비트", hoveredOrgRole.heartbeat)}
                     </div>
                   ) : (
-                    <p className="text-sm text-white/55">Hover a role to inspect it.</p>
+                    <p className="text-sm text-white/55">역할에 마우스를 올려 자세히 확인하세요.</p>
                   )}
                 </aside>
               </div>
@@ -894,11 +893,10 @@ export function CompanyBuilderModal({
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-200/70">
-                  What should the company do?
+                  회사가 무엇을 해야 하나요?
                 </p>
                 <p className="mt-2 text-sm text-white/55">
-                  As soon as you submit this, Claw3D will improve the brief using your connected
-                  runtime.
+                  제출하면 Claw3D가 연결된 런타임으로 브리프를 개선합니다.
                 </p>
               </div>
               <button
@@ -909,14 +907,14 @@ export function CompanyBuilderModal({
                   setPromptModalOpen(false);
                 }}
                 disabled={busy}
-                aria-label="Close prompt modal"
+                aria-label="프롬프트 모달 닫기"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
             <textarea
               className={`${textareaClassName} mt-5 min-h-[220px]`}
-              placeholder="I run a web design company that builds websites, web apps, mobile apps, SEO campaigns, and social media services..."
+              placeholder="웹사이트, 웹앱, 모바일 앱, SEO 캠페인, 소셜 미디어 서비스를 만드는 웹 디자인 회사를 운영합니다..."
               value={promptDraft}
               onChange={(event) => {
                 setPromptDraft(event.target.value);
@@ -926,7 +924,7 @@ export function CompanyBuilderModal({
             <div className="mt-5 flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs text-white/45">
-                  The improved brief becomes the main editable input for generation.
+                  개선된 브리프가 생성에 사용할 기본 편집 입력값이 됩니다.
                 </p>
                 {error ? <p className="mt-2 text-xs text-red-200">{error}</p> : null}
               </div>
@@ -951,7 +949,7 @@ export function CompanyBuilderModal({
                 disabled={!canUseAi || promptDraft.trim().length === 0 || busy}
               >
                 <Sparkles className="h-4 w-4" />
-                Generate Company
+                회사 생성
               </button>
             </div>
           </div>

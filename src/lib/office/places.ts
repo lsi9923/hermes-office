@@ -45,7 +45,7 @@ export const OFFICE_SKILL_TRIGGER_PLACE_REGISTRY: Record<
     animationHoldKey: "deskHoldByAgentId",
   },
   github: {
-    label: "GitHub / Server Room",
+    label: "GitHub / 서버룸",
     interactionTarget: "server_room",
     animationHoldKey: "githubHoldByAgentId",
   },
@@ -56,12 +56,12 @@ export const OFFICE_SKILL_TRIGGER_PLACE_REGISTRY: Record<
     alsoSetsSkillGymHold: true,
   },
   jukebox: {
-    label: "Jukebox",
+    label: "주크박스",
     interactionTarget: "jukebox",
     animationHoldKey: "jukeboxHoldByAgentId",
   },
   qa_lab: {
-    label: "QA Lab",
+    label: "QA 랩",
     interactionTarget: "qa_lab",
     animationHoldKey: "qaHoldByAgentId",
   },

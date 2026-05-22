@@ -320,7 +320,7 @@ export const runHistorySyncOperation = async (
   } catch (err) {
     commands.push({
       kind: "logError",
-      message: err instanceof Error ? err.message : "Failed to load chat history.",
+      message: err instanceof Error ? err.message : "채팅 기록을 불러오지 못했습니다.",
       error: err,
     });
     return commands;

@@ -83,7 +83,7 @@ export function KanbanImmersiveScreen({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Kanban Board"
+      aria-label="칸반 보드"
       className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -93,7 +93,7 @@ export function KanbanImmersiveScreen({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close Kanban Board"
+          aria-label="칸반 보드 닫기"
           className="absolute -right-5 -top-5 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-amber-400/20 bg-[#0e0b07]/90 text-amber-200/70 backdrop-blur-sm transition-colors hover:border-amber-400/40 hover:text-white"
         >
           <X className="h-4 w-4" />
@@ -106,8 +106,8 @@ export function KanbanImmersiveScreen({
         >
           <div className="min-h-0 flex-1">
           <TaskBoardView
-            title="Kanban Board"
-            subtitle="Headquarters task routing, scheduling, and review."
+            title="칸반 보드"
+            subtitle="본부 작업 라우팅, 일정, 검토를 관리합니다."
             agents={agents}
             cardsByStatus={cardsByStatus}
             selectedCard={selectedCard}

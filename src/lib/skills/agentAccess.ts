@@ -27,12 +27,12 @@ export const setAgentSkillEnabled = async (params: {
 }): Promise<void> => {
   const resolvedSkillName = normalizeSkillName(params.skillName);
   if (!resolvedSkillName) {
-    throw new Error("Skill name is required.");
+    throw new Error("스킬 이름이 필요합니다.");
   }
 
   const visibleSkillNames = resolveVisibleAgentSkillNames(params.visibleSkills);
   if (visibleSkillNames.length === 0) {
-    throw new Error("Cannot update skill access: no skills available for this agent.");
+    throw new Error("스킬 접근 권한을 업데이트할 수 없습니다: 이 에이전트에서 사용할 수 있는 스킬이 없습니다.");
   }
 
   const existingAllowlist = await readGatewayAgentSkillsAllowlist({

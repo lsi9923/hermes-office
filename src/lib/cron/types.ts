@@ -108,14 +108,14 @@ const formatEveryMs = (everyMs: number) => {
 
 export const formatCronSchedule = (schedule: CronSchedule) => {
   if (schedule.kind === "every") {
-    return `Every ${formatEveryMs(schedule.everyMs)}`;
+    return `${formatEveryMs(schedule.everyMs)}마다`;
   }
   if (schedule.kind === "cron") {
     return schedule.tz ? `Cron: ${schedule.expr} (${schedule.tz})` : `Cron: ${schedule.expr}`;
   }
   const atDate = new Date(schedule.at);
-  if (Number.isNaN(atDate.getTime())) return `At: ${schedule.at}`;
-  return `At: ${atDate.toLocaleString()}`;
+  if (Number.isNaN(atDate.getTime())) return `일시: ${schedule.at}`;
+  return `일시: ${atDate.toLocaleString()}`;
 };
 
 export const formatCronPayload = (payload: CronPayload) => {
@@ -158,7 +158,7 @@ export type CronJobRestoreInput = {
 const resolveJobId = (jobId: string): string => {
   const trimmed = jobId.trim();
   if (!trimmed) {
-    throw new Error("Cron job id is required.");
+    throw new Error("Cron 작업 ID가 필요합니다.");
   }
   return trimmed;
 };
@@ -166,7 +166,7 @@ const resolveJobId = (jobId: string): string => {
 const resolveAgentId = (agentId: string): string => {
   const trimmed = agentId.trim();
   if (!trimmed) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
   return trimmed;
 };
@@ -174,7 +174,7 @@ const resolveAgentId = (agentId: string): string => {
 const resolveCronJobName = (name: string): string => {
   const trimmed = name.trim();
   if (!trimmed) {
-    throw new Error("Cron job name is required.");
+    throw new Error("Cron 작업 이름이 필요합니다.");
   }
   return trimmed;
 };
@@ -242,7 +242,7 @@ const restoreRemovedJobsBestEffort = async (
   try {
     await restoreCronJobs(client, removedJobs);
   } catch (restoreErr) {
-    console.error("Failed to restore cron jobs after partial deletion failure.", restoreErr);
+    console.error("일부 삭제 실패 후 Cron 작업을 복원하지 못했습니다.", restoreErr);
   }
 };
 
@@ -255,7 +255,7 @@ export const restoreCronJobs = async (
       await createCronJob(client, job);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      throw new Error(`Failed to restore cron job "${job.name}" (${job.agentId}): ${message}`);
+      throw new Error(`Cron 작업 "${job.name}" (${job.agentId})을 복원하지 못했습니다: ${message}`);
     }
   }
 };
@@ -278,7 +278,7 @@ export const removeCronJobsForAgentWithBackup = async (
     }
     if (!removeResult.ok) {
       await restoreRemovedJobsBestEffort(client, removedJobs);
-      throw new Error(`Failed to delete cron job "${job.name}" (${job.id}).`);
+      throw new Error(`Cron 작업 "${job.name}" (${job.id})을 삭제하지 못했습니다.`);
     }
     if (removeResult.removed) {
       removedJobs.push(toCronJobRestoreInput(job, id));

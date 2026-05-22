@@ -28,16 +28,16 @@ export function SmsBoothImmersiveScreen({
 }) {
   const statusLabel =
     step === "selecting_contact"
-      ? "Selecting contact"
+      ? "연락처 선택 중"
       : step === "composing"
-      ? "Composing"
+      ? "작성 중"
       : step === "sending"
-        ? "Sending"
+        ? "전송 중"
         : step === "delivered"
-          ? "Delivered"
+          ? "전달됨"
           : step === "reply"
-            ? "Reply received"
-            : "Message complete";
+            ? "답장 수신"
+            : "메시지 완료";
   const messageBody = typedMessage || scenario.messageText || "";
 
   return (
@@ -48,7 +48,7 @@ export function SmsBoothImmersiveScreen({
           <div className="rounded-[32px] border border-sky-300/18 bg-slate-950/65 p-8 shadow-[0_24px_90px_rgba(2,8,23,0.75)]">
             <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.28em] text-sky-200/70">
               <MessageSquareText className="h-4 w-4" />
-              Messaging Booth
+              메시지 부스
             </div>
             <div className="mt-4 text-4xl font-semibold tracking-[0.08em] text-sky-50">
               {scenario.recipient}
@@ -58,21 +58,21 @@ export function SmsBoothImmersiveScreen({
             </div>
             <div className="mt-8 rounded-[28px] border border-sky-300/16 bg-slate-900/90 p-6">
               <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.24em] text-sky-200/60">
-                <span>Typing from booth</span>
-                <span>iPhone relay</span>
+                <span>부스에서 입력 중</span>
+                <span>iPhone 릴레이</span>
               </div>
               <div className="mt-5 rounded-[24px] border border-slate-700 bg-slate-950/80 px-5 py-4 text-base leading-7 text-sky-50">
-                {messageBody || "Waiting for the first characters."}
+                {messageBody || "첫 글자를 기다리는 중입니다."}
                 {step === "composing" ? <span className="ml-1 inline-block animate-pulse">|</span> : null}
               </div>
               <div className="mt-5 flex items-center justify-end gap-3 text-sm uppercase tracking-[0.22em]">
                 <div className="inline-flex items-center gap-2 rounded-2xl border border-sky-300/22 bg-sky-400/10 px-4 py-2 text-sky-100/80">
                   <Smartphone className="h-4 w-4" />
-                  Active
+                  활성
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-2xl border border-emerald-300/24 bg-emerald-400/10 px-4 py-2 text-emerald-100/80">
                   {step === "sending" ? <Send className="h-4 w-4" /> : <CheckCheck className="h-4 w-4" />}
-                  {step === "composing" ? "Drafting" : statusLabel}
+                  {step === "composing" ? "초안 작성" : statusLabel}
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function SmsBoothImmersiveScreen({
               <div className="absolute left-1/2 top-3 h-1.5 w-28 -translate-x-1/2 rounded-full bg-slate-700" />
               <div className="relative flex h-full flex-col overflow-hidden rounded-[34px] border border-sky-300/12 bg-[linear-gradient(180deg,#081225_0%,#020617_100%)] px-5 py-6">
                 <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.24em] text-sky-200/65">
-                  <span>Messages</span>
+                  <span>메시지</span>
                   <Smartphone className="h-4 w-4" />
                 </div>
                 <div className="mt-5 text-center">
@@ -104,20 +104,20 @@ export function SmsBoothImmersiveScreen({
                     <div className="space-y-4">
                       <Bubble
                         align="right"
-                        label="Agent"
-                        text={messageBody || "Starting draft."}
+                        label="에이전트"
+                        text={messageBody || "초안을 시작하는 중입니다."}
                         tone="primary"
                       />
                       {step === "delivered" || step === "reply" || step === "complete" ? (
                         <div className="text-right text-[11px] uppercase tracking-[0.2em] text-sky-200/45">
-                          Delivered
+                          전달됨
                         </div>
                       ) : null}
                       {step === "reply" || step === "complete" ? (
                         <Bubble
                           align="left"
                           label={scenario.recipient}
-                          text={scenario.confirmationText ?? "Delivered."}
+                          text={scenario.confirmationText ?? "전달되었습니다."}
                           tone="secondary"
                         />
                       ) : null}
@@ -172,7 +172,7 @@ function ContactList({
             >
               <div className="text-sm font-medium">{contact}</div>
               <div className="mt-1 text-[11px] uppercase tracking-[0.18em] opacity-60">
-                {active ? "Opening conversation" : "Recent thread"}
+                {active ? "대화 여는 중" : "최근 대화"}
               </div>
             </div>
           );
@@ -207,8 +207,8 @@ function PhoneKeyboard({ activeKey }: { activeKey: string | null }) {
       ))}
       <div className="flex items-center gap-2">
         <KeyboardKey label="123" active={false} className="w-[18%]" />
-        <KeyboardKey label="space" active={activeKey === "space"} className="flex-1" />
-        <KeyboardKey label="return" active={activeKey === "return"} className="w-[22%]" />
+        <KeyboardKey label="스페이스" active={activeKey === "space"} className="flex-1" />
+        <KeyboardKey label="리턴" active={activeKey === "return"} className="w-[22%]" />
       </div>
     </div>
   );

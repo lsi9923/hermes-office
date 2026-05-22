@@ -230,11 +230,11 @@ export const buildHistoryLines = (messages: ChatHistoryMessage[]): HistoryLinesR
     if (stopReason === "error") {
       const errorMessage =
         typeof message.errorMessage === "string" ? message.errorMessage.trim() : "";
-      return errorMessage ? `Error: ${errorMessage}` : "Run error.";
+      return errorMessage ? `오류: ${errorMessage}` : "실행 오류.";
     }
     const fallbackError =
       typeof message.errorMessage === "string" ? message.errorMessage.trim() : "";
-    return fallbackError ? `Error: ${fallbackError}` : null;
+    return fallbackError ? `오류: ${fallbackError}` : null;
   };
   const isRestartSentinelMessage = (text: string) => {
     const trimmed = text.trim();

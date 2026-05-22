@@ -99,7 +99,7 @@ export const useApprovalMetrics = ({
           id: resolved.id,
           agentId: null,
           sessionKey: null,
-          command: "Unknown command",
+          command: "알 수 없는 명령",
           createdAtMs: resolved.ts,
           expiresAtMs: resolved.ts,
           resolvedAtMs: resolved.ts,

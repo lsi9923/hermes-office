@@ -25,19 +25,19 @@ export function KanbanDisabledPanel({
         </div>
 
         <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">
-          Task Manager
+          작업 관리자
         </div>
-        <h2 className="mt-1 text-xl font-semibold text-white">Kanban Skill Not Installed</h2>
+        <h2 className="mt-1 text-xl font-semibold text-white">칸반 스킬이 설치되지 않았습니다</h2>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
-          Install the <span className="text-cyan-400">TASK-MANAGER</span> skill to let your
-          agents capture work as tasks and open the Kanban desk.
+          에이전트가 작업을 태스크로 기록하고 칸반 데스크를 열 수 있게
+          <span className="text-cyan-400"> TASK-MANAGER</span> 스킬을 설치하세요.
         </p>
 
         {installing ? (
           <div className="mt-5 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4 text-left">
             <div className="flex items-center justify-between gap-3">
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-300/80">
-                Installing
+                설치 중
               </span>
               <span className="font-mono text-[10px] text-cyan-100/70">
                 {Math.max(0, Math.min(100, Math.round(progressPercent)))}%
@@ -50,10 +50,10 @@ export function KanbanDisabledPanel({
               />
             </div>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              {progressMessage?.trim() || "Installing the task-manager skill."}
+              {progressMessage?.trim() || "task-manager 스킬을 설치하는 중입니다."}
             </p>
             <p className="mt-2 text-xs leading-relaxed text-slate-500">
-              Once it&apos;s installed, Claw3D will refresh the task-manager state.
+              설치가 끝나면 Claw3D가 task-manager 상태를 새로고침합니다.
             </p>
           </div>
         ) : null}
@@ -71,7 +71,7 @@ export function KanbanDisabledPanel({
             onClick={onInstall}
             disabled={installing}
           >
-            {installing ? "Installing TASK-MANAGER skill..." : "Install TASK-MANAGER skill"}
+            {installing ? "TASK-MANAGER 스킬 설치 중..." : "TASK-MANAGER 스킬 설치"}
           </button>
           <button
             type="button"
@@ -79,7 +79,7 @@ export function KanbanDisabledPanel({
             onClick={onClose}
             disabled={installing}
           >
-            Dismiss
+            닫기
           </button>
         </div>
       </div>

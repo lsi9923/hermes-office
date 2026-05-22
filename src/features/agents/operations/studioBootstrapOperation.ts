@@ -84,7 +84,7 @@ export async function runStudioBootstrapLoadOperation(params: {
 
     return commands;
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to load agents.";
+    const message = err instanceof Error ? err.message : "에이전트를 불러오지 못했습니다.";
     return [{ kind: "set-error", message }];
   }
 }
@@ -166,7 +166,7 @@ export async function runStudioFocusedPreferenceLoadOperation(params: {
     return [
       {
         kind: "log-error",
-        message: "Failed to load focused preference.",
+        message: "포커스 설정을 불러오지 못했습니다.",
         error,
       },
       { kind: "set-focused-preferences-loaded", value: true },

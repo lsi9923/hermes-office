@@ -47,81 +47,81 @@ const SKILL_MARKETPLACE_OVERRIDES: Record<
   Partial<SkillMarketplaceMetadata>
 > = {
   github: {
-    category: "Engineering",
-    tagline: "Turns repository operations into a one-step teammate workflow.",
+    category: "엔지니어링",
+    tagline: "저장소 작업을 한 단계짜리 팀원 워크플로로 바꿉니다.",
     capabilities: [
-      "Pull request support",
-      "Issue context",
-      "Repository operations",
+      "풀 리퀘스트 지원",
+      "이슈 맥락",
+      "저장소 작업",
     ],
     featured: true,
-    editorBadge: "Popular",
+    editorBadge: "인기",
     rating: 4.9,
     installs: 18240,
   },
   figma: {
-    category: "Design",
-    tagline: "Connects design files, specs, and implementation context.",
-    capabilities: ["Design context", "Asset lookup", "Spec handoff"],
+    category: "디자인",
+    tagline: "디자인 파일, 사양, 구현 맥락을 연결합니다.",
+    capabilities: ["디자인 맥락", "에셋 조회", "사양 전달"],
     featured: true,
-    editorBadge: "Editor pick",
+    editorBadge: "추천",
     rating: 4.8,
     installs: 9640,
   },
   slack: {
-    category: "Communication",
-    tagline: "Keeps agents plugged into team channels and notifications.",
+    category: "커뮤니케이션",
+    tagline: "에이전트를 팀 채널과 알림에 연결합니다.",
     capabilities: [
-      "Channel updates",
-      "Message drafting",
-      "Notification routing",
+      "채널 업데이트",
+      "메시지 초안",
+      "알림 라우팅",
     ],
     featured: true,
     rating: 4.7,
     installs: 14110,
   },
   linear: {
-    category: "Planning",
+    category: "기획",
     tagline:
-      "Brings issue tracking and execution loops directly into agent workflows.",
-    capabilities: ["Issue lookup", "Status updates", "Planning workflows"],
+      "이슈 추적과 실행 루프를 에이전트 워크플로에 직접 넣습니다.",
+    capabilities: ["이슈 조회", "상태 업데이트", "기획 워크플로"],
     featured: true,
     rating: 4.7,
     installs: 11980,
   },
   "todo-board": {
-    category: "Productivity",
+    category: "생산성",
     tagline:
-      "Gives agents a shared workspace TODO board with blocked-task tracking.",
+      "에이전트에게 막힌 작업 추적이 가능한 공유 TODO 보드를 제공합니다.",
     capabilities: [
-      "Task capture",
-      "Blocked tracking",
-      "Shared workspace state",
+      "작업 기록",
+      "막힌 항목 추적",
+      "공유 워크스페이스 상태",
     ],
     featured: true,
-    editorBadge: "Claw3D test",
+    editorBadge: "Claw3D 테스트",
     hideStats: true,
   },
   "task-manager": {
-    category: "Productivity",
+    category: "생산성",
     tagline:
-      "Turns actionable requests into persistent shared tasks that power the Claw3D Kanban board.",
+      "실행 가능한 요청을 Claw3D 칸반 보드의 영구 공유 작업으로 바꿉니다.",
     capabilities: [
-      "Automatic task capture",
-      "Task lifecycle tracking",
-      "Shared Kanban state",
+      "자동 작업 기록",
+      "작업 수명 주기 추적",
+      "공유 칸반 상태",
     ],
     featured: true,
-    editorBadge: "Kanban core",
+    editorBadge: "칸반 핵심",
     hideStats: true,
   },
   soundclaw: {
-    category: "Audio",
+    category: "오디오",
     tagline:
-      "Lets agents search Spotify, control playback, and return music links on the current channel.",
-    capabilities: ["Spotify search", "Playback control", "Same-channel link sharing"],
+      "에이전트가 Spotify를 검색하고 재생을 제어하며 현재 채널에 음악 링크를 보낼 수 있게 합니다.",
+    capabilities: ["Spotify 검색", "재생 제어", "같은 채널 링크 공유"],
     featured: true,
-    editorBadge: "Office demo",
+    editorBadge: "오피스 데모",
     hideStats: true,
   },
 };
@@ -144,19 +144,19 @@ const titleCaseWords = (value: string): string =>
 const buildFallbackCapabilities = (skill: SkillStatusEntry): string[] => {
   const capabilities: string[] = [];
   if (skill.primaryEnv) {
-    capabilities.push(`Uses ${skill.primaryEnv}.`);
+    capabilities.push(`${skill.primaryEnv} 환경 변수를 사용합니다.`);
   }
   if (skill.install.length > 0) {
-    capabilities.push("Supports guided dependency install.");
+    capabilities.push("안내형 의존성 설치를 지원합니다.");
   }
   if (skill.always) {
-    capabilities.push("Always available by policy.");
+    capabilities.push("정책상 항상 사용할 수 있습니다.");
   }
   if (skill.homepage) {
-    capabilities.push("Has external docs.");
+    capabilities.push("외부 문서가 있습니다.");
   }
   if (capabilities.length === 0) {
-    capabilities.push("Reusable operational workflow.");
+    capabilities.push("재사용 가능한 운영 워크플로입니다.");
   }
   return capabilities.slice(0, 3);
 };
@@ -169,27 +169,27 @@ const buildFallbackMetadata = (
   const seed = hashString(`${normalizedKey}:${source}`);
   const category =
     skill.bundled || source === "openclaw-bundled"
-      ? "Built-in"
+      ? "내장"
       : source === "openclaw-managed"
-        ? "Installed"
+        ? "설치됨"
         : source === "openclaw-workspace"
-          ? "Workspace"
+          ? "워크스페이스"
           : source === "openclaw-extra"
-            ? "Community"
-            : "Automation";
+            ? "커뮤니티"
+            : "자동화";
   const trustLabel =
     skill.bundled || source === "openclaw-bundled"
-      ? "Verified"
+      ? "검증됨"
       : source === "openclaw-managed"
-        ? "Managed"
+        ? "관리됨"
         : source === "openclaw-workspace"
-          ? "Workspace"
-          : "Community";
+          ? "워크스페이스"
+          : "커뮤니티";
   return {
     category,
     tagline:
       skill.description.trim() ||
-      `${titleCaseWords(skill.name)} capability pack.`,
+      `${titleCaseWords(skill.name)} 기능 팩입니다.`,
     trustLabel,
     capabilities: buildFallbackCapabilities(skill),
     featured: skill.bundled || source === "openclaw-managed",
@@ -230,7 +230,7 @@ export const buildSkillMarketplaceEntry = (
   const missingDetails = buildSkillMissingDetails(skill);
   if (packagedSkill && !skill.baseDir.trim()) {
     missingDetails.unshift(
-      "Install this packaged Claw3D skill to make it available on the gateway.",
+      "패키지된 Claw3D 스킬을 설치해 게이트웨이에서 사용할 수 있게 하세요.",
     );
   }
   return {
@@ -262,7 +262,7 @@ export const buildSkillMarketplaceCollections = (
     .filter((entry) => entry.metadata.featured)
     .slice(0, 6);
   if (featured.length > 0) {
-    collections.push({ id: "featured", label: "Featured", entries: featured });
+    collections.push({ id: "featured", label: "추천", entries: featured });
   }
 
   const claw3d = entries.filter((entry) =>
@@ -278,7 +278,7 @@ export const buildSkillMarketplaceCollections = (
   if (installed.length > 0) {
     collections.push({
       id: "installed",
-      label: "Installed",
+      label: "설치됨",
       entries: installed,
     });
   }
@@ -289,7 +289,7 @@ export const buildSkillMarketplaceCollections = (
   if (setupRequired.length > 0) {
     collections.push({
       id: "setup-required",
-      label: "Needs setup",
+      label: "설정 필요",
       entries: setupRequired,
     });
   }

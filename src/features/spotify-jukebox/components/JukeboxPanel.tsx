@@ -75,7 +75,7 @@ export function JukeboxPanel({ onClose }: JukeboxPanelProps) {
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-400/70">
                 Soundclaw
               </div>
-              <h2 className="text-base font-semibold text-white">Office Jukebox</h2>
+              <h2 className="text-base font-semibold text-white">오피스 주크박스</h2>
             </div>
           </div>
           <button
@@ -83,7 +83,7 @@ export function JukeboxPanel({ onClose }: JukeboxPanelProps) {
             onClick={onClose}
             className="rounded-full border border-white/10 px-4 py-1.5 text-sm text-slate-400 transition hover:bg-white/5 hover:text-white"
           >
-            Close
+            닫기
           </button>
         </div>
 
@@ -124,7 +124,7 @@ function SetupView() {
       setIsRedirecting(false);
       return;
     }
-    popup.document.write("<p style=\"font-family: sans-serif; padding: 24px;\">Redirecting to Spotify...</p>");
+    popup.document.write("<p style=\"font-family: sans-serif; padding: 24px;\">Spotify로 이동 중...</p>");
     await startSpotifyAuth(inputId.trim(), redirectUri, popup);
     setIsRedirecting(false);
   };
@@ -132,26 +132,27 @@ function SetupView() {
   return (
     <div className="space-y-6 p-6">
       <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 text-sm text-cyan-100">
-        Keep Claw3D open on <code className="rounded bg-slate-900/70 px-1">{localhostOrigin}</code>.
-        Spotify will redirect to your ngrok callback, which sends the auth code back into this window.
+        <code className="rounded bg-slate-900/70 px-1">{localhostOrigin}</code>에서
+        Claw3D를 계속 열어두세요. Spotify가 ngrok 콜백으로 이동하면 인증 코드가
+        이 창으로 돌아옵니다.
       </div>
 
       {!callbackLooksValid && callbackBaseUrl.trim().length > 0 && (
         <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-          Enter a valid HTTPS ngrok URL, for example <code className="rounded bg-slate-900/70 px-1">https://your-id.ngrok-free.app</code>.
+          올바른 HTTPS ngrok URL을 입력하세요. 예: <code className="rounded bg-slate-900/70 px-1">https://your-id.ngrok-free.app</code>
         </div>
       )}
 
       {/* What you need card. */}
       <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
         <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-300">
-          <span>⚠️</span> What you need before connecting
+          <span>⚠️</span> 연결 전에 필요한 것
         </h3>
         <ol className="space-y-3 text-sm text-slate-300">
           <li className="flex gap-2">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">1</span>
             <span>
-              Go to{" "}
+              {" "}
               <a
                 href="https://developer.spotify.com/dashboard"
                 target="_blank"
@@ -160,13 +161,13 @@ function SetupView() {
               >
                 developer.spotify.com/dashboard
               </a>{" "}
-              and create an app (or use an existing one).
+              에서 앱을 만들거나 기존 앱을 사용하세요.
             </span>
           </li>
           <li className="flex gap-2">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">2</span>
             <span>
-              In your Spotify app settings, add this <strong className="text-white">Redirect URI</strong>:
+              Spotify 앱 설정에 이 <strong className="text-white">Redirect URI</strong>를 추가하세요:
             </span>
           </li>
           {redirectUri && (
@@ -179,28 +180,28 @@ function SetupView() {
                 onClick={() => navigator.clipboard.writeText(redirectUri)}
                 className="mt-1.5 text-xs text-slate-500 hover:text-slate-300"
               >
-                Copy to clipboard
+                클립보드에 복사
               </button>
             </li>
           )}
           <li className="flex gap-2">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">3</span>
-            <span>Paste your public <strong className="text-white">ngrok URL</strong> below, then use the exact redirect shown here in Spotify.</span>
+            <span>아래에 공개 <strong className="text-white">ngrok URL</strong>을 붙여넣고, 여기 표시된 리디렉션 주소를 Spotify에 그대로 사용하세요.</span>
           </li>
           <li className="flex gap-2">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">4</span>
-            <span>Keep this local office tab open while authenticating. The popup callback will hand the code back to this page.</span>
+            <span>인증하는 동안 이 로컬 오피스 탭을 열어두세요. 팝업 콜백이 이 페이지로 코드를 전달합니다.</span>
           </li>
           <li className="flex gap-2">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">5</span>
-            <span>Make sure Spotify is open and playing on at least one device before using playback controls.</span>
+            <span>재생 컨트롤을 사용하기 전에 Spotify가 최소 한 기기에서 열려 있고 재생 준비가 되어 있는지 확인하세요.</span>
           </li>
         </ol>
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-slate-300">
-          ngrok Public URL
+          ngrok 공개 URL
         </label>
         <input
           type="url"
@@ -210,7 +211,7 @@ function SetupView() {
           className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-2.5 font-mono text-sm text-white placeholder-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30"
         />
         <p className="text-xs text-slate-500">
-          This is only used for the Spotify OAuth callback bridge. Your app can stay on {localhostOrigin}.
+          Spotify OAuth 콜백 브리지에만 사용됩니다. 앱 화면은 계속 {localhostOrigin}에서 열어두면 됩니다.
         </p>
       </div>
 
@@ -227,7 +228,7 @@ function SetupView() {
           className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-2.5 font-mono text-sm text-white placeholder-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30"
         />
         <p className="text-xs text-slate-500">
-          Stored locally in your browser. Never sent to any server other than Spotify.
+          브라우저에 로컬로 저장되며 Spotify 외 서버로 전송되지 않습니다.
         </p>
       </div>
 
@@ -237,7 +238,7 @@ function SetupView() {
         onClick={handleConnect}
         className="w-full rounded-xl bg-[#1DB954] py-3 text-sm font-semibold text-black transition hover:bg-[#1ed760] active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {isRedirecting ? "Opening Spotify…" : "Connect with Spotify"}
+        {isRedirecting ? "Spotify 여는 중..." : "Spotify 연결"}
       </button>
     </div>
   );
@@ -299,12 +300,12 @@ function PlayerView() {
       {/* Now playing. */}
       <div className="rounded-2xl border border-white/5 bg-slate-900/60 p-4">
         <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-          Now playing
+          현재 재생 중
         </div>
         {isLoadingPlayer && !track ? (
           <div className="flex items-center gap-3 text-slate-500">
             <RunningAvatarLoader size={16} trackWidth={32} inline />
-            <span className="text-sm">Loading player…</span>
+            <span className="text-sm">플레이어 불러오는 중...</span>
           </div>
         ) : track ? (
           <div className="flex items-center gap-4">
@@ -326,19 +327,19 @@ function PlayerView() {
           </div>
         ) : (
           <p className="text-sm text-slate-500">
-            No active playback. Open Spotify on a device first, then hit play.
+            활성 재생이 없습니다. 먼저 기기에서 Spotify를 열고 재생을 눌러주세요.
           </p>
         )}
 
         {/* Transport controls. */}
         <div className="mt-4 flex items-center justify-center gap-4">
-          <ControlButton icon="⏮" onClick={() => void previous()} title="Previous" />
+          <ControlButton icon="⏮" onClick={() => void previous()} title="이전" />
           {playerState?.isPlaying ? (
-            <ControlButton icon="⏸" onClick={() => void pause()} title="Pause" large />
+            <ControlButton icon="⏸" onClick={() => void pause()} title="일시정지" large />
           ) : (
-            <ControlButton icon="▶" onClick={() => void resume()} title="Play" large />
+            <ControlButton icon="▶" onClick={() => void resume()} title="재생" large />
           )}
-          <ControlButton icon="⏭" onClick={() => void next()} title="Next" />
+          <ControlButton icon="⏭" onClick={() => void next()} title="다음" />
         </div>
 
         {/* Volume. */}
@@ -363,14 +364,14 @@ function PlayerView() {
       {/* Search. */}
       <div>
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
-          Search tracks
+          트랙 검색
         </div>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Artist, song, or album…"
+            placeholder="아티스트, 곡 또는 앨범..."
             className="w-full rounded-xl border border-white/10 bg-slate-900 py-2.5 pl-4 pr-10 text-sm text-white placeholder-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30"
           />
           {isSearching && (
@@ -396,7 +397,7 @@ function PlayerView() {
           onClick={disconnect}
           className="text-xs text-slate-600 underline underline-offset-2 hover:text-slate-400"
         >
-          Disconnect Spotify
+          Spotify 연결 해제
         </button>
       </div>
     </div>
@@ -457,7 +458,7 @@ function SearchResult({
         onClick={onPlay}
         className="shrink-0 rounded-full border border-cyan-500/30 px-3 py-1 text-xs font-medium text-cyan-400 transition hover:bg-cyan-500/10"
       >
-        Play
+        재생
       </button>
     </li>
   );

@@ -111,7 +111,7 @@ export async function sendChatMessageViaStudio(params: {
     params.dispatch({
       type: "appendOutput",
       agentId,
-      line: "Error: Agent not found.",
+      line: "오류: 에이전트를 찾지 못했습니다.",
     });
     return;
   }
@@ -263,7 +263,7 @@ export async function sendChatMessageViaStudio(params: {
       });
     }
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Gateway error";
+    const msg = err instanceof Error ? err.message : "게이트웨이 오류";
     params.dispatch({
       type: "updateAgent",
       agentId,
@@ -272,7 +272,7 @@ export async function sendChatMessageViaStudio(params: {
     params.dispatch({
       type: "appendOutput",
       agentId,
-      line: `Error: ${msg}`,
+      line: `오류: ${msg}`,
     });
   }
 }

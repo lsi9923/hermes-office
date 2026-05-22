@@ -68,7 +68,7 @@ function useBrowserPreviewScreenshot(params: {
       };
 
       if (!response.ok) {
-        throw new Error(payload.error?.trim() || "Unable to capture browser preview.");
+        throw new Error(payload.error?.trim() || "브라우저 미리보기를 캡처하지 못했습니다.");
       }
       if (requestIdRef.current !== requestId) return;
 
@@ -86,7 +86,7 @@ function useBrowserPreviewScreenshot(params: {
         ...current,
         browserUrl,
         error:
-          error instanceof Error ? error.message : "Unable to capture browser preview.",
+          error instanceof Error ? error.message : "브라우저 미리보기를 캡처하지 못했습니다.",
         loading: false,
       }));
     }
@@ -207,7 +207,7 @@ function MonitorBrowserContent({
             }}
             className="rounded-full border border-white/12 bg-white/6 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white/72 transition-colors hover:bg-white/10"
           >
-            {browserView === "screenshot" ? "Live Embed" : "Screenshot"}
+            {browserView === "screenshot" ? "라이브 임베드" : "스크린샷"}
           </button>
           {browserView === "screenshot" ? (
             <button
@@ -215,7 +215,7 @@ function MonitorBrowserContent({
               onClick={() => void browserPreview.refresh()}
               className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-emerald-200 transition-colors hover:bg-emerald-400/20"
             >
-              Refresh Shot
+              스크린샷 새로고침
             </button>
           ) : null}
           <button
@@ -225,7 +225,7 @@ function MonitorBrowserContent({
             }
             className="rounded-full border border-sky-400/25 bg-sky-400/10 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-sky-200 transition-colors hover:bg-sky-400/20"
           >
-            Open Browser
+            브라우저 열기
           </button>
         </div>
         <div className="relative flex-1 bg-[#f4f7fb]">
@@ -243,16 +243,16 @@ function MonitorBrowserContent({
               ) : (
                 <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-center font-mono text-[14px] text-white/68">
                   {browserPreview.loading
-                    ? "Capturing browser screenshot..."
-                    : browserPreview.error || "Waiting for browser screenshot."}
+                    ? "브라우저 스크린샷 캡처 중..."
+                    : browserPreview.error || "브라우저 스크린샷 대기 중."}
                 </div>
               )}
               <div className="pointer-events-none absolute right-4 top-4 rounded-full border border-white/10 bg-black/45 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">
                 {browserPreview.loading
-                  ? "Refreshing"
+                  ? "새로고침 중"
                   : browserPreview.capturedAt
-                    ? `Screenshot ${new Date(browserPreview.capturedAt).toLocaleTimeString()}`
-                    : "Screenshot fallback"}
+                    ? `스크린샷 ${new Date(browserPreview.capturedAt).toLocaleTimeString("ko-KR")}`
+                    : "스크린샷 대체 보기"}
               </div>
             </div>
           ) : (
@@ -330,7 +330,7 @@ export function MonitorImmersiveContent({
           </div>
           <div className="flex w-[240px] flex-col border-r border-white/6 bg-[#1f2024]">
             <div className="border-b border-white/6 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              Openclaw-Control-Center
+              OpenClaw 컨트롤 센터
             </div>
             <div className="flex-1 space-y-1 px-3 py-3 font-mono text-[12px]">
               <div className="px-2 pb-1 text-white/35">src</div>
@@ -344,13 +344,13 @@ export function MonitorImmersiveContent({
                 </div>
               </div>
               <div className="mt-5 px-2 text-[11px] uppercase tracking-[0.2em] text-white/28">
-                Agent
+                에이전트
               </div>
               <div className="rounded-md border border-white/6 bg-black/20 px-3 py-2 text-white/82">
                 {monitor.agentName}
               </div>
               <div className="rounded-md px-3 py-2 text-[11px] leading-5 text-white/42">
-                {monitor.title} · {monitor.subtitle}
+                {monitor.title} - {monitor.subtitle}
               </div>
             </div>
           </div>
@@ -365,7 +365,7 @@ export function MonitorImmersiveContent({
                 </div>
               </div>
               <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-200/90">
-                {monitor.live ? "Live" : "Idle"}
+                {monitor.live ? "라이브" : "대기"}
               </div>
             </div>
             <div className="flex min-h-0 flex-1">
@@ -397,7 +397,7 @@ export function MonitorImmersiveContent({
                 </div>
                 <div className="h-[28%] border-t border-white/6 bg-[#18191d]">
                   <div className="border-b border-white/6 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-white/32">
-                    Terminal
+                    터미널
                   </div>
                   <div className="space-y-2 overflow-auto px-4 py-3 font-mono text-[13px] text-[#9cdcfe]">
                     {(
@@ -411,14 +411,14 @@ export function MonitorImmersiveContent({
                       </div>
                     ))}
                     {(editor?.terminalLines ?? []).length === 0 ? (
-                      <div className="text-white/35">No terminal output yet.</div>
+                      <div className="text-white/35">아직 터미널 출력이 없습니다.</div>
                     ) : null}
                   </div>
                 </div>
               </div>
               <div className="flex w-[290px] flex-col border-l border-white/6 bg-[#1f2024]">
                 <div className="border-b border-white/6 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
-                  Agent Movement And Behavior
+                  에이전트 이동 및 동작
                 </div>
                 <div className="flex-1 space-y-3 overflow-auto px-4 py-4">
                   {monitor.entries.length > 0 ? (
@@ -437,7 +437,7 @@ export function MonitorImmersiveContent({
                       >
                         <div className="mb-2 text-[10px] uppercase tracking-[0.22em] text-white/28">
                           {entry.kind}
-                          {entry.live ? " · live" : ""}
+                          {entry.live ? " - 라이브" : ""}
                         </div>
                         <div className="whitespace-pre-wrap break-words font-mono text-[12px] leading-5 text-white/76">
                           {entry.text}
@@ -446,7 +446,7 @@ export function MonitorImmersiveContent({
                     ))
                   ) : (
                     <div className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-4 text-[12px] text-white/40">
-                      No live activity yet.
+                      아직 라이브 활동이 없습니다.
                     </div>
                   )}
                 </div>
@@ -456,7 +456,7 @@ export function MonitorImmersiveContent({
               <div className="flex items-center gap-4">
                 <span>{editor?.language ?? "tsx"}</span>
                 <span>UTF-8</span>
-                <span>Spaces: 2</span>
+                <span>공백: 2</span>
               </div>
               <div className="flex items-center gap-4 text-white/85">
                 <span>Ln {editor?.cursorLine ?? 1}</span>

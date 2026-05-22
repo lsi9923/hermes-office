@@ -8,7 +8,7 @@ import type { SkillRemoveRequest, SkillRemoveResult } from "@/lib/skills/types";
 const normalizeRequired = (value: string, field: string): string => {
   const trimmed = value.trim();
   if (!trimmed) {
-    throw new Error(`${field} is required.`);
+    throw new Error(`${field} 값이 필요합니다.`);
   }
   return trimmed;
 };
@@ -17,12 +17,12 @@ const escapeForJsonString = (value: string) => JSON.stringify(value);
 
 const resolveRunId = (payload: unknown): string => {
   if (!payload || typeof payload !== "object") {
-    throw new Error("Gateway returned an invalid chat.send response.");
+    throw new Error("게이트웨이가 올바르지 않은 chat.send 응답을 반환했습니다.");
   }
   const record = payload as Record<string, unknown>;
   const runId = typeof record.runId === "string" ? record.runId.trim() : "";
   if (!runId) {
-    throw new Error("Gateway returned an invalid chat.send response (missing runId).");
+    throw new Error("게이트웨이가 올바르지 않은 chat.send 응답을 반환했습니다(runId 없음).");
   }
   return runId;
 };
@@ -37,18 +37,18 @@ const buildSkillRemovalMessage = (params: {
   allowedRoot: string;
 }) => {
   return [
-    "Delete exactly one installed skill directory from the current workspace context.",
-    "You may use the runtime tools or file tools.",
-    `Target directory: ${escapeForJsonString(params.baseDir)}`,
-    `Allowed root: ${escapeForJsonString(params.allowedRoot)}`,
+    "현재 작업공간 컨텍스트에서 설치된 스킬 디렉터리 하나만 삭제하세요.",
+    "런타임 도구 또는 파일 도구를 사용할 수 있습니다.",
+    `대상 디렉터리: ${escapeForJsonString(params.baseDir)}`,
+    `허용된 루트: ${escapeForJsonString(params.allowedRoot)}`,
     "",
-    "Rules:",
-    "1. Refuse to operate outside the allowed root.",
-    "2. Refuse to delete the allowed root directory itself.",
-    "3. If the target directory exists, verify it contains SKILL.md before deleting it.",
-    "4. If the target directory does not exist, reply only with: REMOVED_ALREADY",
-    "5. If deletion succeeds, reply only with: REMOVED",
-    "6. Do not modify any other files or directories.",
+    "규칙:",
+    "1. 허용된 루트 밖에서는 작업을 거부하세요.",
+    "2. 허용된 루트 디렉터리 자체는 삭제하지 마세요.",
+    "3. 대상 디렉터리가 있으면 삭제 전에 SKILL.md가 있는지 확인하세요.",
+    "4. 대상 디렉터리가 없으면 다음 단어만 답하세요: REMOVED_ALREADY",
+    "5. 삭제가 성공하면 다음 단어만 답하세요: REMOVED",
+    "6. 다른 파일이나 디렉터리는 수정하지 마세요.",
   ].join("\n");
 };
 
@@ -85,7 +85,7 @@ export const removeSkillViaGatewayAgent = async (params: {
     workspaceDir,
     managedSkillsDir,
   });
-  const removerName = `Skill Remover ${Date.now()}`;
+  const removerName = `스킬 제거기 ${Date.now()}`;
 
   let removerAgentId: string | null = null;
   try {
@@ -95,7 +95,7 @@ export const removeSkillViaGatewayAgent = async (params: {
     })) as { agentId?: unknown };
     removerAgentId = typeof created?.agentId === "string" ? created.agentId.trim() : "";
     if (!removerAgentId) {
-      throw new Error("Gateway returned an invalid agents.create response (missing agentId).");
+      throw new Error("게이트웨이가 올바르지 않은 agents.create 응답을 반환했습니다(agentId 없음).");
     }
 
     await updateGatewayAgentOverrides({

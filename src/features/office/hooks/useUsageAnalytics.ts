@@ -218,7 +218,7 @@ const normalizeToolUsage = (value: unknown) => {
   const tools = asArray(record?.tools).map((entry) => {
     const parsed = asRecord(entry);
     return {
-      name: asString(parsed?.name) ?? "Unknown",
+      name: asString(parsed?.name) ?? "알 수 없음",
       count: asNumber(parsed?.count),
     };
   });
@@ -439,7 +439,7 @@ export const useUsageAnalytics = ({
       setServerTotals(asRecord(usageResult.totals) ? normalizeTotals(usageResult.totals) : null);
       setLastRefreshedAt(Date.now());
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load usage analytics.");
+      setError(err instanceof Error ? err.message : "사용량 분석을 불러오지 못했습니다.");
       setSessions([]);
       setCostDaily([]);
       setServerTotals(null);

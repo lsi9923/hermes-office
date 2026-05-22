@@ -95,7 +95,7 @@ export function GithubImmersiveScreen({
       };
       if (!response.ok) {
         throw new Error(
-          payload.error?.trim() || "Unable to load GitHub dashboard.",
+          payload.error?.trim() || "GitHub 대시보드를 불러오지 못했습니다.",
         );
       }
       if (requestIdRef.current !== requestId) return;
@@ -126,7 +126,7 @@ export function GithubImmersiveScreen({
       setError(
         error instanceof Error
           ? error.message
-          : "Unable to load GitHub dashboard.",
+          : "GitHub 대시보드를 불러오지 못했습니다.",
       );
     } finally {
       if (requestIdRef.current === requestId) {
@@ -166,7 +166,7 @@ export function GithubImmersiveScreen({
         };
         if (!response.ok) {
           throw new Error(
-            payload.error?.trim() || "Unable to load pull request details.",
+            payload.error?.trim() || "Pull Request 상세 정보를 불러오지 못했습니다.",
           );
         }
         if (detailRequestIdRef.current !== requestId) return;
@@ -179,7 +179,7 @@ export function GithubImmersiveScreen({
         setError(
           error instanceof Error
             ? error.message
-            : "Unable to load pull request details.",
+            : "Pull Request 상세 정보를 불러오지 못했습니다.",
         );
       } finally {
         if (detailRequestIdRef.current === requestId) {
@@ -223,7 +223,7 @@ export function GithubImmersiveScreen({
       : (dashboard?.currentRepoPullRequests ?? []);
   const currentRepoLabel = useMemo(() => {
     const slug = dashboard?.currentRepoSlug?.trim();
-    if (!slug) return "No git remote";
+    if (!slug) return "Git 원격 저장소 없음";
     const segments = slug.split("/").filter(Boolean);
     return maskGitHubRecordingText(segments.at(-1) ?? slug);
   }, [dashboard?.currentRepoSlug]);
@@ -278,17 +278,17 @@ export function GithubImmersiveScreen({
         };
         if (!response.ok) {
           throw new Error(
-            payload.error?.trim() || "Unable to submit GitHub review.",
+            payload.error?.trim() || "GitHub 리뷰를 제출하지 못했습니다.",
           );
         }
-        setReviewMessage(payload.message?.trim() || "Review submitted.");
+        setReviewMessage(payload.message?.trim() || "리뷰가 제출되었습니다.");
         setReviewBody("");
         await Promise.all([refreshDashboard(), loadDetail(selectedPr)]);
       } catch (error) {
         setError(
           error instanceof Error
             ? error.message
-            : "Unable to submit GitHub review.",
+            : "GitHub 리뷰를 제출하지 못했습니다.",
         );
       } finally {
         setReviewBusyAction(null);
@@ -323,7 +323,7 @@ export function GithubImmersiveScreen({
       const payload = (await response.json()) as { error?: string; message?: string };
       if (!response.ok) {
         const message =
-          payload.error?.trim() || "Unable to submit the GitHub inline comment.";
+          payload.error?.trim() || "GitHub 인라인 댓글을 제출하지 못했습니다.";
         throw new Error(message);
       }
     },
@@ -343,10 +343,10 @@ export function GithubImmersiveScreen({
             <Github className="h-6 w-6" />
             <div>
               <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/70">
-                Code Review Room
+                코드 리뷰 룸
               </div>
               <div className="text-xl font-semibold">
-                GitHub skill setup required.
+                GitHub 스킬 설정이 필요합니다.
               </div>
             </div>
           </div>
@@ -357,20 +357,20 @@ export function GithubImmersiveScreen({
               <ShieldX className="h-5 w-5 text-amber-300" />
               <span className="text-sm uppercase tracking-[0.24em] text-cyan-100/70">
                 {skillMetadata?.tagline ??
-                  "GitHub access is not ready for this agent."}
+                  "이 에이전트의 GitHub 접근 준비가 끝나지 않았습니다."}
               </span>
             </div>
             <div className="text-2xl font-semibold text-white">
               {skillReadiness === "disabled-globally"
-                ? "GitHub is disabled for this gateway."
+                ? "이 게이트웨이에서 GitHub가 비활성화되어 있습니다."
                 : skillReadiness === "unavailable"
-                  ? "This agent cannot use the GitHub skill yet."
-                  : "The GitHub skill still needs setup."}
+                  ? "이 에이전트는 아직 GitHub 스킬을 사용할 수 없습니다."
+                  : "GitHub 스킬 설정이 아직 필요합니다."}
             </div>
             <p className="mt-3 text-sm leading-6 text-cyan-100/72">
-              Open the Skills panel to install or enable the bundled GitHub
-              skill so agents can walk here and review pull requests through
-              OpenClaw.
+              스킬 패널을 열어 번들 GitHub 스킬을 설치하거나 활성화하세요.
+              그러면 에이전트가 이 방에서 OpenClaw를 통해 Pull Request를
+              리뷰할 수 있습니다.
             </p>
             <div className="mt-5 space-y-2">
               {skillMissingDetails.length > 0 ? (
@@ -384,8 +384,8 @@ export function GithubImmersiveScreen({
                 ))
               ) : (
                 <div className="rounded-2xl border border-white/6 bg-black/20 px-4 py-3 text-sm text-white/72">
-                  Enable the GitHub skill for the selected agent, then come back
-                  to the code review room.
+                  선택한 에이전트에 GitHub 스킬을 활성화한 뒤 코드 리뷰 룸으로
+                  돌아오세요.
                 </div>
               )}
             </div>
@@ -396,7 +396,7 @@ export function GithubImmersiveScreen({
                 className="mt-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-sm font-medium text-cyan-100 transition-colors hover:border-cyan-200/50 hover:bg-cyan-300/18"
               >
                 <ShieldCheck className="h-4 w-4" />
-                Open Skills Setup
+                스킬 설정 열기
               </button>
             ) : null}
           </div>
@@ -415,12 +415,12 @@ export function GithubImmersiveScreen({
             </div>
             <div>
               <div className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/65">
-                Code Review Room
+                코드 리뷰 룸
               </div>
               <div className="text-lg font-semibold text-white">
                 {agentName
-                  ? `${agentName} is reviewing GitHub.`
-                  : "GitHub review station."}
+                  ? `${agentName}이 GitHub를 리뷰 중입니다.`
+                  : "GitHub 리뷰 스테이션입니다."}
               </div>
             </div>
           </div>
@@ -438,7 +438,7 @@ export function GithubImmersiveScreen({
               ) : (
                 <RefreshCw className="h-3.5 w-3.5" />
               )}
-              Refresh
+              새로고침
             </button>
             {dashboard?.viewerLogin ? (
               <div className="rounded-full border border-cyan-300/16 bg-cyan-300/8 px-3 py-1.5 text-[12px] text-cyan-100/90">
@@ -470,13 +470,13 @@ export function GithubImmersiveScreen({
           <div className="flex max-w-md flex-col items-center rounded-3xl border border-cyan-300/12 bg-[#081122]/78 px-8 py-10 text-center shadow-[0_20px_80px_rgba(0,0,0,0.38)]">
             <RunningAvatarLoader size={40} trackWidth={104} />
             <div className="mt-5 text-[11px] uppercase tracking-[0.28em] text-cyan-100/55">
-              Loading GitHub
+              GitHub 불러오는 중
             </div>
             <div className="mt-2 text-lg font-semibold text-white">
-              Fetching your review queue.
+              리뷰 큐를 가져오는 중입니다.
             </div>
             <div className="mt-2 text-sm text-white/58">
-              Pull requests, repo metadata, and review details are loading now.
+              Pull Request, 저장소 메타데이터, 리뷰 상세 정보를 불러오고 있습니다.
             </div>
           </div>
         </div>
@@ -494,7 +494,7 @@ export function GithubImmersiveScreen({
                 }`}
               >
                 <div className="text-[11px] uppercase tracking-[0.24em] text-white/50">
-                  My Queue
+                  내 큐
                 </div>
                 <div className="mt-1 text-lg font-semibold leading-none">
                   {queueEntries.length}
@@ -510,7 +510,7 @@ export function GithubImmersiveScreen({
                 }`}
               >
                 <div className="text-[11px] uppercase tracking-[0.24em] text-white/50">
-                  Current Repo
+                  현재 저장소
                 </div>
                 <div className="mt-1 break-words text-sm font-medium leading-5 text-white/85">
                   {currentRepoLabel}
@@ -521,13 +521,13 @@ export function GithubImmersiveScreen({
             <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
               {loading ? (
                 <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-4 text-sm text-white/55">
-                  Loading pull requests.
+                  Pull Request를 불러오는 중입니다.
                 </div>
               ) : activeList.length === 0 ? (
                 <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-4 text-sm text-white/55">
                   {activeTab === "queue"
-                    ? "No review requests or authored pull requests found."
-                    : "No open pull requests found for this repository."}
+                    ? "리뷰 요청이나 내가 작성한 Pull Request가 없습니다."
+                    : "이 저장소에 열린 Pull Request가 없습니다."}
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -557,7 +557,7 @@ export function GithubImmersiveScreen({
                           </div>
                           {entry.isDraft ? (
                             <span className="rounded-full border border-white/10 px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-white/55">
-                              Draft
+                              초안
                             </span>
                           ) : null}
                         </div>
@@ -585,7 +585,7 @@ export function GithubImmersiveScreen({
           <div className="min-h-0 overflow-hidden">
             {detailLoading ? (
               <div className="flex h-full items-center justify-center text-sm text-white/55">
-                Loading pull request details.
+                Pull Request 상세 정보를 불러오는 중입니다.
               </div>
             ) : detail ? (
               <div className="grid h-full grid-cols-[minmax(0,1fr)_320px]">
@@ -616,14 +616,14 @@ export function GithubImmersiveScreen({
                       className="inline-flex min-w-[96px] shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[12px] text-white/75 transition-colors hover:border-white/20 hover:text-white"
                     >
                       <ExternalLink className="h-3.5 w-3.5" />
-                      Open PR
+                      PR 열기
                     </a>
                   </div>
 
                   <div className="mt-5 grid gap-4 md:grid-cols-3">
                     <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-4">
                       <div className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                        Checks
+                        검사
                       </div>
                       <div className="mt-2 text-lg font-semibold text-white">
                         {detail.statusChecks.length}
@@ -631,7 +631,7 @@ export function GithubImmersiveScreen({
                     </div>
                     <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-4">
                       <div className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                        Files Changed
+                        변경 파일
                       </div>
                       <div className="mt-2 text-lg font-semibold text-white">
                         {detail.files.length}
@@ -639,7 +639,7 @@ export function GithubImmersiveScreen({
                     </div>
                     <div className="rounded-2xl border border-white/6 bg-white/4 px-4 py-4">
                       <div className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                        Reviews
+                        리뷰
                       </div>
                       <div className="mt-2 text-lg font-semibold text-white">
                         {detail.reviews.length}
@@ -651,10 +651,10 @@ export function GithubImmersiveScreen({
                     <div className="space-y-4">
                       <div>
                         <div className="text-[11px] uppercase tracking-[0.24em] text-cyan-100/52">
-                          Review Actions
+                          리뷰 작업
                         </div>
                         <div className="mt-1 text-sm text-white/68">
-                          Submit the review directly from the server room.
+                          서버 룸에서 바로 리뷰를 제출합니다.
                         </div>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -665,8 +665,8 @@ export function GithubImmersiveScreen({
                           className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-full border border-emerald-300/24 bg-emerald-300/10 px-4 text-sm text-emerald-100 transition-colors hover:border-emerald-200/40 hover:bg-emerald-300/16 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {reviewBusyAction === "APPROVE"
-                            ? "Approving..."
-                            : "Approve"}
+                            ? "승인 중..."
+                            : "승인"}
                         </button>
                         <button
                           type="button"
@@ -677,8 +677,8 @@ export function GithubImmersiveScreen({
                           className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-full border border-amber-300/24 bg-amber-300/10 px-4 text-xs text-amber-100 transition-colors hover:border-amber-200/40 hover:bg-amber-300/16 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {reviewBusyAction === "REQUEST_CHANGES"
-                            ? "Requesting..."
-                            : "Request Changes"}
+                            ? "변경 요청 중..."
+                            : "변경 요청"}
                         </button>
                         <button
                           type="button"
@@ -687,15 +687,15 @@ export function GithubImmersiveScreen({
                           className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-full border border-cyan-300/24 bg-cyan-300/10 px-4 text-sm text-cyan-100 transition-colors hover:border-cyan-200/40 hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {reviewBusyAction === "COMMENT"
-                            ? "Sending..."
-                            : "Comment"}
+                            ? "전송 중..."
+                            : "댓글"}
                         </button>
                       </div>
                     </div>
                     <textarea
                       value={reviewBody}
                       onChange={(event) => setReviewBody(event.target.value)}
-                      placeholder="Add an approval note or request changes summary."
+                      placeholder="승인 메모 또는 변경 요청 요약을 입력하세요."
                       className="mt-4 h-28 w-full resize-none rounded-2xl border border-white/8 bg-black/22 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28"
                     />
                   </div>
@@ -710,7 +710,7 @@ export function GithubImmersiveScreen({
                           : "border border-white/6 bg-white/4 text-white/58 hover:text-white"
                       }`}
                     >
-                      Summary
+                      요약
                     </button>
                     <button
                       type="button"
@@ -721,7 +721,7 @@ export function GithubImmersiveScreen({
                           : "border border-white/6 bg-white/4 text-white/58 hover:text-white"
                       }`}
                     >
-                      Browser Preview
+                      브라우저 미리보기
                     </button>
                   </div>
 
@@ -729,28 +729,28 @@ export function GithubImmersiveScreen({
                     <>
                       <div className="mt-5 rounded-3xl border border-white/6 bg-white/4 p-5">
                         <div className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                          Description
+                          설명
                         </div>
                         <div className="mt-3 whitespace-pre-wrap text-sm leading-6 text-white/78">
                           {maskGitHubRecordingText(detail.body) ||
-                            "No pull request description."}
+                            "Pull Request 설명이 없습니다."}
                         </div>
                       </div>
 
                       <div className="mt-5 rounded-3xl border border-white/6 bg-white/4 p-5">
                         <div className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                          Diff Preview
+                          Diff 미리보기
                         </div>
                         <div className="mt-1 text-sm text-white/72">
-                          Full pull request diff preview.
+                          전체 Pull Request diff 미리보기입니다.
                         </div>
                         <pre className="mt-3 max-h-[320px] overflow-auto rounded-2xl border border-white/6 bg-black/28 p-4 text-[12px] leading-5 text-cyan-100/86">
                           {maskGitHubRecordingText(detail.diff) ||
-                            "Diff preview unavailable."}
+                            "Diff 미리보기를 사용할 수 없습니다."}
                         </pre>
                         {detail.diffTruncated ? (
                           <div className="mt-2 text-[11px] text-white/45">
-                            Diff preview truncated for performance.
+                            성능을 위해 Diff 미리보기가 일부 잘렸습니다.
                           </div>
                         ) : null}
                       </div>
@@ -758,21 +758,21 @@ export function GithubImmersiveScreen({
                   ) : (
                     <div className="mt-5 rounded-3xl border border-white/6 bg-white/4 p-5">
                       <div className="mb-3 text-[11px] uppercase tracking-[0.24em] text-white/45">
-                        Browser Preview
+                        브라우저 미리보기
                       </div>
                       {GITHUB_RECORDING_PRIVACY_MASK_ACTIVE ? (
                         <div className="rounded-2xl border border-white/6 bg-black/20 px-4 py-5 text-sm text-white/55">
-                          Browser preview is temporarily disabled so the screen
-                          recording does not reveal the real GitHub username.
+                          화면 녹화에 실제 GitHub 사용자명이 드러나지 않도록
+                          브라우저 미리보기를 임시로 비활성화했습니다.
                         </div>
                       ) : browserPreview.loading ? (
                         <div className="rounded-2xl border border-white/6 bg-black/20 px-4 py-5 text-sm text-white/55">
-                          Capturing GitHub preview.
+                          GitHub 미리보기를 캡처하는 중입니다.
                         </div>
                       ) : browserPreview.mediaUrl ? (
                         <Image
                           src={browserPreview.mediaUrl}
-                          alt={`Preview of ${detail.url}`}
+                          alt={`${detail.url} 미리보기`}
                           width={1280}
                           height={720}
                           unoptimized
@@ -781,7 +781,7 @@ export function GithubImmersiveScreen({
                       ) : (
                         <div className="rounded-2xl border border-white/6 bg-black/20 px-4 py-5 text-sm text-white/55">
                           {browserPreview.error ??
-                            "Browser preview unavailable on this setup."}
+                            "이 설정에서는 브라우저 미리보기를 사용할 수 없습니다."}
                         </div>
                       )}
                     </div>
@@ -790,7 +790,7 @@ export function GithubImmersiveScreen({
 
                 <div className="min-h-0 overflow-y-auto border-l border-white/6 bg-[#060d19]/86 px-4 py-5">
                   <div className="text-[11px] uppercase tracking-[0.24em] text-white/42">
-                    Checks
+                    검사
                   </div>
                   <div className="mt-3 space-y-2">
                     {detail.statusChecks.length > 0 ? (
@@ -805,19 +805,19 @@ export function GithubImmersiveScreen({
                           <div className="mt-1 text-[12px] text-white/55">
                             {[check.status, check.conclusion, check.workflow]
                               .filter(Boolean)
-                              .join(" · ") || "No status"}
+                              .join(" - ") || "상태 없음"}
                           </div>
                         </div>
                       ))
                     ) : (
                       <div className="rounded-2xl border border-white/6 bg-white/4 px-3 py-3 text-sm text-white/55">
-                        No checks reported.
+                        보고된 검사가 없습니다.
                       </div>
                     )}
                   </div>
 
                   <div className="mt-6 text-[11px] uppercase tracking-[0.24em] text-white/42">
-                    Files
+                    파일
                   </div>
                   <div className="mt-3 space-y-2">
                     {detail.files.slice(0, 12).map((file) => (
@@ -847,7 +847,7 @@ export function GithubImmersiveScreen({
                   </div>
 
                   <div className="mt-6 text-[11px] uppercase tracking-[0.24em] text-white/42">
-                    Recent Reviews
+                    최근 리뷰
                   </div>
                   <div className="mt-3 space-y-2">
                     {detail.reviews.slice(0, 6).length > 0 ? (
@@ -863,7 +863,7 @@ export function GithubImmersiveScreen({
                           <div className="mt-1 text-[12px] text-white/55">
                             {[review.state, review.submittedAt]
                               .filter(Boolean)
-                              .join(" · ")}
+                              .join(" - ")}
                           </div>
                           {review.body ? (
                             <div className="mt-2 text-[12px] leading-5 text-white/68">
@@ -874,7 +874,7 @@ export function GithubImmersiveScreen({
                       ))
                     ) : (
                       <div className="rounded-2xl border border-white/6 bg-white/4 px-3 py-3 text-sm text-white/55">
-                        No reviews yet.
+                        아직 리뷰가 없습니다.
                       </div>
                     )}
                   </div>
@@ -882,8 +882,7 @@ export function GithubImmersiveScreen({
               </div>
             ) : (
               <div className="flex h-full items-center justify-center px-8 text-center text-sm text-white/55">
-                Select a pull request to inspect its checks, diff, and review
-                actions.
+                검사, diff, 리뷰 작업을 확인할 Pull Request를 선택하세요.
               </div>
             )}
           </div>

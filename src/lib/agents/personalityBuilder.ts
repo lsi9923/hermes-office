@@ -198,7 +198,7 @@ const serializeIdentityMarkdown = (draft: PersonalityBuilderDraft["identity"]) =
     `- Creature: ${creature}`,
     `- Vibe: ${vibe}`,
     `- Emoji: ${emoji}`,
-    `- Avatar: ${avatar}`,
+    `- 아바타: ${avatar}`,
     "",
   ].join("\n");
 };

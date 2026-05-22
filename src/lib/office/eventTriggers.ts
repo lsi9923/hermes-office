@@ -1239,7 +1239,7 @@ export const reconcileOfficeAnimationTriggerState = (params: {
     cleaningCues.unshift({
       id: randomUUID(),
       agentId,
-      agentName: agent.name || "Agent",
+      agentName: agent.name || "에이전트",
       ts: nowMs,
     });
   }

@@ -23,10 +23,10 @@ export type AgentSkillDisplayState = "ready" | "setup-required" | "not-supported
 export type AgentSkillsAccessMode = "all" | "none" | "selected";
 
 const GROUP_DEFINITIONS: Array<{ id: Exclude<SkillSourceGroupId, "other">; label: string }> = [
-  { id: "workspace", label: "Workspace Skills" },
-  { id: "built-in", label: "Built-in Skills" },
-  { id: "installed", label: "Installed Skills" },
-  { id: "extra", label: "Extra Skills" },
+  { id: "workspace", label: "워크스페이스 스킬" },
+  { id: "built-in", label: "내장 스킬" },
+  { id: "installed", label: "설치된 스킬" },
+  { id: "extra", label: "추가 스킬" },
 ];
 
 const WORKSPACE_SOURCES = new Set(["openclaw-workspace", "agents-skills-personal", "agents-skills-project"]);
@@ -98,7 +98,7 @@ export const groupSkillsBySource = (skills: SkillStatusEntry[]): SkillSourceGrou
   for (const def of GROUP_DEFINITIONS) {
     grouped.set(def.id, { id: def.id, label: def.label, skills: [] });
   }
-  grouped.set("other", { id: "other", label: "Other Skills", skills: [] });
+  grouped.set("other", { id: "other", label: "기타 스킬", skills: [] });
 
   for (const skill of skills) {
     const groupId = resolveGroupId(skill);
@@ -135,27 +135,27 @@ export const buildSkillMissingDetails = (skill: SkillStatusEntry): string[] => {
   const details: string[] = [];
   const bins = normalizeStringList(skill.missing.bins);
   if (bins.length > 0) {
-    details.push(`Missing tools: ${bins.join(", ")}`);
+    details.push(`없는 도구: ${bins.join(", ")}`);
   }
 
   const anyBins = normalizeStringList(skill.missing.anyBins);
   if (anyBins.length > 0) {
-    details.push(`Missing one-of tools (install any): ${anyBins.join(" | ")}`);
+    details.push(`대체 도구 중 하나가 없습니다(아무거나 설치): ${anyBins.join(" | ")}`);
   }
 
   const env = normalizeStringList(skill.missing.env);
   if (env.length > 0) {
-    details.push(`Missing env vars (set in gateway env): ${env.join(", ")}`);
+    details.push(`없는 환경 변수(게이트웨이 환경에 설정): ${env.join(", ")}`);
   }
 
   const config = normalizeStringList(skill.missing.config);
   if (config.length > 0) {
-    details.push(`Missing config values (set in openclaw.json): ${config.join(", ")}`);
+    details.push(`없는 설정값(openclaw.json에 설정): ${config.join(", ")}`);
   }
 
   const os = normalizeStringList(skill.missing.os);
   if (os.length > 0) {
-    details.push(`Requires OS: ${os.map((value) => toOsLabel(value)).join(", ")}`);
+    details.push(`필요한 OS: ${os.map((value) => toOsLabel(value)).join(", ")}`);
   }
 
   return details;
@@ -164,25 +164,25 @@ export const buildSkillMissingDetails = (skill: SkillStatusEntry): string[] => {
 export const buildSkillReasons = (skill: SkillStatusEntry): string[] => {
   const reasons: string[] = [];
   if (skill.disabled) {
-    reasons.push("disabled");
+    reasons.push("비활성화됨");
   }
   if (skill.blockedByAllowlist) {
-    reasons.push("blocked by allowlist");
+    reasons.push("허용 목록에 의해 차단됨");
   }
   if (normalizeStringList(skill.missing.bins).length > 0) {
-    reasons.push("missing tools");
+    reasons.push("도구 없음");
   }
   if (normalizeStringList(skill.missing.anyBins).length > 0) {
-    reasons.push("missing one-of tools");
+    reasons.push("대체 도구 없음");
   }
   if (normalizeStringList(skill.missing.env).length > 0) {
-    reasons.push("missing env vars");
+    reasons.push("환경 변수 없음");
   }
   if (normalizeStringList(skill.missing.config).length > 0) {
-    reasons.push("missing config values");
+    reasons.push("설정값 없음");
   }
   if (normalizeStringList(skill.missing.os).length > 0) {
-    reasons.push("unsupported OS");
+    reasons.push("지원하지 않는 OS");
   }
   return reasons;
 };

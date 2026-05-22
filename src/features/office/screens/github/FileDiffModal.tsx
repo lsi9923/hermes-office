@@ -61,7 +61,7 @@ export function FileDiffModal({
     setCommentBusy(true);
     setCommentError(null);
     setSubmissionTone("info");
-    setSubmissionMessage("Submitting inline comment...");
+    setSubmissionMessage("인라인 댓글 제출 중...");
     setCommentBody("");
     setSelectedLineId(null);
 
@@ -76,14 +76,14 @@ export function FileDiffModal({
     })
       .then(() => {
         setSubmissionTone("success");
-        setSubmissionMessage("Inline comment submitted.");
+        setSubmissionMessage("인라인 댓글이 제출되었습니다.");
       })
       .catch((error) => {
         setSubmissionTone("error");
         setSubmissionMessage(
           error instanceof Error
             ? error.message
-            : "Unable to submit the inline comment.",
+            : "인라인 댓글을 제출하지 못했습니다.",
         );
       })
       .finally(() => {
@@ -111,7 +111,7 @@ export function FileDiffModal({
         <div className="flex items-start justify-between gap-4 border-b border-white/8 px-6 py-5">
           <div className="min-w-0">
             <div className="text-[11px] uppercase tracking-[0.24em] text-cyan-100/48">
-              File Diff
+              파일 Diff
             </div>
             <div className="mt-2 break-all text-lg font-semibold text-white">
               {file.path}
@@ -131,7 +131,7 @@ export function FileDiffModal({
             </div>
             {file.previousPath ? (
               <div className="mt-3 text-sm text-white/54">
-                Renamed from {file.previousPath}
+                이전 이름: {file.previousPath}
               </div>
             ) : null}
           </div>
@@ -139,7 +139,7 @@ export function FileDiffModal({
             type="button"
             onClick={onClose}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition-colors hover:border-white/18 hover:text-white"
-            aria-label="Close file diff"
+            aria-label="파일 diff 닫기"
           >
             <X className="h-4 w-4" />
           </button>
@@ -148,7 +148,7 @@ export function FileDiffModal({
         <div className="min-h-0 flex-1 overflow-auto p-4">
           <div className="overflow-hidden rounded-2xl border border-white/8 bg-[#050b15]">
             <div className="border-b border-white/8 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-white/40">
-              Patch
+              패치
             </div>
             {submissionMessage ? (
               <div
@@ -201,13 +201,13 @@ export function FileDiffModal({
                   {selectedLine?.id === line.id ? (
                     <div className="mx-3 my-2 rounded-2xl border border-cyan-300/14 bg-[#0b172c] p-4">
                       <div className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/58">
-                        Comment on {(selectedLine.side ?? "RIGHT").toLowerCase()} side
-                        line {selectedLine.lineNumber}
+                        {(selectedLine.side ?? "RIGHT") === "LEFT" ? "왼쪽" : "오른쪽"} 쪽
+                        {selectedLine.lineNumber}번 줄에 댓글
                       </div>
                       <textarea
                         value={commentBody}
                         onChange={(event) => setCommentBody(event.target.value)}
-                        placeholder="Add an inline comment."
+                        placeholder="인라인 댓글을 입력하세요."
                         className="mt-3 h-28 w-full resize-none rounded-2xl border border-white/8 bg-black/22 px-4 py-3 text-sm text-white outline-none placeholder:text-white/28"
                       />
                       {commentError ? (
@@ -217,7 +217,7 @@ export function FileDiffModal({
                       ) : null}
                       <div className="mt-3 flex items-center justify-between gap-3">
                         <div className="text-[12px] text-white/45">
-                          This posts directly to GitHub on the selected diff line.
+                          선택한 diff 줄에 GitHub 댓글로 바로 게시됩니다.
                         </div>
                         <div className="flex items-center gap-2">
                           <button
@@ -229,7 +229,7 @@ export function FileDiffModal({
                             }}
                             className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[12px] text-white/68 transition-colors hover:border-white/18 hover:text-white"
                           >
-                            Cancel
+                            취소
                           </button>
                           <button
                             type="button"
@@ -237,7 +237,7 @@ export function FileDiffModal({
                             onClick={() => void handleSubmitComment()}
                             className="inline-flex items-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-[12px] text-cyan-100 transition-colors hover:border-cyan-200/38 hover:bg-cyan-300/16 disabled:cursor-not-allowed disabled:opacity-60"
                           >
-                            {commentBusy ? "Submitting..." : "Add Comment"}
+                            {commentBusy ? "제출 중..." : "댓글 추가"}
                           </button>
                         </div>
                       </div>

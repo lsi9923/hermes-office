@@ -100,7 +100,7 @@ export const useRemoteOfficePresence = ({
             "error" in payload &&
             typeof payload.error === "string"
               ? payload.error
-              : "Failed to load remote office presence.";
+              : "원격 오피스 프레즌스를 불러오지 못했습니다.";
           throw new Error(
             errorMessage
           );
@@ -123,7 +123,7 @@ export const useRemoteOfficePresence = ({
         const message =
           loadError instanceof Error
             ? loadError.message
-            : "Failed to load remote office presence.";
+            : "원격 오피스 프레즌스를 불러오지 못했습니다.";
         setError(message);
         if (lastLoggedErrorRef.current !== message) {
           console.warn("[remote-office] Presence polling failed.", {
@@ -230,7 +230,7 @@ export const useRemoteOfficePresence = ({
         const message =
           loadError instanceof Error
             ? loadError.message
-            : "Failed to load remote gateway presence.";
+            : "원격 게이트웨이 프레즌스를 불러오지 못했습니다.";
         setError(message);
         if (isGatewayDisconnectLikeError(loadError)) {
           gatewayConnected = false;

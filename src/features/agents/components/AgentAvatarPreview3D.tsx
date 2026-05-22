@@ -314,7 +314,7 @@ export const AgentAvatarPreview3D = ({
     <div className={`relative ${className}`}>
       {!isReady ? (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[#070b16] text-white/70">
-          <RunningAvatarLoader size={26} trackWidth={72} label="Loading avatar..." />
+          <RunningAvatarLoader size={26} trackWidth={72} label="아바타 불러오는 중..." />
         </div>
       ) : null}
       <Canvas key={profileKey} camera={{ position: [0, 0.7, 2.5], fov: 34 }}>

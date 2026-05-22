@@ -101,7 +101,7 @@ export const useJukeboxStore = create<JukeboxStore>((set, get) => ({
       const playerState = await fetchPlayerState(token);
       set({ playerState, isLoadingPlayer: false });
     } catch {
-      set({ isLoadingPlayer: false, error: "Could not reach Spotify." });
+      set({ isLoadingPlayer: false, error: "Spotify에 연결하지 못했습니다." });
     }
   },
 
@@ -113,7 +113,7 @@ export const useJukeboxStore = create<JukeboxStore>((set, get) => ({
       const results = await searchTracks(token, query);
       set({ searchResults: results, isSearching: false });
     } catch {
-      set({ isSearching: false, error: "Search failed." });
+      set({ isSearching: false, error: "검색에 실패했습니다." });
     }
   },
 
@@ -130,7 +130,7 @@ export const useJukeboxStore = create<JukeboxStore>((set, get) => ({
       await get().refreshPlayer();
       emitPlaybackStarted();
     } catch {
-      set({ error: "Playback failed. Make sure Spotify is open on a device." });
+      set({ error: "재생에 실패했습니다. 기기에서 Spotify가 열려 있는지 확인하세요." });
     }
   },
 

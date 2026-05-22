@@ -17,13 +17,13 @@ export const CRON_ACTION_BUSY_MESSAGE = "Please wait for the current cron action
 const resolveCreateAgentId = (agentId: string) => {
   const trimmed = agentId.trim();
   if (!trimmed) {
-    throw new Error("Failed to create cron job: missing agent id.");
+    throw new Error("Cron 작업을 만들지 못했습니다: 에이전트 ID가 없습니다.");
   }
   return trimmed;
 };
 
 const resolveCreateErrorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : "Failed to create cron job.";
+  error instanceof Error ? error.message : "Cron 작업을 만들지 못했습니다.";
 
 export type CronBusyState = {
   createBusy: boolean;

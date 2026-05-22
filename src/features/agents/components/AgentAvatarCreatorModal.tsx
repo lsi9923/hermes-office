@@ -27,7 +27,7 @@ export const AgentAvatarCreatorModal = ({
       className="fixed inset-0 z-[140] flex items-center justify-center bg-background/85 p-4"
       role="dialog"
       aria-modal="true"
-      aria-label={`Customize avatar for ${agentName}`}
+      aria-label={`${agentName} 아바타 꾸미기`}
       onClick={onClose}
     >
       <div

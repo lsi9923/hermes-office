@@ -4,6 +4,11 @@ import type { GatewayStatus } from "@/lib/gateway/GatewayClient";
 import { isLocalGatewayUrl } from "@/lib/gateway/local-gateway";
 import type { StudioGatewayAdapterType, StudioGatewaySettings } from "@/lib/studio/settings";
 import { RunningAvatarLoader } from "@/features/agents/components/RunningAvatarLoader";
+import {
+  ADAPTER_BUTTON_LABELS,
+  ADAPTER_HINTS,
+  formatAdapterLabel,
+} from "@/features/office/i18n/koLabels";
 
 type GatewayConnectScreenProps = {
   gatewayUrl: string;
@@ -29,6 +34,15 @@ const resolveLocalGatewayPort = (gatewayUrl: string): number => {
   } catch {}
   return 18789;
 };
+
+const ADAPTER_ORDER: StudioGatewayAdapterType[] = [
+  "demo",
+  "hermes",
+  "local",
+  "claw3d",
+  "custom",
+  "openclaw",
+];
 
 export const GatewayConnectScreen = ({
   gatewayUrl,
@@ -57,65 +71,28 @@ export const GatewayConnectScreen = ({
   const localPort = useMemo(() => resolveLocalGatewayPort(gatewayUrl), [gatewayUrl]);
   const localGatewayCommand = useMemo(
     () => `npx openclaw gateway run --bind loopback --port ${localPort} --verbose`,
-    [localPort]
+    [localPort],
   );
   const localGatewayCommandPnpm = useMemo(
     () => `pnpm openclaw gateway run --bind loopback --port ${localPort} --verbose`,
-    [localPort]
+    [localPort],
   );
-  const localDemoCommand = useMemo(
-    () => `npm run demo-gateway`,
-    []
-  );
-  const useDemoPreset = () => {
-    onAdapterTypeChange("demo");
-  };
-  const useHermesPreset = () => {
-    onAdapterTypeChange("hermes");
-  };
-  const useOpenClawPreset = () => {
-    onAdapterTypeChange("openclaw");
-  };
-  const useCustomPreset = () => {
-    onAdapterTypeChange("custom");
-  };
-  const useLocalPreset = () => {
-    onAdapterTypeChange("local");
-  };
-  const useClaw3dPreset = () => {
-    onAdapterTypeChange("claw3d");
-  };
+  const localDemoCommand = useMemo(() => "npm run demo-gateway", []);
   const statusCopy = useMemo(() => {
     if (status === "connecting" && isLocal) {
-      return `Local gateway detected on port ${localPort}. Connecting…`;
+      return `${localPort} 포트에서 로컬 게이트웨이를 찾았습니다. 연결 중...`;
     }
     if (status === "connecting") {
-      return "Connecting to remote gateway…";
+      return "원격 게이트웨이에 연결 중...";
     }
     if (isLocal) {
-      return "No local gateway found.";
+      return "로컬 게이트웨이를 찾지 못했습니다.";
     }
-    return "Not connected to a gateway.";
+    return "아직 게이트웨이에 연결되지 않았습니다.";
   }, [isLocal, localPort, status]);
-  const selectedAdapterHint = useMemo(() => {
-    switch (selectedAdapterType) {
-      case "openclaw":
-        return "OpenClaw is the provider-rich gateway path. Use this when you want upstream model/provider routing managed by OpenClaw itself.";
-      case "hermes":
-        return "Hermes is the agent runtime path with its own provider/account flow behind the gateway.";
-      case "demo":
-        return "Demo can fall back to a seeded main agent locally, or connect to the bundled mock gateway for streaming replies.";
-      case "local":
-        return "Local runtime expects a direct HTTP runtime/orchestrator boundary, not a provider catalog.";
-      case "claw3d":
-        return "Claw3D runtime preserves Claw3D transcript conventions over the direct runtime seam.";
-      case "custom":
-      default:
-        return "Custom is the generic direct runtime seam. Use it for compatible orchestrators, not for provider-specific auth flows.";
-    }
-  }, [selectedAdapterType]);
+  const selectedAdapterHint = ADAPTER_HINTS[selectedAdapterType];
   const connectDisabled = status === "connecting";
-  const connectLabel = connectDisabled ? "Connecting…" : "Connect";
+  const connectLabel = connectDisabled ? "연결 중..." : "연결";
   const statusDotClass =
     status === "connected"
       ? "ui-dot-status-connected"
@@ -144,19 +121,19 @@ export const GatewayConnectScreen = ({
           type="button"
           className="ui-btn-icon ui-command-copy h-7 w-7 shrink-0"
           onClick={copyLocalCommand}
-          aria-label="Copy local gateway command"
-          title="Copy command"
+          aria-label="로컬 게이트웨이 명령 복사"
+          title="명령 복사"
         >
           {copyStatus === "copied" ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
         </button>
       </div>
       {copyStatus === "copied" ? (
-        <p className="text-xs text-muted-foreground">Copied</p>
+        <p className="text-xs text-muted-foreground">복사했습니다.</p>
       ) : copyStatus === "failed" ? (
-        <p className="ui-text-danger text-xs">Could not copy command.</p>
+        <p className="ui-text-danger text-xs">명령을 복사하지 못했습니다.</p>
       ) : (
         <p className="text-xs leading-snug text-muted-foreground">
-          In a source checkout, use <span className="font-mono text-foreground">{localGatewayCommandPnpm}</span>.
+          소스 체크아웃에서는 <span className="font-mono text-foreground">{localGatewayCommandPnpm}</span>를 사용하세요.
         </p>
       )}
     </div>
@@ -165,7 +142,7 @@ export const GatewayConnectScreen = ({
   const remoteForm = (
     <div className="mt-2.5 flex flex-col gap-3">
       <label className="flex flex-col gap-1 text-[11px] font-medium text-foreground/90">
-        Upstream URL
+        업스트림 URL
         <input
           className="ui-input h-10 rounded-md px-4 font-sans text-sm text-foreground outline-none"
           type="text"
@@ -177,27 +154,27 @@ export const GatewayConnectScreen = ({
       </label>
 
       <div className="space-y-0.5 text-xs text-muted-foreground">
-        <p className="font-medium text-foreground">Using Tailscale?</p>
+        <p className="font-medium text-foreground">Tailscale을 쓰나요?</p>
         <p>
           URL: <span className="font-mono">wss://&lt;your-tailnet-host&gt;</span>
         </p>
       </div>
 
       <label className="flex flex-col gap-1 text-[11px] font-medium text-foreground/90">
-        {tokenOptional ? "Upstream token (optional)" : "Upstream token"}
+        {tokenOptional ? "업스트림 토큰(선택)" : "업스트림 토큰"}
         <div className="relative">
           <input
             className="ui-input h-10 w-full rounded-md px-4 pr-10 font-sans text-sm text-foreground outline-none"
             type={showToken ? "text" : "password"}
             value={token}
             onChange={(event) => onTokenChange(event.target.value)}
-            placeholder={tokenOptional ? "optional token" : "gateway token"}
+            placeholder={tokenOptional ? "선택 토큰" : "게이트웨이 토큰"}
             spellCheck={false}
           />
           <button
             type="button"
             className="ui-btn-icon absolute inset-y-0 right-1 my-auto h-8 w-8 border-transparent bg-transparent text-muted-foreground hover:bg-transparent hover:text-foreground"
-            aria-label={showToken ? "Hide token" : "Show token"}
+            aria-label={showToken ? "토큰 숨기기" : "토큰 보기"}
             onClick={() => setShowToken((prev) => !prev)}
           >
             {showToken ? (
@@ -221,15 +198,14 @@ export const GatewayConnectScreen = ({
       {status === "connecting" ? (
         <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
           <RunningAvatarLoader size={16} trackWidth={32} inline />
-          Connecting…
+          연결 중...
         </div>
       ) : null}
       {error ? <p className="ui-text-danger text-xs leading-snug">{error}</p> : null}
       {showApprovalHint && selectedAdapterType === "openclaw" ? (
         <div className="rounded-md border border-border bg-muted/40 px-3 py-3 text-xs text-muted-foreground">
           <p className="leading-snug">
-            If the first connection attempt did not work, go to your OpenClaw computer and approve this
-            device:
+            첫 연결이 되지 않았다면 OpenClaw가 실행 중인 컴퓨터에서 이 장치를 승인하세요.
           </p>
           <code className="mt-2 block overflow-x-auto whitespace-nowrap rounded-md bg-[var(--command-bg)] px-2.5 py-2 font-mono text-[11px] text-[var(--command-fg)]">
             openclaw devices approve --latest
@@ -246,9 +222,7 @@ export const GatewayConnectScreen = ({
           {status === "connecting" ? (
             <RunningAvatarLoader size={18} trackWidth={36} inline />
           ) : (
-            <span
-              className={`h-2.5 w-2.5 ${statusDotClass}`}
-            />
+            <span className={`h-2.5 w-2.5 ${statusDotClass}`} />
           )}
           <p className="text-sm font-semibold text-foreground">{statusCopy}</p>
         </div>
@@ -257,63 +231,31 @@ export const GatewayConnectScreen = ({
       <div className="ui-card px-4 py-5 sm:px-6">
         <div>
           <p className="font-mono text-[10px] font-medium tracking-[0.06em] text-muted-foreground">
-            Remote gateway (recommended)
+            원격 게이트웨이(권장)
           </p>
           <p className="mt-2 text-sm text-foreground/90">
-            Choose a backend, then connect to its gateway URL.
+            백엔드를 선택한 뒤 게이트웨이 URL에 연결하세요.
           </p>
           <p className="mt-2 font-mono text-[11px] text-muted-foreground">
-            Selected backend: {selectedAdapterType} | Active backend: {activeAdapterType}
+            선택 백엔드: {formatAdapterLabel(selectedAdapterType)} | 활성 백엔드: {formatAdapterLabel(activeAdapterType)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Each backend keeps its own saved URL and token.
+            각 백엔드는 저장된 URL과 토큰을 따로 보관합니다.
           </p>
           <p className="mt-2 text-xs leading-snug text-muted-foreground">
             {selectedAdapterHint}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useDemoPreset}
-            >
-              Demo backend
-            </button>
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useHermesPreset}
-            >
-              Hermes backend
-            </button>
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useLocalPreset}
-            >
-              Local runtime
-            </button>
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useClaw3dPreset}
-            >
-              Claw3D runtime
-            </button>
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useCustomPreset}
-            >
-              Custom backend
-            </button>
-            <button
-              type="button"
-              className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
-              onClick={useOpenClawPreset}
-            >
-              OpenClaw backend
-            </button>
+            {ADAPTER_ORDER.map((adapterType) => (
+              <button
+                key={adapterType}
+                type="button"
+                className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
+                onClick={() => onAdapterTypeChange(adapterType)}
+              >
+                {ADAPTER_BUTTON_LABELS[adapterType]}
+              </button>
+            ))}
           </div>
         </div>
         {remoteForm}
@@ -322,54 +264,51 @@ export const GatewayConnectScreen = ({
       <div className="ui-card px-4 py-4 sm:px-6 sm:py-5">
         <div className="space-y-1.5">
           <p className="font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground">
-            Run locally (optional)
+            로컬 실행(선택)
           </p>
           <p className="text-sm text-foreground/90">
-            Start a local gateway process on this machine, then connect.
+            이 컴퓨터에서 로컬 게이트웨이 프로세스를 시작한 뒤 연결하세요.
           </p>
         </div>
         <div className="mt-3 space-y-3">
           {commandField}
           <div className="rounded-md border border-border bg-muted/30 px-3 py-3">
-            <p className="text-xs font-medium text-foreground">Just want to see the office?</p>
+            <p className="text-xs font-medium text-foreground">오피스만 먼저 보고 싶나요?</p>
             <p className="mt-1 text-xs leading-snug text-muted-foreground">
-              Run <span className="font-mono text-foreground">{localDemoCommand}</span> to start a built-in mock gateway with demo agents.
-              Then choose <span className="font-mono text-foreground">Demo backend</span> and connect.
+              <span className="font-mono text-foreground">{localDemoCommand}</span>를 실행하면 데모 에이전트가 있는 내장 모의 게이트웨이가 시작됩니다.
+              그 다음 <span className="font-mono text-foreground">데모 백엔드</span>를 선택하고 연결하세요.
             </p>
           </div>
           <div className="rounded-md border border-border bg-muted/30 px-3 py-3">
-            <p className="text-xs font-medium text-foreground">Using Hermes locally?</p>
+            <p className="text-xs font-medium text-foreground">Hermes를 로컬에서 쓰나요?</p>
             <p className="mt-1 text-xs leading-snug text-muted-foreground">
-              Run <span className="font-mono text-foreground">npm run hermes-adapter</span>, then choose
-              <span className="font-mono text-foreground"> Hermes backend</span>. The default local URL is
-              <span className="font-mono text-foreground"> ws://localhost:18789</span>.
+              <span className="font-mono text-foreground">npm run hermes-adapter</span>를 실행한 뒤
+              <span className="font-mono text-foreground"> Hermes 백엔드</span>를 선택하세요. 기본 로컬 URL은
+              <span className="font-mono text-foreground"> ws://localhost:18789</span>입니다.
             </p>
           </div>
           <div className="rounded-md border border-border bg-muted/30 px-3 py-3">
-            <p className="text-xs font-medium text-foreground">Using a local or custom runtime?</p>
+            <p className="text-xs font-medium text-foreground">로컬 또는 사용자 지정 런타임을 쓰나요?</p>
             <p className="mt-1 text-xs leading-snug text-muted-foreground">
-              Choose <span className="font-mono text-foreground">Local runtime</span>,
-              <span className="font-mono text-foreground"> Claw3D runtime</span>, or
-              <span className="font-mono text-foreground"> Custom backend</span> and point the URL at
-              your orchestrator or runtime boundary. These profiles already preserve separate saved URLs
-              and tokens, but transport-specific chat handoff still needs a follow-up slice.
+              <span className="font-mono text-foreground">로컬 런타임</span>,
+              <span className="font-mono text-foreground"> Claw3D 런타임</span>, 또는
+              <span className="font-mono text-foreground"> 사용자 지정 백엔드</span>를 선택하고 URL을 오케스트레이터나 런타임 엔드포인트로 맞추세요.
+              이 프로필들은 URL과 토큰을 서로 따로 저장합니다.
             </p>
           </div>
           <div className="rounded-md border border-border bg-muted/30 px-3 py-3">
-            <p className="text-xs font-medium text-foreground">Opening Claw3D from another machine?</p>
+            <p className="text-xs font-medium text-foreground">다른 컴퓨터에서 Claw3D를 열고 있나요?</p>
             <p className="mt-1 text-xs leading-snug text-muted-foreground">
-              Start Studio with <span className="font-mono text-foreground">HOST=0.0.0.0</span> (or a
-              specific LAN/Tailscale host) and set
-              <span className="font-mono text-foreground"> STUDIO_ACCESS_TOKEN</span> before exposing it
-              beyond localhost. Gateway settings are stored on the Studio host, but OpenClaw device approval
-              remains per browser/device.
+              Studio를 <span className="font-mono text-foreground">HOST=0.0.0.0</span> 또는 특정 LAN/Tailscale 호스트로 시작하고,
+              로컬호스트 밖으로 노출하기 전에 <span className="font-mono text-foreground"> STUDIO_ACCESS_TOKEN</span>을 설정하세요.
+              게이트웨이 설정은 Studio 호스트에 저장되지만 OpenClaw 장치 승인은 브라우저/장치마다 필요합니다.
             </p>
           </div>
           {localGatewayDefaults ? (
             <div className="ui-input rounded-md px-3 py-3">
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground">
-                  Use token from <span className="font-mono">~/.openclaw/openclaw.json</span>.
+                  <span className="font-mono">~/.openclaw/openclaw.json</span>의 토큰을 사용합니다.
                 </p>
                 <p className="font-mono text-[11px] text-foreground">
                   {localGatewayDefaults.url}
@@ -379,7 +318,7 @@ export const GatewayConnectScreen = ({
                   className="ui-btn-secondary h-9 w-full px-3 text-xs font-semibold tracking-[0.05em]"
                   onClick={onUseLocalDefaults}
                 >
-                  Use local defaults
+                  로컬 기본값 사용
                 </button>
               </div>
             </div>

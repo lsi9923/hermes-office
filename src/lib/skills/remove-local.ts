@@ -30,7 +30,7 @@ const isPathInside = (root: string, candidate: string): boolean => {
 const normalizeRequiredPath = (value: string, field: string): string => {
   const trimmed = value.trim();
   if (!trimmed) {
-    throw new Error(`${field} is required.`);
+    throw new Error(`${field} 값이 필요합니다.`);
   }
   return resolveUserPath(trimmed, os.homedir);
 };
@@ -49,7 +49,7 @@ const resolveAllowedRoot = (params: {
 export const removeSkillLocally = (params: SkillRemoveRequest): SkillRemoveResult => {
   const skillKey = params.skillKey.trim();
   if (!skillKey) {
-    throw new Error("skillKey is required.");
+    throw new Error("skillKey 값이 필요합니다.");
   }
 
   const source = params.source;
@@ -64,21 +64,21 @@ export const removeSkillLocally = (params: SkillRemoveRequest): SkillRemoveResul
   });
 
   if (!isPathInside(allowedRoot, baseDir)) {
-    throw new Error(`Refusing to remove skill outside allowed root: ${baseDir}`);
+    throw new Error(`허용된 루트 밖의 스킬은 제거할 수 없습니다: ${baseDir}`);
   }
   if (resolveComparablePath(allowedRoot) === resolveComparablePath(baseDir)) {
-    throw new Error(`Refusing to remove the skills root directory: ${baseDir}`);
+    throw new Error(`스킬 루트 디렉터리 자체는 제거할 수 없습니다: ${baseDir}`);
   }
 
   const exists = fs.existsSync(baseDir);
   if (exists) {
     const stats = fs.statSync(baseDir);
     if (!stats.isDirectory()) {
-      throw new Error(`Skill path is not a directory: ${baseDir}`);
+      throw new Error(`스킬 경로가 디렉터리가 아닙니다: ${baseDir}`);
     }
     const skillDocPath = path.join(baseDir, "SKILL.md");
     if (!fs.existsSync(skillDocPath) || !fs.statSync(skillDocPath).isFile()) {
-      throw new Error(`Refusing to remove non-skill directory: ${baseDir}`);
+      throw new Error(`스킬 디렉터리가 아닌 경로는 제거할 수 없습니다: ${baseDir}`);
     }
     fs.rmSync(baseDir, { recursive: true, force: false });
   }

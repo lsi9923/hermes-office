@@ -75,7 +75,7 @@ const loadGitHubCommitSummaries = (): {
         hasFailingChecks: false,
         sourceState: buildSourceState("github", {
           ready: false,
-          error: dashboard.message ?? "GitHub is not ready.",
+          error: dashboard.message ?? "GitHub이 준비되지 않았습니다.",
         }),
       };
     }
@@ -110,7 +110,7 @@ const loadGitHubCommitSummaries = (): {
       hasFailingChecks: false,
       sourceState: buildSourceState("github", {
         ready: false,
-        error: error instanceof Error ? error.message : "Failed to load GitHub activity.",
+        error: error instanceof Error ? error.message : "GitHub 활동을 불러오지 못했습니다.",
       }),
     };
   }
@@ -140,7 +140,7 @@ const loadJiraIssues = async (
       sourceState: buildSourceState("jira", {
         ready: false,
         stale: true,
-        error: "Jira is disabled.",
+        error: "Jira가 비활성화되어 있습니다.",
       }),
     };
   }
@@ -150,7 +150,7 @@ const loadJiraIssues = async (
       sourceState: buildSourceState("jira", {
         ready: false,
         stale: true,
-        error: "Jira credentials are incomplete.",
+        error: "Jira 인증 정보가 완전하지 않습니다.",
       }),
     };
   }
@@ -163,7 +163,7 @@ const loadJiraIssues = async (
       sourceState: buildSourceState("jira", {
         ready: false,
         stale: true,
-        error: error instanceof Error ? error.message : "Jira base URL is invalid.",
+        error: error instanceof Error ? error.message : "Jira 기본 URL이 올바르지 않습니다.",
       }),
     };
   }
@@ -174,7 +174,7 @@ const loadJiraIssues = async (
       sourceState: buildSourceState("jira", {
         ready: false,
         stale: true,
-        error: "Add a Jira project key or JQL query.",
+        error: "Jira 프로젝트 키 또는 JQL 쿼리를 추가하세요.",
       }),
     };
   }
@@ -207,14 +207,14 @@ const loadJiraIssues = async (
       | null;
     if (!response.ok) {
       throw new Error(
-        payload?.errorMessages?.join(" ") || "Failed to load Jira issues."
+        payload?.errorMessages?.join(" ") || "Jira 이슈를 불러오지 못했습니다."
       );
     }
     const issues: JiraIssueRecord[] = (payload?.issues ?? []).map((issue) => ({
       id: issue.id ?? issue.key ?? randomUUID(),
       key: issue.key ?? "JIRA",
-      title: coerceText(issue.fields?.summary) || "Untitled issue",
-      status: coerceText(issue.fields?.status?.name) || "Unknown",
+      title: coerceText(issue.fields?.summary) || "제목 없는 이슈",
+      status: coerceText(issue.fields?.status?.name) || "알 수 없음",
       url: issue.key ? `${jiraBaseUrl}/browse/${issue.key}` : null,
       assigneeName: coerceText(issue.fields?.assignee?.displayName) || null,
       assigneeEmail: coerceText(issue.fields?.assignee?.emailAddress) || null,
@@ -232,7 +232,7 @@ const loadJiraIssues = async (
       sourceState: buildSourceState("jira", {
         ready: false,
         stale: true,
-        error: error instanceof Error ? error.message : "Failed to load Jira issues.",
+        error: error instanceof Error ? error.message : "Jira 이슈를 불러오지 못했습니다.",
       }),
     };
   }
@@ -329,10 +329,10 @@ export const buildStandupMeeting = async (params: {
       agent.latestPreview ||
       agent.lastUserMessage ||
       githubResult.commits[0]?.title ||
-      "Reviewing current work.";
+      "현재 작업을 검토 중입니다.";
     const blockers = splitBlockers(manual.blockers);
     if (blockers.length === 0 && githubResult.hasFailingChecks) {
-      blockers.push("GitHub checks are failing.");
+      blockers.push("GitHub 체크가 실패 중입니다.");
     }
     const manualNotes = [manual.note].map(coerceText).filter(Boolean);
     return {

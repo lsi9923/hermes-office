@@ -15,7 +15,7 @@ export const planStopRunIntent = (input: {
     return {
       kind: "deny",
       reason: "not-connected",
-      message: "Connect to gateway before stopping a run.",
+      message: "실행을 중지하려면 먼저 게이트웨이에 연결하세요.",
     };
   }
   const sessionKey = input.sessionKey.trim();
@@ -47,7 +47,7 @@ export const planNewSessionIntent = (input: {
     return {
       kind: "deny",
       reason: "missing-agent",
-      message: "Failed to start new session: agent not found.",
+      message: "새 세션을 시작하지 못했습니다: 에이전트를 찾지 못했습니다.",
     };
   }
   const sessionKey = input.sessionKey.trim();

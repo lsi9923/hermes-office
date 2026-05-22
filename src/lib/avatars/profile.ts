@@ -40,66 +40,66 @@ type EnumOption<T extends string> = {
 };
 
 export const AGENT_AVATAR_SKIN_TONE_OPTIONS: ColorOption[] = [
-  { id: "fair", label: "Fair", color: "#f7d7c2" },
-  { id: "light", label: "Light", color: "#f4c58a" },
-  { id: "warm", label: "Warm", color: "#d8a06e" },
-  { id: "tan", label: "Tan", color: "#b7794e" },
-  { id: "deep", label: "Deep", color: "#8a5a3b" },
-  { id: "rich", label: "Rich", color: "#5d3a24" },
+  { id: "fair", label: "밝음", color: "#f7d7c2" },
+  { id: "light", label: "연함", color: "#f4c58a" },
+  { id: "warm", label: "따뜻함", color: "#d8a06e" },
+  { id: "tan", label: "태닝", color: "#b7794e" },
+  { id: "deep", label: "짙음", color: "#8a5a3b" },
+  { id: "rich", label: "깊음", color: "#5d3a24" },
 ];
 
 export const AGENT_AVATAR_HAIR_STYLE_OPTIONS: EnumOption<AgentAvatarHairStyle>[] = [
-  { id: "short", label: "Short" },
-  { id: "parted", label: "Parted" },
-  { id: "spiky", label: "Spiky" },
-  { id: "bun", label: "Bun" },
+  { id: "short", label: "짧은 머리" },
+  { id: "parted", label: "가르마" },
+  { id: "spiky", label: "스파이크" },
+  { id: "bun", label: "묶음" },
 ];
 
 export const AGENT_AVATAR_HAIR_COLOR_OPTIONS: ColorOption[] = [
-  { id: "ink", label: "Ink", color: "#151515" },
-  { id: "espresso", label: "Espresso", color: "#3e2723" },
-  { id: "walnut", label: "Walnut", color: "#6b4f3a" },
-  { id: "auburn", label: "Auburn", color: "#7b341e" },
-  { id: "blonde", label: "Blonde", color: "#d6b56c" },
-  { id: "violet", label: "Violet", color: "#7c3aed" },
-  { id: "cyan", label: "Cyan", color: "#0891b2" },
-  { id: "pink", label: "Pink", color: "#db2777" },
+  { id: "ink", label: "먹색", color: "#151515" },
+  { id: "espresso", label: "에스프레소", color: "#3e2723" },
+  { id: "walnut", label: "월넛", color: "#6b4f3a" },
+  { id: "auburn", label: "적갈색", color: "#7b341e" },
+  { id: "blonde", label: "블론드", color: "#d6b56c" },
+  { id: "violet", label: "보라", color: "#7c3aed" },
+  { id: "cyan", label: "청록", color: "#0891b2" },
+  { id: "pink", label: "분홍", color: "#db2777" },
 ];
 
 export const AGENT_AVATAR_TOP_STYLE_OPTIONS: EnumOption<AgentAvatarTopStyle>[] = [
-  { id: "tee", label: "Tee" },
-  { id: "hoodie", label: "Hoodie" },
-  { id: "jacket", label: "Jacket" },
+  { id: "tee", label: "티셔츠" },
+  { id: "hoodie", label: "후드" },
+  { id: "jacket", label: "재킷" },
 ];
 
 export const AGENT_AVATAR_BOTTOM_STYLE_OPTIONS: EnumOption<AgentAvatarBottomStyle>[] = [
-  { id: "pants", label: "Pants" },
-  { id: "shorts", label: "Shorts" },
-  { id: "cuffed", label: "Cuffed" },
+  { id: "pants", label: "바지" },
+  { id: "shorts", label: "반바지" },
+  { id: "cuffed", label: "롤업" },
 ];
 
 export const AGENT_AVATAR_HAT_STYLE_OPTIONS: EnumOption<AgentAvatarHatStyle>[] = [
-  { id: "none", label: "None" },
-  { id: "cap", label: "Cap" },
-  { id: "beanie", label: "Beanie" },
+  { id: "none", label: "없음" },
+  { id: "cap", label: "캡" },
+  { id: "beanie", label: "비니" },
 ];
 
 export const AGENT_AVATAR_CLOTHING_COLOR_OPTIONS: ColorOption[] = [
-  { id: "graphite", label: "Graphite", color: "#2d3748" },
-  { id: "sky", label: "Sky", color: "#7090ff" },
-  { id: "mint", label: "Mint", color: "#34d399" },
-  { id: "amber", label: "Amber", color: "#f59e0b" },
-  { id: "rose", label: "Rose", color: "#f43f5e" },
-  { id: "violet", label: "Violet", color: "#8b5cf6" },
-  { id: "cream", label: "Cream", color: "#f5f5f4" },
-  { id: "slate", label: "Slate", color: "#64748b" },
+  { id: "graphite", label: "흑연", color: "#2d3748" },
+  { id: "sky", label: "하늘", color: "#7090ff" },
+  { id: "mint", label: "민트", color: "#34d399" },
+  { id: "amber", label: "호박색", color: "#f59e0b" },
+  { id: "rose", label: "장미", color: "#f43f5e" },
+  { id: "violet", label: "보라", color: "#8b5cf6" },
+  { id: "cream", label: "크림", color: "#f5f5f4" },
+  { id: "slate", label: "슬레이트", color: "#64748b" },
 ];
 
 export const AGENT_AVATAR_SHOE_COLOR_OPTIONS: ColorOption[] = [
-  { id: "black", label: "Black", color: "#1a1a1a" },
-  { id: "navy", label: "Navy", color: "#1e3a8a" },
-  { id: "brown", label: "Brown", color: "#7c4a2d" },
-  { id: "white", label: "White", color: "#e5e7eb" },
+  { id: "black", label: "검정", color: "#1a1a1a" },
+  { id: "navy", label: "네이비", color: "#1e3a8a" },
+  { id: "brown", label: "갈색", color: "#7c4a2d" },
+  { id: "white", label: "흰색", color: "#e5e7eb" },
 ];
 
 const AGENT_AVATAR_VERSION = 1 as const;

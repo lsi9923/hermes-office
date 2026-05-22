@@ -16,13 +16,13 @@ export type CreateBootstrapCommand =
   | { kind: "set-mobile-pane"; pane: "chat" };
 
 const buildMissingCreatedAgentMessage = (agentName: string): string =>
-  `Agent "${agentName}" was created, but Studio could not load it yet.`;
+  `"${agentName}" 에이전트를 만들었지만 스튜디오가 아직 불러오지 못했습니다.`;
 
 const buildBootstrapGlobalErrorMessage = (errorMessage: string): string =>
-  `Agent created, but default permissions could not be applied: ${errorMessage}`;
+  `에이전트는 생성됐지만 기본 권한을 적용하지 못했습니다: ${errorMessage}`;
 
 const buildBootstrapModalErrorMessage = (errorMessage: string): string =>
-  `Default permissions failed: ${errorMessage}`;
+  `기본 권한 적용 실패: ${errorMessage}`;
 
 export function planCreateAgentBootstrapCommands(
   facts: CreateBootstrapFacts

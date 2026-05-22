@@ -45,7 +45,7 @@ const runDeleteFlow = async (
 ): Promise<DeleteAgentTransactionResult> => {
   const trimmedAgentId = agentId.trim();
   if (!trimmedAgentId) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
 
   let trashed = EMPTY_TRASH_RESULT;
@@ -53,7 +53,7 @@ const runDeleteFlow = async (
     trashed = await deps.trashAgentState(trimmedAgentId);
   } catch (err) {
     deps.logError?.(
-      "Failed to move agent workspace/state into trash. Continuing with gateway deletion only.",
+      "에이전트 작업공간/상태를 휴지통으로 옮기지 못했습니다. 게이트웨이 삭제만 계속합니다.",
       err
     );
   }
@@ -68,14 +68,14 @@ const runDeleteFlow = async (
       try {
         await deps.restoreCronJobs(removedCronJobs);
       } catch (restoreCronErr) {
-        deps.logError?.("Failed to restore removed cron jobs.", restoreCronErr);
+        deps.logError?.("삭제했던 Cron 작업을 복원하지 못했습니다.", restoreCronErr);
       }
     }
     if (trashed.moved.length > 0) {
       try {
         await deps.restoreAgentState(trimmedAgentId, trashed.trashDir);
       } catch (restoreErr) {
-        deps.logError?.("Failed to restore trashed agent state.", restoreErr);
+        deps.logError?.("휴지통으로 옮긴 에이전트 상태를 복원하지 못했습니다.", restoreErr);
       }
     }
     throw err;
@@ -137,7 +137,7 @@ export const deleteAgentRecordViaStudio = async (params: {
 }): Promise<void> => {
   const trimmedAgentId = params.agentId.trim();
   if (!trimmedAgentId) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
   const logError = params.logError ?? ((message, error) => console.error(message, error));
   let removedCronJobs: CronJobRestoreInput[] = [];
@@ -149,7 +149,7 @@ export const deleteAgentRecordViaStudio = async (params: {
       try {
         await restoreCronJobs(params.client, removedCronJobs);
       } catch (restoreErr) {
-        logError("Failed to restore removed cron jobs.", restoreErr);
+        logError("삭제했던 Cron 작업을 복원하지 못했습니다.", restoreErr);
       }
     }
     throw err;
@@ -162,7 +162,7 @@ export const trashAgentStateViaStudio = async (params: {
 }): Promise<TrashAgentStateResult> => {
   const trimmedAgentId = params.agentId.trim();
   if (!trimmedAgentId) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
   const fetchJson = params.fetchJson ?? defaultFetchJson;
   const { result } = await fetchJson<{ result: TrashAgentStateResult }>(

@@ -223,7 +223,7 @@ export function useChatInteractionController(
         params.dispatch({
           type: "appendOutput",
           agentId,
-          line: "Error: Agent not found.",
+          line: "오류: 에이전트를 찾지 못했습니다.",
         });
         return;
       }
@@ -333,7 +333,7 @@ export function useChatInteractionController(
           sessionKey: stopIntent.sessionKey,
         });
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to stop run.";
+        const message = err instanceof Error ? err.message : "실행을 중지하지 못했습니다.";
         params.setError(message);
         console.error(message);
         params.dispatch({
@@ -383,12 +383,12 @@ export function useChatInteractionController(
         params.setInspectSidebarNull();
         params.setMobilePaneChat();
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to start new session.";
+        const message = err instanceof Error ? err.message : "새 세션을 시작하지 못했습니다.";
         params.setError(message);
         params.dispatch({
           type: "appendOutput",
           agentId,
-          line: `New session failed: ${message}`,
+          line: `새 세션 시작 실패: ${message}`,
         });
       }
     },

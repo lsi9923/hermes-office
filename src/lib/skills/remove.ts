@@ -5,7 +5,7 @@ import type { SkillRemoveRequest, SkillRemoveResult } from "@/lib/skills/types";
 const normalizeRequired = (value: string, field: string): string => {
   const trimmed = value.trim();
   if (!trimmed) {
-    throw new Error(`${field} is required.`);
+    throw new Error(`${field} 값이 필요합니다.`);
   }
   return trimmed;
 };

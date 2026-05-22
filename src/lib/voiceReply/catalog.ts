@@ -8,31 +8,31 @@ export const CURATED_ELEVENLABS_VOICES: CuratedVoiceOption[] = [
   {
     id: null,
     label: "Rachel",
-    description: "Balanced and conversational.",
+    description: "균형 잡힌 대화형 음성입니다.",
   },
   {
     id: "EXAVITQu4vr4xnSDxMaL",
     label: "Bella",
-    description: "Warm and friendly.",
+    description: "따뜻하고 친근한 음성입니다.",
   },
   {
     id: "MF3mGyEYCl7XYWbV9V6O",
     label: "Elli",
-    description: "Clear and upbeat.",
+    description: "또렷하고 밝은 음성입니다.",
   },
   {
     id: "ErXwobaYiN019PkySvjV",
     label: "Antoni",
-    description: "Calm and professional.",
+    description: "차분하고 전문적인 음성입니다.",
   },
   {
     id: "TxGEqnHWrfWFTfGW9XjX",
     label: "Josh",
-    description: "Steady and confident.",
+    description: "안정적이고 자신감 있는 음성입니다.",
   },
   {
     id: "pNInz6obpgDQGcFmaJgB",
     label: "Adam",
-    description: "Deep and authoritative.",
+    description: "낮고 권위 있는 음성입니다.",
   },
 ];

@@ -220,8 +220,8 @@ export type MutationStatusBlock = {
 type MutationFailureMessageByKind = Record<MutationWorkflowKind, string>;
 
 const FALLBACK_MUTATION_FAILURE_MESSAGE: MutationFailureMessageByKind = {
-  "rename-agent": "Failed to rename agent.",
-  "delete-agent": "Failed to delete agent.",
+  "rename-agent": "에이전트 이름을 바꾸지 못했습니다.",
+  "delete-agent": "에이전트를 삭제하지 못했습니다.",
 };
 
 const assertMutationKind = (kind: string): MutationWorkflowKind => {
@@ -319,14 +319,14 @@ export const runCreateAgentMutationLifecycle = async (
   });
   if (guard.kind === "deny") {
     if (guard.reason === "not-connected") {
-      deps.setCreateAgentModalError("Connect to gateway before creating an agent.");
+      deps.setCreateAgentModalError("에이전트를 만들려면 먼저 게이트웨이에 연결하세요.");
     }
     return false;
   }
 
   const name = params.payload.name.trim();
   if (!name) {
-    deps.setCreateAgentModalError("Agent name is required.");
+    deps.setCreateAgentModalError("에이전트 이름이 필요합니다.");
     return false;
   }
 
@@ -338,7 +338,7 @@ export const runCreateAgentMutationLifecycle = async (
   try {
     const queuedMutation = deps.enqueueConfigMutation({
       kind: "create-agent",
-      label: `Create ${name}`,
+      label: `${name} 생성`,
       run: async () => {
         deps.setCreatingBlock(name);
         const created = await deps.createAgent(name, avatarSeed);
@@ -351,7 +351,7 @@ export const runCreateAgentMutationLifecycle = async (
     await queuedMutation;
     return true;
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create agent.";
+    const message = error instanceof Error ? error.message : "에이전트를 만들지 못했습니다.";
     deps.clearCreateBlock();
     deps.setCreateAgentModalError(message);
     deps.onError(message);
@@ -406,14 +406,14 @@ export const resolveConfigMutationStatusLine = (params: {
     return "Waiting for active runs to finish";
   }
   if (block.phase === "mutating") {
-    return params.mutatingLabel ?? "Submitting config change";
+    return params.mutatingLabel ?? "설정 변경 제출 중";
   }
   if (!block.sawDisconnect) {
     return "Waiting for gateway to restart";
   }
   return status === "connected"
-    ? "Gateway is back online, syncing agents"
-    : "Gateway restart in progress";
+    ? "게이트웨이가 다시 온라인입니다. 에이전트를 동기화하는 중"
+    : "게이트웨이 재시작 중";
 };
 
 export const buildAwaitingRestartPatch = (): AwaitingRestartPatch => {

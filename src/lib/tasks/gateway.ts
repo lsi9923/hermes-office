@@ -87,7 +87,7 @@ export const createGatewayTask = async (
   input: GatewayTaskCreateInput
 ): Promise<GatewayTaskRecord> => {
   const title = trimOrUndefined(input.title);
-  if (!title) throw new Error("Task title is required.");
+  if (!title) throw new Error("작업 제목이 필요합니다.");
   return client.call<GatewayTaskRecord>("tasks.create", {
     title,
     ...(trimOrUndefined(input.description) ? { description: trimOrUndefined(input.description) } : {}),
@@ -111,7 +111,7 @@ export const updateGatewayTask = async (
   patch: GatewayTaskUpdateInput
 ): Promise<GatewayTaskRecord> => {
   const taskId = trimOrUndefined(id);
-  if (!taskId) throw new Error("Task id is required.");
+  if (!taskId) throw new Error("작업 ID가 필요합니다.");
   return client.call<GatewayTaskRecord>("tasks.update", {
     id: taskId,
     ...(patch.title !== undefined ? { title: trimOrUndefined(patch.title) ?? "" } : {}),
@@ -133,6 +133,6 @@ export const updateGatewayTask = async (
 
 export const deleteGatewayTask = async (client: GatewayClient, id: string) => {
   const taskId = trimOrUndefined(id);
-  if (!taskId) throw new Error("Task id is required.");
+  if (!taskId) throw new Error("작업 ID가 필요합니다.");
   return client.call<{ ok: boolean; removed?: boolean }>("tasks.delete", { id: taskId });
 };

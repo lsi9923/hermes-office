@@ -27,10 +27,10 @@ type TemplateDefinition = {
 const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
   {
     id: "daily-briefing",
-    name: "Daily Morning Briefing",
-    description: "Every day at 9am. Summarize priorities, blockers, and what changed overnight.",
+    name: "일일 아침 브리핑",
+    description: "매일 오전 9시. 우선순위, 막힌 일, 밤사이 변경 사항을 요약합니다.",
     buildInput: (agent, customName) => ({
-      name: customName || "Daily Morning Briefing",
+      name: customName || "일일 아침 브리핑",
       agentId: agent.agentId,
       sessionKey: agent.sessionKey,
       enabled: true,
@@ -40,17 +40,17 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
       payload: {
         kind: "agentTurn",
         message:
-          "Create a concise morning briefing for headquarters. Summarize current priorities, blocked work, recent notable changes, and the next recommended actions.",
+          "본부를 위한 간결한 아침 브리핑을 작성하세요. 현재 우선순위, 막힌 작업, 최근 주요 변경 사항, 다음 권장 행동을 요약하세요.",
         thinking: "high",
       },
     }),
   },
   {
     id: "nightly-code-review",
-    name: "Nightly Code Review Digest",
-    description: "Every night at midnight. Review the day and summarize risky changes or regressions.",
+    name: "야간 코드 리뷰 요약",
+    description: "매일 자정. 하루 작업을 검토하고 위험한 변경이나 회귀 가능성을 요약합니다.",
     buildInput: (agent, customName) => ({
-      name: customName || "Nightly Code Review Digest",
+      name: customName || "야간 코드 리뷰 요약",
       agentId: agent.agentId,
       sessionKey: agent.sessionKey,
       enabled: true,
@@ -60,17 +60,17 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
       payload: {
         kind: "agentTurn",
         message:
-          "Review the latest work available to you and produce a digest of risky changes, unresolved questions, and follow-up recommendations for the team.",
+          "확인 가능한 최신 작업을 검토하고 위험한 변경, 해결되지 않은 질문, 팀을 위한 후속 권장 사항을 요약하세요.",
         thinking: "high",
       },
     }),
   },
   {
     id: "hourly-health-check",
-    name: "Hourly Health Check",
-    description: "Every 60 minutes. Report runtime health, failures, and anything that needs intervention.",
+    name: "시간별 상태 점검",
+    description: "60분마다. 런타임 상태, 실패, 개입이 필요한 항목을 보고합니다.",
     buildInput: (agent, customName) => ({
-      name: customName || "Hourly Health Check",
+      name: customName || "시간별 상태 점검",
       agentId: agent.agentId,
       sessionKey: agent.sessionKey,
       enabled: true,
@@ -80,17 +80,17 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
       payload: {
         kind: "agentTurn",
         message:
-          "Run a health check. Summarize your current status, errors, blocked tasks, pending approvals, and whether a human needs to step in.",
+          "상태 점검을 실행하세요. 현재 상태, 오류, 막힌 작업, 대기 중인 승인, 사람이 개입해야 하는지 요약하세요.",
         thinking: "medium",
       },
     }),
   },
   {
     id: "weekly-progress-report",
-    name: "Weekly Progress Report",
-    description: "Every Monday at 8am. Roll up wins, unfinished work, and next steps.",
+    name: "주간 진행 보고",
+    description: "매주 월요일 오전 8시. 성과, 미완료 작업, 다음 단계를 정리합니다.",
     buildInput: (agent, customName) => ({
-      name: customName || "Weekly Progress Report",
+      name: customName || "주간 진행 보고",
       agentId: agent.agentId,
       sessionKey: agent.sessionKey,
       enabled: true,
@@ -100,17 +100,17 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
       payload: {
         kind: "agentTurn",
         message:
-          "Write a weekly progress report for headquarters. Include completed work, unfinished work, risks, and the most important next steps.",
+          "본부를 위한 주간 진행 보고서를 작성하세요. 완료한 작업, 미완료 작업, 위험, 가장 중요한 다음 단계를 포함하세요.",
         thinking: "high",
       },
     }),
   },
   {
     id: "continuous-monitor",
-    name: "Continuous Monitor",
-    description: "Every 15 minutes. Watch for drift, silent failures, or anything unusual.",
+    name: "상시 모니터링",
+    description: "15분마다. 드리프트, 조용한 실패, 이상 징후를 확인합니다.",
     buildInput: (agent, customName) => ({
-      name: customName || "Continuous Monitor",
+      name: customName || "상시 모니터링",
       agentId: agent.agentId,
       sessionKey: agent.sessionKey,
       enabled: true,
@@ -120,7 +120,7 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
       payload: {
         kind: "agentTurn",
         message:
-          "Monitor your current context and report only if you detect unusual behavior, blocked progress, repeated failures, or opportunities that need attention.",
+          "현재 맥락을 모니터링하고 이상 행동, 막힌 진행, 반복 실패, 주의가 필요한 기회를 발견한 경우에만 보고하세요.",
         thinking: "medium",
       },
     }),
@@ -128,7 +128,7 @@ const PLAYBOOK_TEMPLATES: TemplateDefinition[] = [
 ];
 
 const formatRelativeDateTime = (timestampMs?: number) => {
-  if (!timestampMs || !Number.isFinite(timestampMs)) return "Unknown";
+  if (!timestampMs || !Number.isFinite(timestampMs)) return "알 수 없음";
   return new Date(timestampMs).toLocaleString([], {
     month: "short",
     day: "numeric",
@@ -231,7 +231,7 @@ export function PlaybooksPanel({
       const result = await listCronJobs(client, { includeDisabled: true });
       setJobs(sortCronJobsByUpdatedAt(result.jobs));
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to load playbooks.";
+      const message = err instanceof Error ? err.message : "플레이북을 불러오지 못했습니다.";
       setError(message);
       if (!isGatewayDisconnectLikeError(err)) {
         console.error(message);
@@ -247,13 +247,13 @@ export function PlaybooksPanel({
 
   const handleCreate = useCallback(async () => {
     if (!cronEnabled) {
-      setError("This runtime does not expose scheduled playbooks.");
+      setError("이 런타임은 예약 플레이북을 제공하지 않습니다.");
       return;
     }
     if (!activeTemplate) return;
     const agent = agentById.get(selectedAgentId);
     if (!agent) {
-      setError("Pick an agent before launching a playbook.");
+      setError("플레이북을 실행하기 전에 에이전트를 선택하세요.");
       return;
     }
 
@@ -262,13 +262,13 @@ export function PlaybooksPanel({
     setActionMessage(null);
     try {
       await createCronJob(client, activeTemplate.buildInput(agent, nameOverride.trim()));
-      setActionMessage(`Created "${nameOverride.trim() || activeTemplate.name}".`);
+      setActionMessage(`"${nameOverride.trim() || activeTemplate.name}" 플레이북을 만들었습니다.`);
       setSelectedTemplateId(null);
       setSelectedAgentId("");
       setNameOverride("");
       await loadJobs();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to create playbook.";
+      const message = err instanceof Error ? err.message : "플레이북을 만들지 못했습니다.";
       setError(message);
     } finally {
       setCreateBusy(false);
@@ -278,7 +278,7 @@ export function PlaybooksPanel({
   const handleRunNow = useCallback(
     async (jobId: string) => {
       if (!cronEnabled) {
-        setError("This runtime does not expose scheduled playbooks.");
+        setError("이 런타임은 예약 플레이북을 제공하지 않습니다.");
         return;
       }
       setRunBusyJobId(jobId);
@@ -286,10 +286,10 @@ export function PlaybooksPanel({
       setActionMessage(null);
       try {
         const result = await runCronJobNow(client, jobId);
-        setActionMessage(result.ok ? "Playbook triggered." : "Playbook trigger failed.");
+        setActionMessage(result.ok ? "플레이북을 실행했습니다." : "플레이북 실행에 실패했습니다.");
         await loadJobs();
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to run playbook.");
+        setError(err instanceof Error ? err.message : "플레이북을 실행하지 못했습니다.");
       } finally {
         setRunBusyJobId(null);
       }
@@ -300,7 +300,7 @@ export function PlaybooksPanel({
   const handleDelete = useCallback(
     async (jobId: string) => {
       if (!cronEnabled) {
-        setError("This runtime does not expose scheduled playbooks.");
+        setError("이 런타임은 예약 플레이북을 제공하지 않습니다.");
         return;
       }
       setDeleteBusyJobId(jobId);
@@ -308,10 +308,10 @@ export function PlaybooksPanel({
       setActionMessage(null);
       try {
         const result = await removeCronJob(client, jobId);
-        setActionMessage(result.ok && result.removed ? "Playbook removed." : "Playbook was not removed.");
+        setActionMessage(result.ok && result.removed ? "플레이북을 제거했습니다." : "플레이북이 제거되지 않았습니다.");
         await loadJobs();
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to delete playbook.");
+        setError(err instanceof Error ? err.message : "플레이북을 삭제하지 못했습니다.");
       } finally {
         setDeleteBusyJobId(null);
       }
@@ -340,9 +340,9 @@ export function PlaybooksPanel({
           jql: jiraJql.trim(),
         },
       });
-      setActionMessage("Standup settings saved.");
+      setActionMessage("스탠드업 설정을 저장했습니다.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save standup settings.");
+      setError(err instanceof Error ? err.message : "스탠드업 설정을 저장하지 못했습니다.");
     }
   }, [
     jiraApiToken,
@@ -361,7 +361,7 @@ export function PlaybooksPanel({
 
   const handleSaveManualNotes = useCallback(async () => {
     if (!standupAgentId) {
-      setError("Pick an agent before saving standup notes.");
+      setError("스탠드업 메모를 저장하기 전에 에이전트를 선택하세요.");
       return;
     }
     setError(null);
@@ -373,9 +373,9 @@ export function PlaybooksPanel({
         blockers: manualBlockers.trim(),
         note: manualNote.trim(),
       });
-      setActionMessage("Standup notes saved.");
+      setActionMessage("스탠드업 메모를 저장했습니다.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save standup notes.");
+      setError(err instanceof Error ? err.message : "스탠드업 메모를 저장하지 못했습니다.");
     }
   }, [
     manualBlockers,
@@ -392,10 +392,10 @@ export function PlaybooksPanel({
         <div className="flex items-center justify-between gap-2">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/70">
-              Playbooks
+              플레이북
             </div>
             <div className="mt-1 font-mono text-[11px] text-white/40">
-              Launch reusable schedules for the whole headquarters.
+              본부 전체에서 재사용할 일정을 실행합니다.
             </div>
           </div>
           <button
@@ -404,12 +404,12 @@ export function PlaybooksPanel({
             disabled={!cronEnabled}
             className="rounded border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-200 transition-colors hover:border-cyan-400/40 hover:text-cyan-100"
           >
-            Refresh
+            새로고침
           </button>
         </div>
         {!cronEnabled ? (
           <div className="mt-2 font-mono text-[11px] text-white/35">
-            This runtime does not expose scheduled playbooks.
+            이 런타임은 예약 플레이북을 제공하지 않습니다.
           </div>
         ) : null}
         {error ? <div className="mt-2 font-mono text-[11px] text-rose-300">{error}</div> : null}
@@ -421,16 +421,16 @@ export function PlaybooksPanel({
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="border-b border-cyan-500/10 px-4 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-            Active Jobs
+            활성 작업
           </div>
           <div className="mt-3 space-y-2">
             {loading ? (
-              <div className="font-mono text-[11px] text-white/40">Loading scheduled jobs.</div>
+              <div className="font-mono text-[11px] text-white/40">예약 작업을 불러오는 중입니다.</div>
             ) : jobs.length === 0 ? (
-              <div className="font-mono text-[11px] text-white/35">No active playbooks yet.</div>
+              <div className="font-mono text-[11px] text-white/35">아직 활성 플레이북이 없습니다.</div>
             ) : (
               jobs.map((job) => {
-                const agentName = agentById.get(job.agentId ?? "")?.name || job.agentId || "Unknown";
+                const agentName = agentById.get(job.agentId ?? "")?.name || job.agentId || "알 수 없음";
                 return (
                   <div
                     key={job.id}
@@ -444,14 +444,14 @@ export function PlaybooksPanel({
                         <div className="mt-1 font-mono text-[11px] text-white/45">{agentName}</div>
                       </div>
                       <div className="shrink-0 rounded border border-cyan-500/20 bg-cyan-500/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-cyan-200">
-                        {job.state.lastStatus ?? "ready"}
+                        {job.state.lastStatus ?? "준비"}
                       </div>
                     </div>
 
                     <div className="mt-3 space-y-1 font-mono text-[11px] text-white/65">
                       <div>{formatCronSchedule(job.schedule)}</div>
-                      <div>Next run: {formatRelativeDateTime(job.state.nextRunAtMs)}</div>
-                      <div>Last run: {formatRelativeDateTime(job.state.lastRunAtMs)}</div>
+                      <div>다음 실행: {formatRelativeDateTime(job.state.nextRunAtMs)}</div>
+                      <div>마지막 실행: {formatRelativeDateTime(job.state.lastRunAtMs)}</div>
                     </div>
 
                     <div className="mt-3 flex gap-2">
@@ -461,7 +461,7 @@ export function PlaybooksPanel({
                         disabled={runBusyJobId === job.id || deleteBusyJobId === job.id}
                         className="rounded border border-amber-500/25 bg-amber-500/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-amber-200 transition-colors hover:border-amber-400/50 hover:text-amber-100 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {runBusyJobId === job.id ? "Running" : "Run now"}
+                        {runBusyJobId === job.id ? "실행 중" : "지금 실행"}
                       </button>
                       <button
                         type="button"
@@ -469,7 +469,7 @@ export function PlaybooksPanel({
                         disabled={deleteBusyJobId === job.id || runBusyJobId === job.id}
                         className="rounded border border-rose-500/25 bg-rose-500/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-rose-200 transition-colors hover:border-rose-400/50 hover:text-rose-100 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {deleteBusyJobId === job.id ? "Deleting" : "Delete"}
+                        {deleteBusyJobId === job.id ? "삭제 중" : "삭제"}
                       </button>
                     </div>
                   </div>
@@ -484,10 +484,10 @@ export function PlaybooksPanel({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-200/85">
-                  Automated Standup
+                  자동 스탠드업
                 </div>
                 <div className="mt-1 font-mono text-[11px] leading-5 text-white/50">
-                  Configure the daily meeting, Jira source, and manual notes board.
+                  일일 미팅, Jira 소스, 수동 메모 보드를 설정합니다.
                 </div>
               </div>
               <button
@@ -495,7 +495,7 @@ export function PlaybooksPanel({
                 onClick={() => void standup.startMeeting("manual")}
                 className="rounded border border-emerald-500/25 bg-emerald-500/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-100 transition-colors hover:border-emerald-400/50 hover:text-white"
               >
-                Start now
+                지금 시작
               </button>
             </div>
 
@@ -506,12 +506,12 @@ export function PlaybooksPanel({
                   checked={standupScheduleEnabled}
                   onChange={(event) => setStandupScheduleEnabled(event.target.checked)}
                 />
-                Enable scheduled standup.
+                예약 스탠드업 사용
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Cron expression
+                  Cron 표현식
                 </span>
                 <input
                   value={standupCronExpr}
@@ -522,7 +522,7 @@ export function PlaybooksPanel({
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Timezone
+                  시간대
                 </span>
                 <input
                   value={standupTimezone}
@@ -533,7 +533,7 @@ export function PlaybooksPanel({
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Seconds per speaker
+                  발표자당 초
                 </span>
                 <input
                   value={standupSpeakerSeconds}
@@ -548,7 +548,7 @@ export function PlaybooksPanel({
                   checked={standupAutoOpenBoard}
                   onChange={(event) => setStandupAutoOpenBoard(event.target.checked)}
                 />
-                Auto-open the standup board when a meeting starts.
+                미팅 시작 시 스탠드업 보드를 자동으로 엽니다.
               </label>
 
               <label className="flex items-center gap-2 font-mono text-[11px] text-white/75">
@@ -557,12 +557,12 @@ export function PlaybooksPanel({
                   checked={jiraEnabled}
                   onChange={(event) => setJiraEnabled(event.target.checked)}
                 />
-                Enable Jira source.
+                Jira 소스 사용
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Jira base URL
+                  Jira 기본 URL
                 </span>
                 <input
                   value={jiraBaseUrl}
@@ -574,7 +574,7 @@ export function PlaybooksPanel({
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Jira email
+                  Jira 이메일
                 </span>
                 <input
                   value={jiraEmail}
@@ -585,7 +585,7 @@ export function PlaybooksPanel({
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Jira API token
+                  Jira API 토큰
                 </span>
                 <input
                   type="password"
@@ -595,20 +595,20 @@ export function PlaybooksPanel({
                     setJiraApiTokenConfigured(event.target.value.trim().length > 0);
                   }}
                   placeholder={
-                    jiraApiTokenConfigured ? "Stored on Studio host. Enter to replace." : ""
+                    jiraApiTokenConfigured ? "Studio 호스트에 저장되어 있습니다. 교체하려면 입력하세요." : ""
                   }
                   className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none"
                 />
                 {jiraApiTokenConfigured ? (
                   <span className="text-[10px] text-white/45">
-                    A Jira API token is already stored on the Studio host.
+                    Jira API 토큰이 이미 Studio 호스트에 저장되어 있습니다.
                   </span>
                 ) : null}
               </label>
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Jira project key
+                  Jira 프로젝트 키
                 </span>
                 <input
                   value={jiraProjectKey}
@@ -619,7 +619,7 @@ export function PlaybooksPanel({
 
               <label className="flex flex-col gap-1">
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Jira JQL override
+                  Jira JQL 재정의
                 </span>
                 <textarea
                   value={jiraJql}
@@ -635,25 +635,25 @@ export function PlaybooksPanel({
                 disabled={standup.saving}
                 className="rounded border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-emerald-100 transition-colors hover:border-emerald-400/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {standup.saving ? "Saving standup settings" : "Save standup settings"}
+                {standup.saving ? "스탠드업 설정 저장 중" : "스탠드업 설정 저장"}
               </button>
             </div>
 
             <div className="mt-4 border-t border-white/10 pt-4">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                Manual board input
+                수동 보드 입력
               </div>
               <div className="mt-3 grid gap-3">
                 <label className="flex flex-col gap-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                    Agent
+                    에이전트
                   </span>
                   <select
                     value={standupAgentId}
                     onChange={(event) => setStandupAgentId(event.target.value)}
                     className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none"
                   >
-                    <option value="">Select an agent</option>
+                    <option value="">에이전트 선택</option>
                     {agents.map((agent) => (
                       <option key={agent.agentId} value={agent.agentId}>
                         {agent.name || agent.agentId}
@@ -664,7 +664,7 @@ export function PlaybooksPanel({
 
                 <label className="flex flex-col gap-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                    Jira assignee hint
+                    Jira 담당자 힌트
                   </span>
                   <input
                     value={manualJiraAssignee}
@@ -675,7 +675,7 @@ export function PlaybooksPanel({
 
                 <label className="flex flex-col gap-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                    Current task
+                    현재 작업
                   </span>
                   <input
                     value={manualTask}
@@ -686,7 +686,7 @@ export function PlaybooksPanel({
 
                 <label className="flex flex-col gap-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                    Blockers
+                    막힌 항목
                   </span>
                   <textarea
                     value={manualBlockers}
@@ -698,7 +698,7 @@ export function PlaybooksPanel({
 
                 <label className="flex flex-col gap-1">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                    Manual note
+                    수동 메모
                   </span>
                   <textarea
                     value={manualNote}
@@ -713,24 +713,24 @@ export function PlaybooksPanel({
                   onClick={() => void handleSaveManualNotes()}
                   className="rounded border border-cyan-500/25 bg-cyan-500/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-100 transition-colors hover:border-cyan-400/50 hover:text-white"
                 >
-                  Save manual notes
+                  수동 메모 저장
                 </button>
               </div>
             </div>
 
             {standup.meeting ? (
               <div className="mt-4 rounded border border-white/8 bg-white/[0.03] px-3 py-3 font-mono text-[11px] text-white/65">
-                <div>Meeting phase: {standup.meeting.phase}</div>
-                <div>Participants: {standup.meeting.participantOrder.length}</div>
+                <div>미팅 단계: {standup.meeting.phase}</div>
+                <div>참가자: {standup.meeting.participantOrder.length}</div>
                 <div>
-                  Current speaker: {standup.meeting.currentSpeakerAgentId ?? "Waiting"}
+                  현재 발표자: {standup.meeting.currentSpeakerAgentId ?? "대기 중"}
                 </div>
               </div>
             ) : null}
           </div>
 
           <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-            Templates
+            템플릿
           </div>
           <div className="mt-3 space-y-2">
             {PLAYBOOK_TEMPLATES.map((template) => {
@@ -767,14 +767,14 @@ export function PlaybooksPanel({
                     <div className="mt-3 space-y-3 border-t border-cyan-500/10 pt-3">
                       <label className="flex flex-col gap-1">
                         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                          Agent
+                          에이전트
                         </span>
                         <select
                           value={selectedAgentId}
                           onChange={(event) => setSelectedAgentId(event.target.value)}
                           className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none"
                         >
-                          <option value="">Select an agent</option>
+                          <option value="">에이전트 선택</option>
                           {agents.map((agent) => (
                             <option key={agent.agentId} value={agent.agentId}>
                               {agent.name || agent.agentId}
@@ -785,7 +785,7 @@ export function PlaybooksPanel({
 
                       <label className="flex flex-col gap-1">
                         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                          Name override
+                          이름 덮어쓰기
                         </span>
                         <input
                           value={nameOverride}
@@ -801,7 +801,7 @@ export function PlaybooksPanel({
                         disabled={createBusy}
                         className="w-full rounded border border-cyan-500/25 bg-cyan-500/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-100 transition-colors hover:border-cyan-400/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {createBusy ? "Creating playbook" : "Launch playbook"}
+                        {createBusy ? "플레이북 생성 중" : "플레이북 실행"}
                       </button>
                     </div>
                   ) : null}

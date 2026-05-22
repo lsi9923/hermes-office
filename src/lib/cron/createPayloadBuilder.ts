@@ -43,7 +43,7 @@ type ZonedParts = {
 const resolveName = (name: string) => {
   const trimmed = name.trim();
   if (!trimmed) {
-    throw new Error("Cron job name is required.");
+    throw new Error("Cron 작업 이름이 필요합니다.");
   }
   return trimmed;
 };
@@ -51,7 +51,7 @@ const resolveName = (name: string) => {
 const resolveAgentId = (agentId: string) => {
   const trimmed = agentId.trim();
   if (!trimmed) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
   return trimmed;
 };
@@ -59,7 +59,7 @@ const resolveAgentId = (agentId: string) => {
 const resolveTaskText = (text: string) => {
   const trimmed = text.trim();
   if (!trimmed) {
-    throw new Error("Task text is required.");
+    throw new Error("작업 내용이 필요합니다.");
   }
   return trimmed;
 };
@@ -67,7 +67,7 @@ const resolveTaskText = (text: string) => {
 const resolveAtSchedule = (raw: string): CronSchedule => {
   const ms = Date.parse(raw);
   if (!Number.isFinite(ms)) {
-    throw new Error("Invalid run time.");
+    throw new Error("실행 시간이 올바르지 않습니다.");
   }
   return { kind: "at", at: new Date(ms).toISOString() };
 };
@@ -80,7 +80,7 @@ const resolveTimeZone = (timeZoneRaw: string | undefined): string => {
     // Validate IANA timezone.
     new Intl.DateTimeFormat("en-US", { timeZone }).format(new Date());
   } catch {
-    throw new Error("Invalid timezone.");
+    throw new Error("시간대가 올바르지 않습니다.");
   }
   return timeZone;
 };
@@ -89,15 +89,15 @@ const resolveTimeOfDay = (raw: string | undefined): TimeOfDay => {
   const value = (raw ?? "").trim();
   const match = value.match(/^(\d{2}):(\d{2})$/);
   if (!match) {
-    throw new Error("Daily schedule time is required.");
+    throw new Error("일일 일정 시간이 필요합니다.");
   }
   const hour = Number.parseInt(match[1], 10);
   const minute = Number.parseInt(match[2], 10);
   if (!Number.isInteger(hour) || hour < 0 || hour > 23) {
-    throw new Error("Daily schedule time is required.");
+    throw new Error("일일 일정 시간이 필요합니다.");
   }
   if (!Number.isInteger(minute) || minute < 0 || minute > 59) {
-    throw new Error("Daily schedule time is required.");
+    throw new Error("일일 일정 시간이 필요합니다.");
   }
   return { hour, minute };
 };
@@ -142,7 +142,7 @@ const resolveZonedParts = (ms: number, timeZone: string): ZonedParts => {
     values.minute === undefined ||
     values.second === undefined
   ) {
-    throw new Error("Invalid timezone.");
+    throw new Error("시간대가 올바르지 않습니다.");
   }
   return values as ZonedParts;
 };
@@ -230,7 +230,7 @@ const resolveEverySchedule = (
 ): CronSchedule => {
   const amount = Number.isFinite(draft.everyAmount) ? Math.floor(draft.everyAmount ?? 0) : 0;
   if (amount <= 0) {
-    throw new Error("Invalid interval amount.");
+    throw new Error("반복 간격 값이 올바르지 않습니다.");
   }
 
   const unit = draft.everyUnit ?? "minutes";

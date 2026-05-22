@@ -30,7 +30,7 @@ type RunControlDispatch = (action: RunControlDispatchAction) => void;
 
 type SetState<T> = (next: T | ((current: T) => T)) => void;
 
-const AUTO_RESUME_FOLLOW_UP_MESSAGE = `${EXEC_APPROVAL_AUTO_RESUME_MARKER}\nContinue where you left off and finish the task.`;
+const AUTO_RESUME_FOLLOW_UP_MESSAGE = `${EXEC_APPROVAL_AUTO_RESUME_MARKER}\n중단한 지점부터 이어서 작업을 마무리하세요.`;
 export const EXEC_APPROVAL_AUTO_RESUME_WAIT_TIMEOUT_MS = 3_000;
 
 export async function runPauseRunForExecApprovalOperation(params: {
@@ -67,7 +67,7 @@ export async function runPauseRunForExecApprovalOperation(params: {
     params.pausedRunIdByAgentId.delete(plan.pauseIntent.agentId);
     if (!params.isDisconnectLikeError(error)) {
       (params.logWarn ?? ((message, err) => console.warn(message, err)))(
-        "Failed to pause run for pending exec approval.",
+        "대기 중인 실행 승인을 위해 실행을 일시정지하지 못했습니다.",
         error
       );
     }
@@ -121,7 +121,7 @@ export async function runExecApprovalAutoResumeOperation(params: {
   } catch (error) {
     if (!params.isDisconnectLikeError(error)) {
       (params.logWarn ?? ((message, err) => console.warn(message, err)))(
-        "Failed waiting for paused run before auto-resume.",
+        "자동 재개 전에 일시정지된 실행 대기를 완료하지 못했습니다.",
         error
       );
     }

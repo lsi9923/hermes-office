@@ -2,9 +2,9 @@ import type { AgentStatus } from "@/features/agents/state/store";
 import type { GatewayStatus } from "@/lib/gateway/GatewayClient";
 
 export const AGENT_STATUS_LABEL: Record<AgentStatus, string> = {
-  idle: "Idle",
-  running: "Running",
-  error: "Error",
+  idle: "대기",
+  running: "실행 중",
+  error: "오류",
 };
 
 export const AGENT_STATUS_BADGE_CLASS: Record<AgentStatus, string> = {
@@ -14,9 +14,9 @@ export const AGENT_STATUS_BADGE_CLASS: Record<AgentStatus, string> = {
 };
 
 export const GATEWAY_STATUS_LABEL: Record<GatewayStatus, string> = {
-  disconnected: "Disconnected",
-  connecting: "Connecting",
-  connected: "Connected",
+  disconnected: "연결 끊김",
+  connecting: "연결 중",
+  connected: "연결됨",
 };
 
 export const GATEWAY_STATUS_BADGE_CLASS: Record<GatewayStatus, string> = {

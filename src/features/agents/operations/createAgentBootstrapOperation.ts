@@ -24,9 +24,9 @@ export const CREATE_AGENT_DEFAULT_PERMISSIONS: Readonly<AgentPermissionsDraft> =
 
 const resolveBootstrapErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
-    return error.message || "Failed to apply default permissions.";
+    return error.message || "기본 권한을 적용하지 못했습니다.";
   }
-  return "Failed to apply default permissions.";
+  return "기본 권한을 적용하지 못했습니다.";
 };
 
 export async function applyCreateAgentBootstrapPermissions(params: {

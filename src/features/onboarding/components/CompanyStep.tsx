@@ -21,10 +21,10 @@ export const CompanyStep = ({
             <Building2 className="h-5 w-5 text-amber-300" />
           </div>
           <div className="space-y-2">
-            <p className="text-sm font-semibold text-white">Bootstrap your company with AI</p>
+            <p className="text-sm font-semibold text-white">AI로 회사 구조 만들기</p>
             <p className="text-xs leading-5 text-white/60">
-              Describe what your company does and Claw3D can turn that into a full org structure
-              with specialized agents, working files, and role instructions.
+              회사가 하는 일을 설명하면 Claw3D가 전문 에이전트, 작업 파일, 역할
+              지침이 포함된 조직 구조로 바꿔줍니다.
             </p>
           </div>
         </div>
@@ -34,18 +34,18 @@ export const CompanyStep = ({
         {[
           {
             icon: Sparkles,
-            title: "Improve the brief",
-            description: "Use your connected runtime to sharpen the company prompt.",
+            title: "요청 정리",
+            description: "연결된 런타임으로 회사 생성 프롬프트를 더 명확하게 다듬습니다.",
           },
           {
             icon: Users,
-            title: "Generate the team",
-            description: "Get a practical org chart with roles, responsibilities, and handoffs.",
+            title: "팀 생성",
+            description: "역할, 책임, 인수인계 흐름이 담긴 실용적인 조직도를 만듭니다.",
           },
           {
             icon: Wand2,
-            title: "Create everything",
-            description: "Write agent files and create the team directly in the connected runtime.",
+            title: "전체 생성",
+            description: "에이전트 파일을 작성하고 연결된 런타임에 팀을 바로 생성합니다.",
           },
         ].map(({ icon: Icon, title, description }) => (
           <div
@@ -68,13 +68,13 @@ export const CompanyStep = ({
               onClick={onOpenCompanyBuilder}
             >
               <Sparkles className="h-3.5 w-3.5" />
-              Open Company Builder
+              회사 빌더 열기
             </button>
           </div>
         ) : (
           <div className="rounded-md border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-xs text-amber-100/80">
-            Connect to a runtime and keep at least one planning agent available to generate the
-            company with AI.
+            AI로 회사를 생성하려면 런타임에 연결하고 계획 담당 에이전트를 최소
+            1개 이상 준비하세요.
           </div>
         )}
       </div>

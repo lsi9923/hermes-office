@@ -35,18 +35,18 @@ type SystemSkillsPanelProps = {
 };
 
 const READINESS_FILTERS: Array<{ id: ReadinessFilter; label: string }> = [
-  { id: "all", label: "All" },
-  { id: "ready", label: "Ready" },
-  { id: "needs-setup", label: "Needs setup" },
-  { id: "unavailable", label: "Unavailable" },
-  { id: "disabled-globally", label: "Disabled globally" },
+  { id: "all", label: "전체" },
+  { id: "ready", label: "준비됨" },
+  { id: "needs-setup", label: "설정 필요" },
+  { id: "unavailable", label: "사용 불가" },
+  { id: "disabled-globally", label: "전체 비활성화" },
 ];
 
 const READINESS_LABELS = {
-  ready: "Ready",
-  "needs-setup": "Needs setup",
-  unavailable: "Unavailable",
-  "disabled-globally": "Disabled globally",
+  ready: "준비됨",
+  "needs-setup": "설정 필요",
+  unavailable: "사용 불가",
+  "disabled-globally": "전체 비활성화",
 } as const;
 
 const READINESS_CLASSES = {
@@ -64,15 +64,15 @@ const resolveReadinessHint = (
     return null;
   }
   if (readiness === "disabled-globally") {
-    return "Disabled globally for all agents.";
+    return "모든 에이전트에서 비활성화되어 있습니다.";
   }
   if (readiness === "unavailable") {
     if (skill.blockedByAllowlist) {
-      return "Blocked by bundled skills policy.";
+      return "번들 스킬 정책에 의해 차단되었습니다.";
     }
-    return buildSkillMissingDetails(skill)[0] ?? "Unavailable on this system.";
+    return buildSkillMissingDetails(skill)[0] ?? "이 시스템에서 사용할 수 없습니다.";
   }
-  return buildSkillMissingDetails(skill)[0] ?? "Requires setup.";
+  return buildSkillMissingDetails(skill)[0] ?? "설정이 필요합니다.";
 };
 
 export const SystemSkillsPanel = ({
@@ -170,11 +170,11 @@ export const SystemSkillsPanel = ({
   return (
     <section className="sidebar-section" data-testid="agent-settings-system-skills">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="sidebar-section-title">System skill setup</h3>
+        <h3 className="sidebar-section-title">시스템 스킬 설정</h3>
         <div className="font-mono text-[10px] text-muted-foreground">{skillEntries.length}</div>
       </div>
       <div className="mt-2 text-[11px] text-muted-foreground">
-        Changes here affect all agents on this gateway.
+        여기에서 변경한 내용은 이 게이트웨이의 모든 에이전트에 적용됩니다.
       </div>
       {defaultAgentScopeWarning ? (
         <div className="mt-3 rounded-md border border-border/60 bg-surface-1/65 px-3 py-2 text-[10px] text-muted-foreground/82">
@@ -183,7 +183,7 @@ export const SystemSkillsPanel = ({
       ) : null}
       {setupQueue.length > 0 ? (
         <div className="mt-3 rounded-md border border-border/60 bg-surface-1/65 px-3 py-3">
-          <div className="text-[10px] font-semibold text-foreground/85">Needs setup ({setupQueue.length})</div>
+          <div className="text-[10px] font-semibold text-foreground/85">설정 필요 ({setupQueue.length})</div>
           <div className="mt-2 flex flex-col gap-2">
             {setupQueue.slice(0, 5).map((entry) => (
               <div
@@ -200,7 +200,7 @@ export const SystemSkillsPanel = ({
                     setSetupSkillKey(entry.skill.skillKey);
                   }}
                 >
-                  Set up
+                  설정
                 </button>
               </div>
             ))}
@@ -211,9 +211,9 @@ export const SystemSkillsPanel = ({
         <input
           value={skillsFilter}
           onChange={(event) => setSkillsFilter(event.target.value)}
-          placeholder="Search skills"
+          placeholder="스킬 검색"
           className="w-full rounded-md border border-border/60 bg-surface-1 px-3 py-2 text-[11px] text-foreground outline-none transition focus:border-border"
-          aria-label="Search skills"
+          aria-label="스킬 검색"
         />
       </div>
       <div className="mt-2 flex flex-wrap gap-1">
@@ -235,12 +235,12 @@ export const SystemSkillsPanel = ({
           );
         })}
       </div>
-      {skillsLoading ? <div className="mt-3 text-[11px] text-muted-foreground">Loading skills...</div> : null}
+      {skillsLoading ? <div className="mt-3 text-[11px] text-muted-foreground">스킬을 불러오는 중...</div> : null}
       {!skillsLoading && skillsError ? (
         <div className="ui-alert-danger mt-3 rounded-md px-3 py-2 text-xs">{skillsError}</div>
       ) : null}
       {!skillsLoading && !skillsError && filteredRows.length === 0 ? (
-        <div className="mt-3 text-[11px] text-muted-foreground">No matching skills.</div>
+        <div className="mt-3 text-[11px] text-muted-foreground">일치하는 스킬이 없습니다.</div>
       ) : null}
       {!skillsLoading && !skillsError && filteredRows.length > 0 ? (
         <div className="mt-3 flex flex-col gap-2">
@@ -289,7 +289,7 @@ export const SystemSkillsPanel = ({
                       setSetupSkillKey(entry.skill.skillKey);
                     }}
                   >
-                    Configure
+                    설정
                   </button>
                 </div>
               </div>

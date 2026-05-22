@@ -30,10 +30,10 @@ type AgentSkillsSetupModalProps = {
 };
 
 const READINESS_LABELS = {
-  ready: "Ready",
-  "needs-setup": "Needs setup",
-  unavailable: "Unavailable",
-  "disabled-globally": "Disabled globally",
+  ready: "준비됨",
+  "needs-setup": "설정 필요",
+  unavailable: "사용 불가",
+  "disabled-globally": "전체 비활성화",
 } as const;
 
 const READINESS_CLASSES = {
@@ -93,7 +93,7 @@ export const AgentSkillsSetupModal = ({
       className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 p-4"
       role="dialog"
       aria-modal="true"
-      aria-label={`Setup ${skill.name}`}
+      aria-label={`${skill.name} 설정`}
       onClick={onClose}
     >
       <div
@@ -103,7 +103,7 @@ export const AgentSkillsSetupModal = ({
         <div className="flex items-start justify-between gap-3 px-6 py-5">
           <div className="min-w-0">
             <div className="text-[11px] font-medium tracking-[0.01em] text-muted-foreground/80">
-              System setup
+              시스템 설정
             </div>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <span className="text-base font-semibold text-foreground">{skill.name}</span>
@@ -114,7 +114,7 @@ export const AgentSkillsSetupModal = ({
               </span>
             </div>
             <div className="mt-2 text-[10px] text-muted-foreground/80">
-              Changes affect all agents on this gateway.
+              변경 사항은 이 게이트웨이의 모든 에이전트에 적용됩니다.
             </div>
           </div>
           <button
@@ -122,7 +122,7 @@ export const AgentSkillsSetupModal = ({
             className="sidebar-btn-ghost px-3 font-mono text-[10px] font-semibold tracking-[0.06em]"
             onClick={onClose}
           >
-            Close
+            닫기
           </button>
         </div>
         <div className="space-y-3 px-6 pb-3 text-[11px] text-muted-foreground">
@@ -134,7 +134,7 @@ export const AgentSkillsSetupModal = ({
           <div>{skill.description}</div>
           {skill.blockedByAllowlist ? (
             <div className="text-[10px] text-muted-foreground/80">
-              Blocked by bundled skills policy (`skills.allowBundled`).
+              번들 스킬 정책(`skills.allowBundled`)에 의해 차단되었습니다.
             </div>
           ) : null}
           {missingDetails.map((line) => (
@@ -159,7 +159,7 @@ export const AgentSkillsSetupModal = ({
                   void onInstallSkill(skill.skillKey, skill.name, installOption.id);
                 }}
               >
-                {busyForSkill ? "Working..." : installOption.label}
+                {busyForSkill ? "작업 중..." : installOption.label}
               </button>
             ) : null}
             <button
@@ -171,10 +171,10 @@ export const AgentSkillsSetupModal = ({
               }}
             >
               {busyForSkill
-                ? "Working..."
+                ? "작업 중..."
                 : skill.disabled
-                  ? "Enable globally"
-                  : "Disable globally"}
+                  ? "전체에서 켜기"
+                  : "전체에서 끄기"}
             </button>
             {skill.primaryEnv ? (
               <>
@@ -186,8 +186,8 @@ export const AgentSkillsSetupModal = ({
                   }}
                   disabled={anySkillBusy}
                   className="w-full rounded-md border border-border/60 bg-surface-1 px-3 py-2 text-[10px] text-foreground outline-none transition focus:border-border"
-                  placeholder={`Set ${skill.primaryEnv}`}
-                  aria-label={`API key for ${skill.name}`}
+                  placeholder={`${skill.primaryEnv} 설정`}
+                  aria-label={`${skill.name} API 키`}
                 />
                 <button
                   type="button"
@@ -200,7 +200,7 @@ export const AgentSkillsSetupModal = ({
                     void onSaveSkillApiKey(skill.skillKey);
                   }}
                 >
-                  {busyForSkill ? "Working..." : `Save ${skill.primaryEnv}`}
+                  {busyForSkill ? "작업 중..." : `${skill.primaryEnv} 저장`}
                 </button>
               </>
             ) : null}
@@ -211,7 +211,7 @@ export const AgentSkillsSetupModal = ({
                 disabled={anySkillBusy}
                 onClick={() => {
                   const approved = window.confirm(
-                    `Remove ${skill.name} from the gateway for all agents?`
+                    `모든 에이전트에서 ${skill.name} 스킬을 게이트웨이에서 제거할까요?`
                   );
                   if (!approved) {
                     return;
@@ -224,7 +224,7 @@ export const AgentSkillsSetupModal = ({
                   onClose();
                 }}
               >
-                Remove for all agents
+                모든 에이전트에서 제거
               </button>
             ) : null}
           </div>

@@ -17,12 +17,12 @@ import {
 import type { StudioSettingsCoordinator } from "@/lib/studio/coordinator";
 
 const formatPercent = (value: number | null | undefined) => {
-  if (value === null || value === undefined) return "n/a";
+  if (value === null || value === undefined) return "없음";
   return `${Math.round(value * 100)}%`;
 };
 
 const formatDuration = (valueMs: number | null | undefined) => {
-  if (!valueMs) return "n/a";
+  if (!valueMs) return "없음";
   const seconds = Math.round(valueMs / 1000);
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
@@ -99,7 +99,7 @@ const DatePickerField = ({
           type="button"
           onClick={() => openNativeDatePicker(inputRef.current)}
           className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-white/40 transition-colors hover:text-cyan-200"
-          aria-label={`Open ${label.toLowerCase()} calendar`}
+          aria-label={`${label} 달력 열기`}
         >
           <CalendarDays className="h-3.5 w-3.5" />
         </button>
@@ -169,31 +169,31 @@ export function AnalyticsPanel({
     <section className="flex h-full min-h-0 flex-col">
       <div className="border-b border-cyan-500/10 px-4 py-3">
         <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/70">
-          Analytics
+          분석
         </div>
         <div className="mt-1 font-mono text-[11px] text-white/40">
-          Real usage, spend, and agent trust metrics for headquarters.
+          본부의 실제 사용량, 비용, 에이전트 신뢰 지표입니다.
         </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
         <div className="grid grid-cols-2 gap-2">
-          <DatePickerField label="Start" value={startDate} onChange={setStartDate} />
-          <DatePickerField label="End" value={endDate} onChange={setEndDate} />
+          <DatePickerField label="시작" value={startDate} onChange={setStartDate} />
+          <DatePickerField label="종료" value={endDate} onChange={setEndDate} />
         </div>
 
         <div className="mt-2 flex items-center justify-between gap-2">
           <div className="font-mono text-[10px] text-white/35">
             {usage.lastRefreshedAt
-              ? `Last refresh ${new Date(usage.lastRefreshedAt).toLocaleTimeString()}`
-              : "No analytics snapshot yet"}
+              ? `마지막 새로고침 ${new Date(usage.lastRefreshedAt).toLocaleTimeString()}`
+              : "아직 분석 스냅샷이 없습니다."}
           </div>
           <button
             type="button"
             onClick={() => void usage.refresh()}
             className="rounded border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-200 transition-colors hover:border-cyan-400/40 hover:text-cyan-100"
           >
-            Refresh
+            새로고침
           </button>
         </div>
 
@@ -213,76 +213,76 @@ export function AnalyticsPanel({
           </div>
         ) : settingsLoaded ? (
           <div className="mt-3 rounded border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 font-mono text-[11px] text-emerald-100">
-            Budgets are within threshold.
+            예산이 기준치 안에 있습니다.
           </div>
         ) : null}
 
         <div className="mt-4 grid grid-cols-2 gap-2">
           <StatCard
-            label="Total Spend"
+            label="총 비용"
             value={formatCurrency(usage.totals.totalCost)}
-            hint="Selected range."
+            hint="선택한 기간"
           />
           <StatCard
-            label="Total Tokens"
+            label="총 토큰"
             value={formatNumber(usage.totals.totalTokens)}
-            hint="Input + output + cache."
+            hint="입력 + 출력 + 캐시"
           />
           <StatCard
-            label="Success Rate"
+            label="성공률"
             value={formatPercent(performance.fleet.successRate)}
-            hint="Completed runs only."
+            hint="완료된 실행만"
           />
           <StatCard
-            label="Avg Runtime"
+            label="평균 실행 시간"
             value={formatDuration(performance.fleet.avgRuntimeMs)}
-            hint="Session-local run history."
+            hint="현재 세션 실행 기록"
           />
         </div>
 
         <div className="mt-5 rounded border border-white/8 bg-white/[0.03] px-3 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Budget Limits
+            예산 한도
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <label className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] text-white/35">Daily USD</span>
+              <span className="font-mono text-[10px] text-white/35">일일 USD</span>
               <input
                 value={formatBudgetInput(budgets.dailySpendLimitUsd)}
                 onChange={(event) =>
                   updateBudget("dailySpendLimitUsd", parseBudgetInput(event.target.value))
                 }
-                placeholder="No limit"
+                placeholder="한도 없음"
                 inputMode="decimal"
                 className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none placeholder:text-white/20"
               />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] text-white/35">Monthly USD</span>
+              <span className="font-mono text-[10px] text-white/35">월간 USD</span>
               <input
                 value={formatBudgetInput(budgets.monthlySpendLimitUsd)}
                 onChange={(event) =>
                   updateBudget("monthlySpendLimitUsd", parseBudgetInput(event.target.value))
                 }
-                placeholder="No limit"
+                placeholder="한도 없음"
                 inputMode="decimal"
                 className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none placeholder:text-white/20"
               />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] text-white/35">Per-agent USD</span>
+              <span className="font-mono text-[10px] text-white/35">에이전트별 USD</span>
               <input
                 value={formatBudgetInput(budgets.perAgentSoftLimitUsd)}
                 onChange={(event) =>
                   updateBudget("perAgentSoftLimitUsd", parseBudgetInput(event.target.value))
                 }
-                placeholder="Soft limit"
+                placeholder="소프트 한도"
                 inputMode="decimal"
                 className="rounded border border-white/10 bg-black/50 px-2 py-2 font-mono text-[11px] text-white/80 outline-none placeholder:text-white/20"
               />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] text-white/35">Alert threshold %</span>
+              <span className="font-mono text-[10px] text-white/35">알림 기준 %</span>
               <input
                 value={String(budgets.alertThresholdPct)}
                 onChange={(event) =>
@@ -300,13 +300,13 @@ export function AnalyticsPanel({
 
         <div className="mt-5 rounded border border-white/8 bg-white/[0.03] px-3 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Daily Cost
+            일일 비용
           </div>
           {usage.loading ? (
-            <div className="mt-3 font-mono text-[11px] text-white/40">Loading usage data.</div>
+            <div className="mt-3 font-mono text-[11px] text-white/40">사용량 데이터를 불러오는 중입니다.</div>
           ) : usage.costDaily.length === 0 ? (
             <div className="mt-3 font-mono text-[11px] text-white/35">
-              No cost data in the selected range.
+              선택한 기간의 비용 데이터가 없습니다.
             </div>
           ) : (
             <div className="mt-3 flex items-end gap-1">
@@ -321,7 +321,7 @@ export function AnalyticsPanel({
                       <div
                         className="w-full rounded-t bg-rose-400/80"
                         style={{ height: `${Math.max(4, heightPct)}%` }}
-                        title={`${entry.date} · ${formatCurrency(entry.totalCost)}`}
+                        title={`${entry.date} - ${formatCurrency(entry.totalCost)}`}
                       />
                     </div>
                     <div className="font-mono text-[9px] text-white/35">
@@ -335,20 +335,20 @@ export function AnalyticsPanel({
 
           <div className="mt-4 rounded border border-white/8 bg-black/25 px-3 py-3">
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-              Cost Breakdown
+              비용 세부 내역
             </div>
             <div className="mt-2 space-y-1 font-mono text-[11px] text-white/70">
-              <div>Input: {formatCurrency(usage.totals.inputCost)}.</div>
-              <div>Output: {formatCurrency(usage.totals.outputCost)}.</div>
-              <div>Cache read: {formatCurrency(usage.totals.cacheReadCost)}.</div>
-              <div>Cache write: {formatCurrency(usage.totals.cacheWriteCost)}.</div>
+              <div>입력: {formatCurrency(usage.totals.inputCost)}</div>
+              <div>출력: {formatCurrency(usage.totals.outputCost)}</div>
+              <div>캐시 읽기: {formatCurrency(usage.totals.cacheReadCost)}</div>
+              <div>캐시 쓰기: {formatCurrency(usage.totals.cacheWriteCost)}</div>
             </div>
           </div>
         </div>
 
         <div className="mt-5 rounded border border-white/8 bg-white/[0.03] px-3 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Top Agents By Spend
+            비용 상위 에이전트
           </div>
           <div className="mt-3 space-y-2">
             {usage.aggregates.byAgent.slice(0, 6).map((entry) => (
@@ -365,14 +365,14 @@ export function AnalyticsPanel({
               </button>
             ))}
             {usage.aggregates.byAgent.length === 0 ? (
-              <div className="font-mono text-[11px] text-white/35">No agent spend data yet.</div>
+              <div className="font-mono text-[11px] text-white/35">아직 에이전트별 비용 데이터가 없습니다.</div>
             ) : null}
           </div>
         </div>
 
         <div className="mt-5 rounded border border-white/8 bg-white/[0.03] px-3 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Model Breakdown
+            모델별 세부 내역
           </div>
           <div className="mt-3 space-y-2">
             {usage.aggregates.byModel.slice(0, 6).map((entry) => (
@@ -381,7 +381,7 @@ export function AnalyticsPanel({
                 className="flex items-center justify-between rounded border border-white/8 bg-black/25 px-3 py-2"
               >
                 <span className="font-mono text-[11px] text-white/80">
-                  {entry.provider ?? "unknown"} / {entry.model ?? "unknown"}
+                  {entry.provider ?? "알 수 없음"} / {entry.model ?? "알 수 없음"}
                 </span>
                 <span className="font-mono text-[11px] text-white/55">
                   {formatCurrency(entry.totals.totalCost)}
@@ -389,35 +389,35 @@ export function AnalyticsPanel({
               </div>
             ))}
             {usage.aggregates.byModel.length === 0 ? (
-              <div className="font-mono text-[11px] text-white/35">No model usage data yet.</div>
+              <div className="font-mono text-[11px] text-white/35">아직 모델 사용량 데이터가 없습니다.</div>
             ) : null}
           </div>
         </div>
 
         <div className="mt-5 rounded border border-white/8 bg-white/[0.03] px-3 py-3">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
-            Performance
+            성능
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <StatCard
-              label="Approvals"
+              label="승인"
               value={formatNumber(approvalMetrics.totals.requestedCount)}
-              hint="Session-local approval requests."
+              hint="현재 세션 승인 요청"
             />
             <StatCard
-              label="Intervention Rate"
+              label="개입률"
               value={formatPercent(performance.fleet.interventionRate)}
-              hint="Approvals per observed run."
+              hint="관측 실행당 승인"
             />
             <StatCard
-              label="Tool Calls"
+              label="도구 호출"
               value={formatNumber(performance.fleet.totalToolCalls)}
-              hint="Current transcript state."
+              hint="현재 대화 상태"
             />
             <StatCard
-              label="Completed Runs"
+              label="완료 실행"
               value={formatNumber(performance.fleet.completedRuns)}
-              hint="In-memory office run log."
+              hint="메모리 내 오피스 실행 로그"
             />
           </div>
 
@@ -434,20 +434,20 @@ export function AnalyticsPanel({
                     {row.agentName}
                   </span>
                   <span className="font-mono text-[10px] text-white/40">
-                    {row.totalRuns} runs
+                    실행 {row.totalRuns}회
                   </span>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[10px] text-white/55">
-                  <div>Success: {formatPercent(row.successRate)}.</div>
-                  <div>Avg runtime: {formatDuration(row.avgRuntimeMs)}.</div>
-                  <div>Tool calls: {formatNumber(row.toolCalls)}.</div>
-                  <div>Approvals: {formatNumber(row.approvalRequestedCount)}.</div>
+                  <div>성공률: {formatPercent(row.successRate)}</div>
+                  <div>평균 실행 시간: {formatDuration(row.avgRuntimeMs)}</div>
+                  <div>도구 호출: {formatNumber(row.toolCalls)}</div>
+                  <div>승인: {formatNumber(row.approvalRequestedCount)}</div>
                 </div>
               </button>
             ))}
             {performance.rows.length === 0 ? (
               <div className="font-mono text-[11px] text-white/35">
-                No performance data is available yet.
+                아직 성능 데이터가 없습니다.
               </div>
             ) : null}
           </div>

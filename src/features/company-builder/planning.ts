@@ -365,13 +365,13 @@ export const buildGenerateCompanyPlanPrompt = (brief: string) =>
 export const extractJsonFromAssistantText = (value: string) => {
   const trimmed = value.trim();
   if (!trimmed) {
-    throw new Error("The planning agent returned an empty response.");
+    throw new Error("계획 에이전트가 빈 응답을 반환했습니다.");
   }
   const unfenced = trimmed.replace(COMPANY_FENCE_RE, "").trim();
   const firstBrace = unfenced.indexOf("{");
   const lastBrace = unfenced.lastIndexOf("}");
   if (firstBrace < 0 || lastBrace < firstBrace) {
-    throw new Error("The planning agent did not return valid JSON.");
+    throw new Error("계획 에이전트가 올바른 JSON을 반환하지 않았습니다.");
   }
   return unfenced.slice(firstBrace, lastBrace + 1);
 };
@@ -384,7 +384,7 @@ export const parseCompanyPlanFromAssistantText = (value: string): CompanyBuilder
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error("Failed to parse the planning agent response.");
+    throw new Error("계획 에이전트 응답을 파싱하지 못했습니다.");
   }
 
   const rolesRaw = Array.isArray(parsed.roles) ? parsed.roles : [];
@@ -393,11 +393,11 @@ export const parseCompanyPlanFromAssistantText = (value: string): CompanyBuilder
     .filter((entry): entry is CompanyBuilderRole => Boolean(entry))
     .slice(0, MAX_ROLE_COUNT);
   if (normalizedRoles.length === 0) {
-    throw new Error("The planning agent did not return any company roles.");
+    throw new Error("계획 에이전트가 회사 역할을 반환하지 않았습니다.");
   }
   const uniqueTitles = dedupeCompactNames(
     normalizedRoles.map((entry) => entry.title),
-    "Agent",
+    "에이전트",
   );
   const usedIds = new Set<string>();
   const roles = normalizedRoles.map((role, index) => {
@@ -417,7 +417,7 @@ export const parseCompanyPlanFromAssistantText = (value: string): CompanyBuilder
     };
   });
   return {
-    companyName: coerceString(parsed.companyName) || "New Company",
+    companyName: coerceString(parsed.companyName) || "새 회사",
     summary: coerceString(parsed.summary) || "A company plan generated from the user's brief.",
     sharedRules: uniqueStrings(coerceStringArray(parsed.sharedRules)).slice(0, 12),
     plannerNotes: uniqueStrings(coerceStringArray(parsed.plannerNotes)).slice(0, 12),
@@ -428,7 +428,7 @@ export const parseCompanyPlanFromAssistantText = (value: string): CompanyBuilder
 export const buildCompanyAgentBlueprints = (plan: CompanyBuilderPlan): CompanyAgentBlueprint[] => {
   const usedNames = new Set<string>();
   return plan.roles.map((role, index) => {
-    const baseName = role.title.trim() || `Agent ${index + 1}`;
+    const baseName = role.title.trim() || `에이전트 ${index + 1}`;
     let nextName = baseName;
     let dedupe = 2;
     while (usedNames.has(nextName.toLowerCase())) {

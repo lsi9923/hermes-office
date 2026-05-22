@@ -39,8 +39,8 @@ export function TaskBoardPanel({
 }) {
   return (
     <TaskBoardView
-      title="Kanban"
-      subtitle="Manual tasks, inferred requests, and scheduled playbooks."
+      title="칸반"
+      subtitle="수동 작업, 추론된 요청, 예약 플레이북입니다."
       agents={agents}
       cardsByStatus={cardsByStatus}
       selectedCard={selectedCard}

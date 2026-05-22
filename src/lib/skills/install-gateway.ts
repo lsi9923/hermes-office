@@ -14,7 +14,7 @@ import {
 const normalizeRequired = (value: string, field: string): string => {
   const trimmed = value.trim();
   if (!trimmed) {
-    throw new Error(`${field} is required.`);
+    throw new Error(`${field} 값이 필요합니다.`);
   }
   return trimmed;
 };
@@ -41,9 +41,9 @@ const validateWorkspaceInstallTarget = (params: {
     const targetLabel =
       normalizeOptional(params.agentName) ||
       normalizeOptional(params.agentId) ||
-      "the selected agent";
+      "선택한 에이전트";
     throw new Error(
-      `Cannot install a packaged skill because the workspace reported for ${targetLabel} resolves to the gateway root workspace (${params.workspaceDir}). Re-select the agent and refresh the marketplace before installing.`
+      `${targetLabel}의 작업공간이 게이트웨이 루트 작업공간(${params.workspaceDir})으로 확인되어 패키지 스킬을 설치할 수 없습니다. 설치 전에 에이전트를 다시 선택하고 마켓플레이스를 새로고침하세요.`
     );
   }
 };
@@ -62,25 +62,25 @@ const buildInstallerMessage = (params: {
     .join("\n");
 
   return [
-    "Create these exact skill files inside the current workspace.",
-    "You must use the file tools and write the files exactly as provided.",
-    "Do not modify filenames, frontmatter, spacing, or content.",
-    "Create parent directories if they do not exist.",
-    "After writing the files, verify they exist and then reply only with: INSTALLED",
+    "현재 작업공간 안에 아래 스킬 파일을 정확히 생성하세요.",
+    "반드시 파일 도구를 사용하고 제공된 내용 그대로 파일을 작성하세요.",
+    "파일명, 프런트매터, 공백, 내용을 수정하지 마세요.",
+    "상위 디렉터리가 없으면 생성하세요.",
+    "파일 작성 후 존재 여부를 확인하고 다음 단어만 답하세요: INSTALLED",
     "",
-    "Files:",
+    "파일:",
     fileEntries,
   ].join("\n");
 };
 
 const resolveRunId = (payload: unknown): string => {
   if (!payload || typeof payload !== "object") {
-    throw new Error("Gateway returned an invalid chat.send response.");
+    throw new Error("게이트웨이가 올바르지 않은 chat.send 응답을 반환했습니다.");
   }
   const record = payload as Record<string, unknown>;
   const runId = typeof record.runId === "string" ? record.runId.trim() : "";
   if (!runId) {
-    throw new Error("Gateway returned an invalid chat.send response (missing runId).");
+    throw new Error("게이트웨이가 올바르지 않은 chat.send 응답을 반환했습니다(runId 없음).");
   }
   return runId;
 };
@@ -97,10 +97,10 @@ export const installPackagedSkillViaGatewayAgent = async (params: {
   const packageId = normalizeRequired(params.request.packageId, "packageId");
   const packagedSkill = getPackagedSkillById(packageId);
   if (!packagedSkill) {
-    throw new Error(`Unknown packaged skill: ${packageId}`);
+    throw new Error(`알 수 없는 패키지 스킬입니다: ${packageId}`);
   }
   if (params.request.source !== "openclaw-workspace") {
-    throw new Error("Gateway-native packaged install currently supports workspace skills only.");
+    throw new Error("게이트웨이 네이티브 패키지 설치는 현재 작업공간 스킬만 지원합니다.");
   }
 
   let workspaceDir = normalizeRequired(params.request.workspaceDir, "workspaceDir");
@@ -119,7 +119,7 @@ export const installPackagedSkillViaGatewayAgent = async (params: {
     agentName: params.request.agentName,
   });
   const files = readPackagedSkillFiles(packagedSkill.packageId);
-  const installerName = `Skill Installer ${Date.now()}`;
+  const installerName = `스킬 설치기 ${Date.now()}`;
 
   let installerAgentId: string | null = null;
   try {
@@ -130,7 +130,7 @@ export const installPackagedSkillViaGatewayAgent = async (params: {
     installerAgentId =
       typeof created?.agentId === "string" ? created.agentId.trim() : "";
     if (!installerAgentId) {
-      throw new Error("Gateway returned an invalid agents.create response (missing agentId).");
+      throw new Error("게이트웨이가 올바르지 않은 agents.create 응답을 반환했습니다(agentId 없음).");
     }
 
     await updateGatewayAgentOverrides({

@@ -52,8 +52,8 @@ export const AgentAvatarEditorPanel = forwardRef<
     onDraftChange,
     onCancel,
     onSaved,
-    cancelLabel = "Cancel",
-    saveLabel = "Save avatar",
+    cancelLabel = "취소",
+    saveLabel = "아바타 저장",
     showActions = true,
   }: AgentAvatarEditorPanelProps,
   ref
@@ -97,11 +97,11 @@ export const AgentAvatarEditorPanel = forwardRef<
     <div className="grid h-full min-h-0 gap-0 xl:grid-cols-[360px_minmax(0,1fr)]">
       <div className="border-b border-border/45 p-5 xl:border-b-0 xl:border-r">
         <div className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-          Avatar creator
+          아바타 생성기
         </div>
         <div className="mt-1 text-lg font-semibold text-foreground">{agentName}</div>
         <div className="mt-1 text-xs text-muted-foreground">
-          Personalize this office avatar locally on this machine.
+          이 컴퓨터에서 오피스 아바타를 개인화합니다.
         </div>
         <div className="mt-4 overflow-hidden rounded-xl border border-border/45 bg-[#070b16]">
           <AgentAvatarPreview3D profile={draft} className="h-[360px] w-full" />
@@ -114,7 +114,7 @@ export const AgentAvatarEditorPanel = forwardRef<
             disabled={saving}
           >
             <RefreshCcw className="h-3.5 w-3.5" />
-            Reset
+            초기화
           </button>
           <button
             type="button"
@@ -123,7 +123,7 @@ export const AgentAvatarEditorPanel = forwardRef<
             disabled={saving}
           >
             <Shuffle className="h-3.5 w-3.5" />
-            Randomize
+            랜덤
           </button>
         </div>
       </div>
@@ -147,14 +147,14 @@ export const AgentAvatarEditorPanel = forwardRef<
               }}
               disabled={saving}
             >
-              {saving ? "Saving..." : saveLabel}
+              {saving ? "저장 중..." : saveLabel}
             </button>
           </div>
         ) : null}
         <div className="grid gap-6 xl:grid-cols-2">
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Skin tone
+              피부 톤
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_SKIN_TONE_OPTIONS.map((option) => {
@@ -180,7 +180,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Hair style
+              헤어 스타일
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_HAIR_STYLE_OPTIONS.map((option) => {
@@ -210,7 +210,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Hair color
+              머리색
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_HAIR_COLOR_OPTIONS.map((option) => {
@@ -236,7 +236,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Top style
+              상의 스타일
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_TOP_STYLE_OPTIONS.map((option) => {
@@ -266,7 +266,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Top color
+              상의 색
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_CLOTHING_COLOR_OPTIONS.map((option) => {
@@ -292,7 +292,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Bottom style
+              하의 스타일
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_BOTTOM_STYLE_OPTIONS.map((option) => {
@@ -322,7 +322,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Bottom color
+              하의 색
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_CLOTHING_COLOR_OPTIONS.map((option) => {
@@ -348,7 +348,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Shoe color
+              신발 색
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_SHOE_COLOR_OPTIONS.map((option) => {
@@ -374,7 +374,7 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Hat
+              모자
             </h3>
             <div className="flex flex-wrap gap-2">
               {AGENT_AVATAR_HAT_STYLE_OPTIONS.map((option) => {
@@ -404,23 +404,23 @@ export const AgentAvatarEditorPanel = forwardRef<
 
           <section className="space-y-3 xl:col-span-2">
             <h3 className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-              Accessories
+              액세서리
             </h3>
             <div className="flex flex-wrap gap-2">
               {[
                 {
                   key: "glasses" as const,
-                  label: "Glasses",
+                  label: "안경",
                   enabled: draft.accessories.glasses,
                 },
                 {
                   key: "headset" as const,
-                  label: "Headset",
+                  label: "헤드셋",
                   enabled: draft.accessories.headset,
                 },
                 {
                   key: "backpack" as const,
-                  label: "Backpack",
+                  label: "백팩",
                   enabled: draft.accessories.backpack,
                 },
               ].map((option) => (

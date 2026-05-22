@@ -14,7 +14,7 @@ export const getDefaultUsageAnalyticsRange = () => {
 
 export const formatCurrency = (value: number | null | undefined) => {
   const amount = value ?? 0;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("ko-KR", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: amount < 10 ? 2 : 0,
@@ -23,4 +23,4 @@ export const formatCurrency = (value: number | null | undefined) => {
 };
 
 export const formatNumber = (value: number | null | undefined) =>
-  new Intl.NumberFormat("en-US").format(value ?? 0);
+  new Intl.NumberFormat("ko-KR").format(value ?? 0);

@@ -84,12 +84,12 @@ export const resolvePresetDefaultsForRole = (role: ExecutionRoleId): AgentPermis
 export const resolveEffectivePermissionsSummary = (draft: AgentPermissionsDraft): string => {
   const commandLabel =
     draft.commandMode === "auto"
-      ? "Commands: Auto"
+      ? "명령: 자동"
       : draft.commandMode === "ask"
-      ? "Commands: Ask"
-      : "Commands: Off";
-  const webLabel = draft.webAccess ? "Web: On" : "Web: Off";
-  const fileLabel = draft.fileTools ? "File tools: On" : "File tools: Off";
+      ? "명령: 확인"
+      : "명령: 끔";
+  const webLabel = draft.webAccess ? "웹: 켬" : "웹: 끔";
+  const fileLabel = draft.fileTools ? "파일 도구: 켬" : "파일 도구: 끔";
   return `${commandLabel} | ${webLabel} | ${fileLabel}`;
 };
 
@@ -356,7 +356,7 @@ export async function updateAgentPermissionsViaStudio(params: {
 }): Promise<void> {
   const agentId = params.agentId.trim();
   if (!agentId) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
 
   const role = resolveRoleForCommandMode(params.draft.commandMode);
@@ -404,7 +404,7 @@ export async function updateExecutionRoleViaStudio(params: {
 }): Promise<void> {
   const agentId = params.agentId.trim();
   if (!agentId) {
-    throw new Error("Agent id is required.");
+    throw new Error("에이전트 ID가 필요합니다.");
   }
 
   await upsertExecApprovalsPolicyForRole({

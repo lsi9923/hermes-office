@@ -58,7 +58,7 @@ export function useBrowserPreview(url: string | null, enabled: boolean) {
         };
         if (!response.ok) {
           throw new Error(
-            payload.error?.trim() || "Unable to capture GitHub browser preview.",
+            payload.error?.trim() || "GitHub 브라우저 미리보기를 캡처하지 못했습니다.",
           );
         }
         if (requestIdRef.current !== requestId) return;
@@ -77,7 +77,7 @@ export function useBrowserPreview(url: string | null, enabled: boolean) {
           error:
             error instanceof Error
               ? error.message
-              : "Unable to capture GitHub browser preview.",
+              : "GitHub 브라우저 미리보기를 캡처하지 못했습니다.",
         });
       }
     })();

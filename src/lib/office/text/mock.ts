@@ -24,7 +24,7 @@ const buildPromptText = (recipientLabel: string): string =>
 const buildConfirmationText = (message: string): string => {
   const normalized = normalizeWhitespace(message).toLowerCase();
   if (normalized.includes("late for the soccer game")) {
-    return "No worries, thanks for the heads up.";
+    return "괜찮습니다. 알려줘서 고마워요.";
   }
   if (normalized.includes("running late")) {
     return "Thanks for letting me know.";

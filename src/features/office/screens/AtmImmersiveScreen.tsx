@@ -33,7 +33,7 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
 
   const handlePinSubmit = () => {
     if (inputPin.length < 4) {
-      setError("PIN must be at least 4 digits");
+      setError("PIN은 최소 4자리여야 합니다");
       return;
     }
 
@@ -47,7 +47,7 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
         setIsAuthenticated(true);
         setError(null);
       } else {
-        setError("Incorrect PIN");
+        setError("PIN이 올바르지 않습니다");
         setInputPin("");
       }
     }
@@ -75,15 +75,15 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
   );
   const overviewCards = useMemo(
     () => [
-      { label: "Total Spend", value: formatCurrency(usage.totals.totalCost) },
-      { label: "Total Tokens", value: formatNumber(usage.totals.totalTokens) },
-      { label: "Sessions", value: formatNumber(usage.sessions.length) },
-      { label: "Messages", value: formatNumber(usage.aggregates.messages.total) },
-      { label: "Tool Calls", value: formatNumber(usage.aggregates.tools.totalCalls) },
-      { label: "Unique Tools", value: formatNumber(usage.aggregates.tools.uniqueTools) },
-      { label: "Errors", value: formatNumber(usage.aggregates.messages.errors) },
+      { label: "총 지출", value: formatCurrency(usage.totals.totalCost) },
+      { label: "총 토큰", value: formatNumber(usage.totals.totalTokens) },
+      { label: "세션", value: formatNumber(usage.sessions.length) },
+      { label: "메시지", value: formatNumber(usage.aggregates.messages.total) },
+      { label: "도구 호출", value: formatNumber(usage.aggregates.tools.totalCalls) },
+      { label: "고유 도구", value: formatNumber(usage.aggregates.tools.uniqueTools) },
+      { label: "오류", value: formatNumber(usage.aggregates.messages.errors) },
       {
-        label: "Avg Session Cost",
+        label: "평균 세션 비용",
         value:
           usage.sessions.length > 0
             ? formatCurrency(usage.totals.totalCost / usage.sessions.length)
@@ -107,10 +107,10 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
     const lastMonth = new Date(now);
     lastMonth.setDate(lastMonth.getDate() - 29);
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    if (startDate === toDateInputValue(lastWeek) && endDate === end) return "7D";
-    if (startDate === toDateInputValue(lastMonth) && endDate === end) return "30D";
-    if (startDate === toDateInputValue(monthStart) && endDate === end) return "MTD";
-    return "Custom";
+    if (startDate === toDateInputValue(lastWeek) && endDate === end) return "7일";
+    if (startDate === toDateInputValue(lastMonth) && endDate === end) return "30일";
+    if (startDate === toDateInputValue(monthStart) && endDate === end) return "이번 달";
+    return "사용자 지정";
   }, [endDate, startDate]);
 
   const setQuickRange = (days: number | "mtd") => {
@@ -136,12 +136,12 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
           </div>
 
           <h2 className="text-[24px] font-medium tracking-[0.1em] text-[#dbfff6]">
-            {pinMode === "setup" ? "CREATE ACCESS PIN" : "ENTER PIN CODE"}
+            {pinMode === "setup" ? "접근 PIN 만들기" : "PIN 코드 입력"}
           </h2>
           <p className="mt-2 text-[13px] uppercase tracking-[0.15em] text-[#83fff0]/60">
             {pinMode === "setup"
-              ? "Set a secure code for your treasury ledger"
-              : "Authentication required to view ledger"}
+              ? "사용량 장부를 보호할 코드를 설정하세요"
+              : "장부를 보려면 인증이 필요합니다"}
           </p>
 
           <div className="mb-8 mt-10 flex gap-4">
@@ -177,7 +177,7 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
               onClick={() => handleKeyPad("clear")}
               className="flex h-16 w-24 items-center justify-center rounded-xl border border-rose-500/20 bg-[#1a0505]/60 text-[14px] font-medium uppercase tracking-wider text-rose-200 transition-all hover:bg-rose-900/40 active:scale-95"
             >
-              Clear
+              지우기
             </button>
             <button
               onClick={() => handleKeyPad("0")}
@@ -206,31 +206,31 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
           <div>
             <div className="flex items-center gap-3 text-[12px] uppercase tracking-[0.32em] text-[#83fff0]/70">
               <Landmark className="h-4 w-4" />
-              OpenClaw Treasury ATM
+              OpenClaw 사용량 ATM
             </div>
             <div className="mt-3 text-[13px] uppercase tracking-[0.24em] text-[#7ddfd2]/62">
-              Token Usage Ledger
+              토큰 사용량 장부
             </div>
             <div className="mt-2 text-[44px] font-semibold tracking-[0.08em] text-[#dbfff6]">
               {formatNumber(usage.totals.totalTokens)}
             </div>
             <div className="mt-2 text-[15px] uppercase tracking-[0.28em] text-[#89fff1]/72">
-              Total tokens used
+              사용한 총 토큰
             </div>
             <div className="mt-4 inline-flex items-center rounded-full border border-[#7cffef]/20 bg-black/20 px-4 py-2 text-[13px] uppercase tracking-[0.24em] text-[#bafff7]/85">
-              USD equivalent {formatCurrency(usage.totals.totalCost)}
+              USD 환산 {formatCurrency(usage.totals.totalCost)}
             </div>
           </div>
           <div className="w-[320px] rounded-[24px] border border-[#7dfff0]/18 bg-black/22 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.34)]">
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-[#88fff1]/62">
               <Wallet className="h-4 w-4" />
-              Account summary
+              계정 요약
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {[
-                { label: "7D", value: 7 },
-                { label: "30D", value: 30 },
-                { label: "MTD", value: "mtd" as const },
+                { label: "7일", value: 7 },
+                { label: "30일", value: 30 },
+                { label: "이번 달", value: "mtd" as const },
               ].map((range) => (
                 <button
                   key={range.label}
@@ -247,25 +247,25 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <SummaryCard label="Input" value={formatCurrency(usage.totals.inputCost)} />
-              <SummaryCard label="Output" value={formatCurrency(usage.totals.outputCost)} />
-              <SummaryCard label="Cache read" value={formatCurrency(usage.totals.cacheReadCost)} />
-              <SummaryCard label="Cache write" value={formatCurrency(usage.totals.cacheWriteCost)} />
+              <SummaryCard label="입력" value={formatCurrency(usage.totals.inputCost)} />
+              <SummaryCard label="출력" value={formatCurrency(usage.totals.outputCost)} />
+              <SummaryCard label="캐시 읽기" value={formatCurrency(usage.totals.cacheReadCost)} />
+              <SummaryCard label="캐시 쓰기" value={formatCurrency(usage.totals.cacheWriteCost)} />
             </div>
             <div className="mt-4 rounded-2xl border border-[#7dfff0]/12 bg-[#031314]/80 px-4 py-3 text-[12px] uppercase tracking-[0.18em] text-[#9ffef0]/76">
               {usage.lastRefreshedAt
-                ? `Last refresh ${new Date(usage.lastRefreshedAt).toLocaleTimeString()}`
+                ? `마지막 새로고침 ${new Date(usage.lastRefreshedAt).toLocaleTimeString("ko-KR")}`
                 : settingsLoaded
-                  ? "Awaiting first usage snapshot"
-                  : "Loading account preferences"}
+                  ? "첫 사용량 스냅샷 대기 중"
+                  : "계정 환경설정 불러오는 중"}
             </div>
           </div>
         </div>
 
         <div className="mt-7 space-y-6">
           <SectionCard
-            title="Usage Overview"
-            subtitle="Expanded OpenClaw expense data for the selected ledger window."
+            title="사용량 개요"
+            subtitle="선택한 장부 기간의 OpenClaw 비용 데이터를 확장해 보여줍니다."
             action={
               <button
                 type="button"
@@ -277,7 +277,7 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
                 ) : (
                   <RefreshCw className="h-3.5 w-3.5" />
                 )}
-                Refresh
+                새로고침
               </button>
             }
           >
@@ -290,13 +290,13 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
           </SectionCard>
 
           <SectionCard
-            title="Daily Withdrawals"
-            subtitle="Recent cost movement across the last seven days."
+            title="일별 사용 비용"
+            subtitle="최근 7일 동안의 비용 흐름입니다."
           >
             {usage.loading && recentCostDaily.length === 0 ? (
-              <EmptyPanelState message="Loading ATM ledger." />
+              <EmptyPanelState message="ATM 장부를 불러오는 중입니다." />
             ) : recentCostDaily.length === 0 ? (
-              <EmptyPanelState message="No token spend recorded for the current ledger window." />
+              <EmptyPanelState message="현재 장부 기간에 기록된 토큰 지출이 없습니다." />
             ) : (
               <div className="grid grid-cols-7 gap-3">
                 {recentCostDaily.map((entry) => {
@@ -325,27 +325,27 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <SectionCard
-              title="Activity By Day"
-              subtitle="Daily tokens, cost, messages, tool calls, and errors."
+              title="일별 활동"
+              subtitle="일별 토큰, 비용, 메시지, 도구 호출, 오류입니다."
             >
               <div className="space-y-3">
                 {usage.aggregates.daily.map((entry) => (
                   <ListRow
                     key={entry.date}
                     title={entry.date}
-                    primary={`${formatCurrency(entry.cost)} · ${formatNumber(entry.tokens)} tokens`}
-                    secondary={`${formatNumber(entry.messages)} messages · ${formatNumber(entry.toolCalls)} tool calls · ${formatNumber(entry.errors)} errors`}
+                    primary={`${formatCurrency(entry.cost)} · 토큰 ${formatNumber(entry.tokens)}개`}
+                    secondary={`메시지 ${formatNumber(entry.messages)}개 · 도구 호출 ${formatNumber(entry.toolCalls)}회 · 오류 ${formatNumber(entry.errors)}개`}
                   />
                 ))}
                 {usage.aggregates.daily.length === 0 ? (
-                  <EmptyPanelState message="No daily activity rows available yet." />
+                  <EmptyPanelState message="아직 표시할 일별 활동 행이 없습니다." />
                 ) : null}
               </div>
             </SectionCard>
 
             <SectionCard
-              title="Budget Alerts"
-              subtitle="Threshold warnings for daily, monthly, and per-agent spend."
+              title="예산 알림"
+              subtitle="일별, 월별, 에이전트별 지출 임계값 경고입니다."
             >
               <div className="space-y-3">
                 {usage.budgetAlerts.map((alert) => (
@@ -367,7 +367,7 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
                 ))}
                 {usage.budgetAlerts.length === 0 ? (
                   <EmptyPanelState
-                    message="Budget thresholds are healthy for the current ATM ledger window."
+                    message="현재 ATM 장부 기간의 예산 임계값은 정상입니다."
                     tone="success"
                   />
                 ) : null}
@@ -376,78 +376,78 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <SectionCard title="Agent Expenses" subtitle="All agents ranked by total spend.">
+            <SectionCard title="에이전트 비용" subtitle="총 지출 기준으로 모든 에이전트를 정렬했습니다.">
               <div className="space-y-3">
                 {usage.aggregates.byAgent.map((entry, index) => (
                   <ListRow
                     key={entry.agentId}
-                    title={`Account ${String(index + 1).padStart(2, "0")} · ${entry.agentName}`}
+                    title={`계정 ${String(index + 1).padStart(2, "0")} · ${entry.agentName}`}
                     primary={formatCurrency(entry.totals.totalCost)}
-                    secondary={`${formatNumber(entry.totals.totalTokens)} tokens`}
+                    secondary={`토큰 ${formatNumber(entry.totals.totalTokens)}개`}
                   />
                 ))}
                 {usage.aggregates.byAgent.length === 0 ? (
-                  <EmptyPanelState message="No agent token activity yet." />
+                  <EmptyPanelState message="아직 에이전트 토큰 활동이 없습니다." />
                 ) : null}
               </div>
             </SectionCard>
 
             <SectionCard
-              title="Model Expenses"
-              subtitle="Provider and model spend breakdown."
+              title="모델 비용"
+              subtitle="제공자와 모델별 지출 내역입니다."
             >
               <div className="space-y-3">
                 {usage.aggregates.byModel.map((entry, index) => (
                   <ListRow
                     key={`${entry.provider ?? "unknown"}:${entry.model ?? "unknown"}`}
-                    title={`Route ${String(index + 1).padStart(2, "0")} · ${entry.provider ?? "unknown"} / ${entry.model ?? "unknown"}`}
+                    title={`경로 ${String(index + 1).padStart(2, "0")} · ${entry.provider ?? "알 수 없음"} / ${entry.model ?? "알 수 없음"}`}
                     primary={formatCurrency(entry.totals.totalCost)}
-                    secondary={`${formatNumber(entry.totals.totalTokens)} tokens`}
+                    secondary={`토큰 ${formatNumber(entry.totals.totalTokens)}개`}
                   />
                 ))}
                 {usage.aggregates.byModel.length === 0 ? (
-                  <EmptyPanelState message="No model cost routes recorded yet." />
+                  <EmptyPanelState message="아직 기록된 모델 비용 경로가 없습니다." />
                 ) : null}
               </div>
             </SectionCard>
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <SectionCard title="Tool Usage" subtitle="All tools observed in the selected sessions.">
+            <SectionCard title="도구 사용량" subtitle="선택한 세션에서 관찰된 모든 도구입니다.">
               <div className="space-y-3">
                 {usage.aggregates.tools.tools.map((tool, index) => (
                   <ListRow
                     key={tool.name}
-                    title={`Tool ${String(index + 1).padStart(2, "0")} · ${tool.name}`}
+                    title={`도구 ${String(index + 1).padStart(2, "0")} · ${tool.name}`}
                     primary={formatNumber(tool.count)}
-                    secondary="total invocations"
+                    secondary="총 호출 횟수"
                   />
                 ))}
                 {usage.aggregates.tools.tools.length === 0 ? (
-                  <EmptyPanelState message="No tool usage has been recorded yet." />
+                  <EmptyPanelState message="아직 기록된 도구 사용량이 없습니다." />
                 ) : null}
               </div>
             </SectionCard>
 
             <SectionCard
-              title="Message Totals"
-              subtitle="Conversation activity across all selected sessions."
+              title="메시지 합계"
+              subtitle="선택한 모든 세션의 대화 활동입니다."
             >
               <div className="grid grid-cols-2 gap-3">
                 <SummaryCard
-                  label="All Messages"
+                  label="전체 메시지"
                   value={formatNumber(usage.aggregates.messages.total)}
                 />
                 <SummaryCard
-                  label="User"
+                  label="사용자"
                   value={formatNumber(usage.aggregates.messages.user)}
                 />
                 <SummaryCard
-                  label="Assistant"
+                  label="어시스턴트"
                   value={formatNumber(usage.aggregates.messages.assistant)}
                 />
                 <SummaryCard
-                  label="Tool Results"
+                  label="도구 결과"
                   value={formatNumber(usage.aggregates.messages.toolResults)}
                 />
               </div>
@@ -455,26 +455,26 @@ export function AtmImmersiveScreen(props: OfficeUsageAnalyticsParams) {
           </div>
 
           <SectionCard
-            title="Recent Sessions"
-            subtitle="Latest sessions with cost and token totals."
+            title="최근 세션"
+            subtitle="비용과 토큰 합계가 포함된 최신 세션입니다."
           >
             <div className="space-y-3">
               {recentSessions.map((session) => (
                 <ListRow
                   key={session.key}
                   title={session.label ?? session.agentName ?? session.key}
-                  primary={`${formatCurrency(session.usage.totals.totalCost)} · ${formatNumber(
+                  primary={`${formatCurrency(session.usage.totals.totalCost)} · 토큰 ${formatNumber(
                     session.usage.totals.totalTokens,
-                  )} tokens`}
-                  secondary={`${session.provider ?? "unknown"} / ${session.model ?? "unknown"} · ${
+                  )}개`}
+                  secondary={`${session.provider ?? "알 수 없음"} / ${session.model ?? "알 수 없음"} · ${
                     session.updatedAt
-                      ? new Date(session.updatedAt).toLocaleString()
-                      : "no timestamp"
+                      ? new Date(session.updatedAt).toLocaleString("ko-KR")
+                      : "타임스탬프 없음"
                   }`}
                 />
               ))}
               {recentSessions.length === 0 ? (
-                <EmptyPanelState message="No sessions available for the selected range." />
+                <EmptyPanelState message="선택한 기간에 표시할 세션이 없습니다." />
               ) : null}
             </div>
           </SectionCard>

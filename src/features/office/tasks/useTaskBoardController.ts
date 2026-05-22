@@ -229,7 +229,7 @@ const buildCardFromExplicitEvent = (
   existing?: TaskBoardCard | null,
 ): TaskBoardCard => {
   const fallbackTitle =
-    explicit.kind === "playbook_triggered" ? "Triggered playbook task" : "Task";
+    explicit.kind === "playbook_triggered" ? "플레이북 실행 작업" : "작업";
   return makeCard({
     ...(existing ?? {}),
     id: explicit.taskId,
@@ -585,10 +585,10 @@ const buildStandupSeedCards = (
         id: existing?.id ?? `standup:${agentId}`,
         title:
           existing?.title ??
-          truncateTitle(title || note || blockers, "Standup task"),
+          truncateTitle(title || note || blockers, "스탠드업 작업"),
         description:
           existing?.description ||
-          [title, blockers ? `Blockers: ${blockers}` : "", note]
+          [title, blockers ? `막힌 점: ${blockers}` : "", note]
             .filter(Boolean)
             .join("\n"),
         status:
@@ -768,7 +768,7 @@ export const useTaskBoardController = ({
         if (error instanceof TaskStoreRequestError && error.status === 404) {
           setSharedTasksSupported(false);
           setSharedTasksError(
-            "Shared task store route is unavailable. Restart the dev server to enable task sync.",
+            "공유 작업 저장소 경로를 사용할 수 없습니다. 작업 동기화를 켜려면 개발 서버를 재시작하세요.",
           );
           setTaskCaptureDebug((current) => ({
             ...current,
@@ -777,14 +777,14 @@ export const useTaskBoardController = ({
             lastTitle: task.title,
             lastTaskId: task.id,
             lastSessionKey: task.externalThreadId,
-            lastMessage: "Shared task store route is unavailable.",
+            lastMessage: "공유 작업 저장소 경로를 사용할 수 없습니다.",
           }));
           return;
         }
         setSharedTasksError(
           error instanceof Error
             ? error.message
-            : "Failed to sync live request into shared task store.",
+            : "실시간 요청을 공유 작업 저장소에 동기화하지 못했습니다.",
         );
         setTaskCaptureDebug((current) => ({
           ...current,
@@ -796,7 +796,7 @@ export const useTaskBoardController = ({
           lastMessage:
             error instanceof Error
               ? error.message
-              : "Failed to sync live request into shared task store.",
+              : "실시간 요청을 공유 작업 저장소에 동기화하지 못했습니다.",
         }));
       }
     },
@@ -858,7 +858,7 @@ export const useTaskBoardController = ({
       setCronJobs(result.jobs);
     } catch (error) {
       setCronError(
-        error instanceof Error ? error.message : "Failed to load playbooks.",
+        error instanceof Error ? error.message : "플레이북을 불러오지 못했습니다.",
       );
     } finally {
       setCronLoading(false);
@@ -884,14 +884,14 @@ export const useTaskBoardController = ({
       if (error instanceof TaskStoreRequestError && error.status === 404) {
         setSharedTasksSupported(false);
         setSharedTasksError(
-          "Shared task store route is unavailable. Restart the dev server to enable task sync.",
+          "공유 작업 저장소 경로를 사용할 수 없습니다. 작업 동기화를 켜려면 개발 서버를 재시작하세요.",
         );
         return;
       }
       setSharedTasksError(
         error instanceof Error
           ? error.message
-          : "Failed to load shared task store.",
+          : "공유 작업 저장소를 불러오지 못했습니다.",
       );
     } finally {
       sharedRefreshInFlightRef.current = false;
@@ -922,7 +922,7 @@ export const useTaskBoardController = ({
       setGatewayTasksError(
         error instanceof Error
           ? error.message
-          : "Failed to load tasks from OpenClaw.",
+          : "OpenClaw에서 작업을 불러오지 못했습니다.",
       );
     } finally {
       setGatewayTasksLoading(false);
@@ -1019,7 +1019,7 @@ export const useTaskBoardController = ({
     async (input?: Partial<TaskBoardCard>) => {
       const card = makeCard({
         id: `manual:${randomUUID()}`,
-        title: input?.title?.trim() || "New task",
+        title: input?.title?.trim() || "새 작업",
         description: input?.description ?? "",
         status: input?.status ?? "todo",
         source: "claw3d_manual",
@@ -1043,7 +1043,7 @@ export const useTaskBoardController = ({
         setSharedTasksError(
           error instanceof Error
             ? error.message
-            : "Failed to create task in shared store.",
+            : "공유 저장소에 작업을 만들지 못했습니다.",
         );
         dispatch({ type: "upsert", card });
         dispatch({ type: "select", cardId: card.id });
@@ -1074,7 +1074,7 @@ export const useTaskBoardController = ({
         setSharedTasksError(
           error instanceof Error
             ? error.message
-            : "Failed to update task in shared store.",
+            : "공유 저장소의 작업을 업데이트하지 못했습니다.",
         );
       }
     },
@@ -1102,7 +1102,7 @@ export const useTaskBoardController = ({
         setSharedTasksError(
           error instanceof Error
             ? error.message
-            : "Failed to move task in shared store.",
+            : "공유 저장소의 작업 상태를 옮기지 못했습니다.",
         );
       }
     },
@@ -1134,7 +1134,7 @@ export const useTaskBoardController = ({
         setSharedTasksError(
           error instanceof Error
             ? error.message
-            : "Failed to archive task in shared store.",
+            : "공유 저장소의 작업을 보관하지 못했습니다.",
         );
       }
     },

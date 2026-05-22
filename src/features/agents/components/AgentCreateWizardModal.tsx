@@ -58,49 +58,49 @@ type WizardStepId =
 const wizardSteps: Array<{ id: WizardStepId; label: string; hint: string }> = [
   {
     id: "identity",
-    label: "Identity",
-    hint: "Create the live agent first, then fill in the rest step by step.",
+    label: "정체성",
+    hint: "먼저 라이브 에이전트를 만들고 나머지를 단계별로 채웁니다.",
   },
   {
     id: "avatar",
-    label: "Avatar",
-    hint: "Customize the office appearance before writing the rest of the profile.",
+    label: "아바타",
+    hint: "나머지 프로필을 작성하기 전에 오피스 외형을 조정합니다.",
   },
   {
     id: "SOUL.md",
-    label: "Soul",
+    label: "소울",
     hint: AGENT_FILE_META["SOUL.md"].hint,
   },
   {
     id: "AGENTS.md",
-    label: "Agents",
+    label: "에이전트",
     hint: AGENT_FILE_META["AGENTS.md"].hint,
   },
   {
     id: "USER.md",
-    label: "User",
+    label: "사용자",
     hint: AGENT_FILE_META["USER.md"].hint,
   },
   {
     id: "TOOLS.md",
-    label: "Tools",
+    label: "도구",
     hint: AGENT_FILE_META["TOOLS.md"].hint,
   },
   {
     id: "MEMORY.md",
-    label: "Memory",
+    label: "메모리",
     hint: AGENT_FILE_META["MEMORY.md"].hint,
   },
   {
     id: "HEARTBEAT.md",
-    label: "Heartbeat",
+    label: "하트비트",
     hint: AGENT_FILE_META["HEARTBEAT.md"].hint,
   },
 ];
 
 const buildInitialDraft = (suggestedName: string): PersonalityBuilderDraft => {
   const draft = createEmptyPersonalityDraft();
-  draft.identity.name = suggestedName.trim() || "New Agent";
+  draft.identity.name = suggestedName.trim() || "새 에이전트";
   return draft;
 };
 
@@ -186,7 +186,7 @@ export function AgentCreateWizardModal({
   const activeStep = wizardSteps[activeStepIndex] ?? wizardSteps[0];
   const isWorking = busy || finishing;
   const isFinalStep = step === "HEARTBEAT.md";
-  const statusCopy = finishing ? "Saving the agent files and avatar." : statusLine;
+  const statusCopy = finishing ? "에이전트 파일과 아바타를 저장하는 중입니다." : statusLine;
 
   const updateDraft = <K extends keyof PersonalityBuilderDraft>(
     key: K,
@@ -237,13 +237,13 @@ export function AgentCreateWizardModal({
   const stepActionLabel =
     step === "identity" && !createdAgentId
       ? busy
-        ? "Creating..."
-        : "Create and continue"
+        ? "생성 중..."
+        : "생성 후 계속"
       : isFinalStep
         ? isWorking
-          ? "Saving..."
-          : "Finish wizard"
-        : "Next";
+          ? "저장 중..."
+          : "마법사 완료"
+        : "다음";
 
   if (!open) return null;
 
@@ -252,7 +252,7 @@ export function AgentCreateWizardModal({
       className="fixed inset-0 z-[140] flex items-center justify-center bg-background/84 p-4"
       role="dialog"
       aria-modal="true"
-      aria-label="Create agent wizard"
+      aria-label="에이전트 생성 마법사"
       onClick={() => {
         if (!isWorking) {
           onClose(createdAgentId);
@@ -267,13 +267,13 @@ export function AgentCreateWizardModal({
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground">
-                New agent wizard
+                새 에이전트 마법사
               </div>
               <div className="mt-1 text-lg font-semibold text-foreground">
-                Create an agent step by step
+                에이전트를 단계별로 생성
               </div>
               <div className="mt-1 text-sm text-muted-foreground">
-                Start with identity, then build the rest of the profile before finishing.
+                정체성부터 시작한 뒤 나머지 프로필을 완성합니다.
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -285,7 +285,7 @@ export function AgentCreateWizardModal({
                   onClose(createdAgentId);
                 }}
               >
-                Close
+                닫기
               </button>
               {activeStepIndex > 0 ? (
                 <button
@@ -299,7 +299,7 @@ export function AgentCreateWizardModal({
                     }
                   }}
                 >
-                  Back
+                  뒤로
                 </button>
               ) : null}
               <button
@@ -351,9 +351,9 @@ export function AgentCreateWizardModal({
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-6">
             <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col">
               <section className="space-y-3">
-                <h3 className="text-sm font-medium text-foreground">Identity</h3>
+                <h3 className="text-sm font-medium text-foreground">정체성</h3>
                 <div className="text-xs text-muted-foreground">
-                  Confirm the live agent name first, then fill in the rest of `IDENTITY.md`.
+                  먼저 라이브 에이전트 이름을 확인한 뒤 `IDENTITY.md`의 나머지를 채우세요.
                 </div>
                 <AgentIdentityFields
                   values={draft.identity}
@@ -368,8 +368,8 @@ export function AgentCreateWizardModal({
               </section>
 
               <div className="mt-6 rounded-xl border border-border/45 bg-muted/20 p-4 text-sm text-muted-foreground">
-                Creating the agent in this step makes it available in OpenClaw immediately so the
-                wizard can save the full profile through the gateway in later steps.
+                이 단계에서 에이전트를 만들면 OpenClaw에서 즉시 사용할 수 있으며,
+                이후 단계에서 마법사가 게이트웨이를 통해 전체 프로필을 저장할 수 있습니다.
               </div>
             </div>
           </div>
@@ -378,7 +378,7 @@ export function AgentCreateWizardModal({
             {step === "avatar" ? (
               <AgentAvatarEditorPanel
                 agentId={createdAgentId}
-                agentName={draft.identity.name.trim() || "New Agent"}
+                agentName={draft.identity.name.trim() || "새 에이전트"}
                 initialProfile={draftAvatarProfile}
                 showActions={false}
                 onDraftChange={(profile) => {
@@ -392,12 +392,12 @@ export function AgentCreateWizardModal({
               <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-6">
                 <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 pb-8">
                   <section className="space-y-3">
-                    <h3 className="text-sm font-medium text-foreground">Soul</h3>
+                    <h3 className="text-sm font-medium text-foreground">소울</h3>
                     <div className="grid gap-4">
                       <WizardTextAreaField
-                        label="Core truths"
+                        label="핵심 원칙"
                         value={draft.soul.coreTruths}
-                        placeholder="e.g. Protect the user's time. Prefer clarity over theatrics."
+                        placeholder="예: 사용자의 시간을 아낀다. 과장보다 명확함을 우선한다."
                         disabled={isWorking}
                         rows={5}
                         onChange={(value) => {
@@ -405,9 +405,9 @@ export function AgentCreateWizardModal({
                         }}
                       />
                       <WizardTextAreaField
-                        label="Boundaries"
+                        label="경계"
                         value={draft.soul.boundaries}
-                        placeholder="e.g. Do not bluff. Say when something is uncertain."
+                        placeholder="예: 허세 부리지 않는다. 확실하지 않으면 그렇게 말한다."
                         disabled={isWorking}
                         rows={5}
                         onChange={(value) => {
@@ -415,9 +415,9 @@ export function AgentCreateWizardModal({
                         }}
                       />
                       <WizardTextAreaField
-                        label="Vibe"
+                        label="분위기"
                         value={draft.soul.vibe}
-                        placeholder="e.g. Friendly, direct, and lightly playful."
+                        placeholder="예: 친근하고 직접적이며 살짝 장난스럽게."
                         disabled={isWorking}
                         rows={4}
                         onChange={(value) => {
@@ -425,9 +425,9 @@ export function AgentCreateWizardModal({
                         }}
                       />
                       <WizardTextAreaField
-                        label="Continuity"
+                        label="연속성"
                         value={draft.soul.continuity}
-                        placeholder="e.g. Keep naming, preferences, and previous decisions consistent."
+                        placeholder="예: 이름, 선호, 이전 결정을 일관되게 유지한다."
                         disabled={isWorking}
                         rows={4}
                         onChange={(value) => {
@@ -442,39 +442,39 @@ export function AgentCreateWizardModal({
               <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-6">
                 <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 pb-8">
                   <section className="space-y-3">
-                    <h3 className="text-sm font-medium text-foreground">User</h3>
+                    <h3 className="text-sm font-medium text-foreground">사용자</h3>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <WizardField
-                        label="Name"
+                        label="이름"
                         value={draft.user.name}
-                        placeholder="e.g. Luke"
+                        placeholder="예: Luke"
                         disabled={isWorking}
                         onChange={(value) => {
                           updateDraft("user", { ...draft.user, name: value });
                         }}
                       />
                       <WizardField
-                        label="What to call them"
+                        label="부를 이름"
                         value={draft.user.callThem}
-                        placeholder="e.g. Luke"
+                        placeholder="예: Luke"
                         disabled={isWorking}
                         onChange={(value) => {
                           updateDraft("user", { ...draft.user, callThem: value });
                         }}
                       />
                       <WizardField
-                        label="Pronouns"
+                        label="대명사"
                         value={draft.user.pronouns}
-                        placeholder="e.g. he/him"
+                        placeholder="예: he/him"
                         disabled={isWorking}
                         onChange={(value) => {
                           updateDraft("user", { ...draft.user, pronouns: value });
                         }}
                       />
                       <WizardField
-                        label="Timezone"
+                        label="시간대"
                         value={draft.user.timezone}
-                        placeholder="e.g. America/Chicago"
+                        placeholder="예: Asia/Seoul"
                         disabled={isWorking}
                         onChange={(value) => {
                           updateDraft("user", { ...draft.user, timezone: value });
@@ -482,9 +482,9 @@ export function AgentCreateWizardModal({
                       />
                       <div className="sm:col-span-2">
                         <WizardField
-                          label="Notes"
+                          label="메모"
                           value={draft.user.notes}
-                          placeholder="e.g. Prefers concise answers and fast iteration."
+                          placeholder="예: 간결한 답변과 빠른 반복을 선호합니다."
                           disabled={isWorking}
                           onChange={(value) => {
                             updateDraft("user", { ...draft.user, notes: value });
@@ -493,9 +493,9 @@ export function AgentCreateWizardModal({
                       </div>
                       <div className="sm:col-span-2">
                         <WizardTextAreaField
-                          label="Context"
+                          label="맥락"
                           value={draft.user.context}
-                          placeholder="e.g. Building Claw3D, likes practical UI improvements, and wants direct feedback."
+                          placeholder="예: Claw3D를 만들고 있으며 실용적인 UI 개선과 직접적인 피드백을 선호합니다."
                           disabled={isWorking}
                           rows={7}
                           onChange={(value) => {

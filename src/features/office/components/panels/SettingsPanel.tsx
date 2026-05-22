@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { CURATED_ELEVENLABS_VOICES } from "@/lib/voiceReply/catalog";
 import type { StudioGatewayAdapterType } from "@/lib/studio/settings";
+import {
+  ADAPTER_LABELS,
+  formatAdapterLabel,
+  GATEWAY_STATUS_LABELS_KO,
+} from "@/features/office/i18n/koLabels";
 
 type SettingsPanelProps = {
   gatewayStatus?: string;
@@ -80,8 +85,8 @@ export function SettingsPanel({
   const normalizedGatewayUrl = gatewayUrl?.trim() ?? "";
   const normalizedGatewayToken = gatewayToken ?? "";
   const gatewayStateLabel = gatewayStatus
-    ? gatewayStatus.charAt(0).toUpperCase() + gatewayStatus.slice(1)
-    : "Unknown";
+    ? GATEWAY_STATUS_LABELS_KO[gatewayStatus as keyof typeof GATEWAY_STATUS_LABELS_KO] ?? gatewayStatus
+    : "알 수 없음";
   const isGatewayConnected = gatewayStatus === "connected";
   const gatewayDisconnectDisabled = !isGatewayConnected;
   const gatewayConnectDisabled = normalizedGatewayUrl.length === 0;
@@ -98,13 +103,13 @@ export function SettingsPanel({
       <div className="rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[11px] font-medium text-white">Studio title</div>
+            <div className="text-[11px] font-medium text-white">Studio 제목</div>
             <div className="mt-1 text-[10px] text-white/75">
-              Customize the banner shown at the top of the office.
+              오피스 상단에 표시되는 배너를 바꿉니다.
             </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
-            {officeTitleLoaded ? "Ready" : "Loading"}
+            {officeTitleLoaded ? "준비됨" : "불러오는 중"}
           </span>
         </div>
         <input
@@ -113,19 +118,19 @@ export function SettingsPanel({
           maxLength={48}
           disabled={!officeTitleLoaded}
           onChange={(event) => onOfficeTitleChange(event.target.value)}
-          placeholder="Luke Headquarters"
+          placeholder="Luke 본부"
           className="mt-3 w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] uppercase tracking-[0.18em] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30 disabled:cursor-not-allowed disabled:opacity-50"
         />
         <div className="mt-2 text-[10px] text-white/50">
-          Used in the office scene header.
+          오피스 장면 헤더에 사용됩니다.
         </div>
       </div>
       <div className="mt-3 rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[11px] font-medium text-white">Gateway</div>
+            <div className="text-[11px] font-medium text-white">게이트웨이</div>
             <div className="mt-1 text-[10px] text-white/75">
-              Switch the active backend and update its saved endpoint details.
+              활성 백엔드를 바꾸고 저장된 엔드포인트 정보를 수정합니다.
             </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
@@ -135,12 +140,12 @@ export function SettingsPanel({
         <div className="mt-3 flex flex-wrap gap-2">
           {(
             [
-              ["demo", "Demo"],
-              ["hermes", "Hermes"],
-              ["local", "Local"],
-              ["claw3d", "Claw3D"],
-              ["custom", "Custom"],
-              ["openclaw", "OpenClaw"],
+              ["demo", ADAPTER_LABELS.demo],
+              ["hermes", ADAPTER_LABELS.hermes],
+              ["local", ADAPTER_LABELS.local],
+              ["claw3d", ADAPTER_LABELS.claw3d],
+              ["custom", ADAPTER_LABELS.custom],
+              ["openclaw", ADAPTER_LABELS.openclaw],
             ] as const
           ).map(([adapterType, label]) => {
             const selected = selectedAdapterType === adapterType;
@@ -163,7 +168,7 @@ export function SettingsPanel({
         <div className="mt-3 grid gap-3">
           <div>
             <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-              Upstream URL
+              업스트림 URL
             </div>
             <input
               type="text"
@@ -182,29 +187,29 @@ export function SettingsPanel({
           </div>
           <div>
             <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-              {tokenOptional ? "Upstream token (optional)" : "Upstream token"}
+              {tokenOptional ? "업스트림 토큰(선택)" : "업스트림 토큰"}
             </div>
             <input
               type="password"
               value={normalizedGatewayToken}
               onChange={(event) => onGatewayTokenChange?.(event.target.value)}
-              placeholder={tokenOptional ? "optional token" : "gateway token"}
+              placeholder={tokenOptional ? "선택 토큰" : "게이트웨이 토큰"}
               className="w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
             />
           </div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-white/60">
           <span className="font-mono">
-            Selected backend: {selectedAdapterType}
+            선택 백엔드: {formatAdapterLabel(selectedAdapterType)}
           </span>
           <span className="font-mono">
-            Active backend: {activeAdapterType}
+            활성 백엔드: {formatAdapterLabel(activeAdapterType)}
           </span>
-          <span>Each backend keeps its own saved URL and token.</span>
+          <span>각 백엔드는 저장된 URL과 토큰을 따로 보관합니다.</span>
         </div>
         <div className="mt-3 flex items-center justify-between gap-3">
           <div className="text-[10px] text-white/60">
-            Connect to apply the selected backend, or disconnect to return to the connection screen.
+            선택한 백엔드를 적용하려면 연결하고, 연결 화면으로 돌아가려면 연결을 끊으세요.
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -213,7 +218,7 @@ export function SettingsPanel({
               disabled={gatewayConnectDisabled}
               className="rounded-md border border-cyan-500/20 bg-cyan-500/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-cyan-50 transition-colors hover:border-cyan-400/40 hover:bg-cyan-500/15 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {gatewayStatus === "connecting" ? "Connecting..." : "Connect"}
+              {gatewayStatus === "connecting" ? "연결 중..." : "연결"}
             </button>
             <button
               type="button"
@@ -221,7 +226,7 @@ export function SettingsPanel({
               disabled={gatewayDisconnectDisabled}
               className="rounded-md border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-rose-100 transition-colors hover:border-rose-400/40 hover:bg-rose-500/15 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Disconnect gateway
+              게이트웨이 연결 끊기
             </button>
           </div>
         </div>
@@ -229,13 +234,13 @@ export function SettingsPanel({
       <div className="mt-3 rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[11px] font-medium text-white">Remote office</div>
+            <div className="text-[11px] font-medium text-white">원격 오피스</div>
             <div className="mt-1 text-[10px] text-white/75">
-              Attach a second read-only office from either another Claw3D or a remote OpenClaw gateway.
+              다른 Claw3D 또는 원격 OpenClaw 게이트웨이의 읽기 전용 오피스를 붙입니다.
             </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
-            {remoteOfficeEnabled ? "Enabled" : "Disabled"}
+            {remoteOfficeEnabled ? "사용 중" : "꺼짐"}
           </span>
         </div>
         <div className="ui-settings-row mt-3 flex min-h-[72px] items-center justify-between gap-6 rounded-lg border border-cyan-500/10 bg-black/15 px-4 py-3">
@@ -243,7 +248,7 @@ export function SettingsPanel({
             <button
               type="button"
               role="switch"
-              aria-label="Remote office"
+              aria-label="원격 오피스"
               aria-checked={remoteOfficeEnabled}
               className={`ui-switch self-center ${remoteOfficeEnabled ? "ui-switch--on" : ""}`}
               onClick={() => onRemoteOfficeEnabledChange(!remoteOfficeEnabled)}
@@ -251,20 +256,20 @@ export function SettingsPanel({
               <span className="ui-switch-thumb" />
             </button>
             <div className="flex flex-col">
-              <span className="text-[11px] font-medium text-white">Show second office</span>
+              <span className="text-[11px] font-medium text-white">두 번째 오피스 표시</span>
               <span className="text-[10px] text-white/80">
-                Remote agents stay visible but non-interactive.
+                원격 에이전트는 보이지만 직접 조작하지는 않습니다.
               </span>
             </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
-            {remoteOfficeTokenConfigured ? "Token set" : "No token"}
+            {remoteOfficeTokenConfigured ? "토큰 설정됨" : "토큰 없음"}
           </span>
         </div>
         <div className="mt-3 grid gap-3">
           <div>
             <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-              Source type
+              소스 유형
             </div>
             <select
               value={remoteOfficeSourceKind}
@@ -275,23 +280,23 @@ export function SettingsPanel({
               }
               className="w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors focus:border-cyan-400/30"
             >
-              <option value="presence_endpoint">Remote Claw3D presence endpoint</option>
-              <option value="openclaw_gateway">Remote OpenClaw gateway</option>
+              <option value="presence_endpoint">원격 Claw3D 프레즌스 엔드포인트</option>
+              <option value="openclaw_gateway">원격 OpenClaw 게이트웨이</option>
             </select>
             <div className="mt-1 text-[10px] text-white/50">
-              Use a presence endpoint when the other machine runs Claw3D. Use gateway mode when the other machine only runs OpenClaw.
+              다른 컴퓨터에서 Claw3D가 실행 중이면 프레즌스 엔드포인트를 쓰고, OpenClaw만 실행 중이면 게이트웨이 모드를 쓰세요.
             </div>
           </div>
           <div>
             <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-              Label
+              라벨
             </div>
             <input
               type="text"
               value={remoteOfficeLabel}
               maxLength={48}
               onChange={(event) => onRemoteOfficeLabelChange(event.target.value)}
-              placeholder="Remote Office"
+              placeholder="원격 오피스"
               className="w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] uppercase tracking-[0.14em] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
             />
           </div>
@@ -299,7 +304,7 @@ export function SettingsPanel({
             <>
               <div>
                 <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-                  Presence URL
+                  프레즌스 URL
                 </div>
                 <input
                   type="url"
@@ -309,19 +314,19 @@ export function SettingsPanel({
                   className="w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
                 />
                 <div className="mt-1 text-[10px] text-white/50">
-                  Studio polls this endpoint server-side when the other machine is also running Claw3D.
+                  다른 컴퓨터도 Claw3D를 실행 중일 때 Studio가 서버 측에서 이 엔드포인트를 폴링합니다.
                 </div>
               </div>
               <div>
                 <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-                  Optional token
+                  선택 토큰
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="password"
                     value={remoteOfficeTokenDraft}
                     onChange={(event) => setRemoteOfficeTokenDraft(event.target.value)}
-                    placeholder={remoteOfficeTokenConfigured ? "Token configured. Enter a new one to replace it." : "Enter token"}
+                    placeholder={remoteOfficeTokenConfigured ? "토큰이 설정되어 있습니다. 교체하려면 새 토큰을 입력하세요." : "토큰 입력"}
                     className="min-w-0 flex-1 rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
                   />
                   <button
@@ -332,7 +337,7 @@ export function SettingsPanel({
                     }}
                     className="rounded-md border border-cyan-500/20 bg-cyan-500/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.14em] text-cyan-100 transition-colors hover:border-cyan-400/40 hover:bg-cyan-500/15"
                   >
-                    Save
+                    저장
                   </button>
                   {remoteOfficeTokenConfigured ? (
                     <button
@@ -343,7 +348,7 @@ export function SettingsPanel({
                       }}
                       className="rounded-md border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.14em] text-rose-100 transition-colors hover:border-rose-400/40 hover:bg-rose-500/15"
                     >
-                      Clear
+                      지우기
                     </button>
                   ) : null}
                 </div>
@@ -353,7 +358,7 @@ export function SettingsPanel({
             <>
               <div>
                 <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-                  Gateway URL
+                  게이트웨이 URL
                 </div>
                 <input
                   type="text"
@@ -363,19 +368,19 @@ export function SettingsPanel({
                   className="w-full rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
                 />
                 <div className="mt-1 text-[10px] text-white/50">
-                  Claw3D connects from the browser directly to the remote OpenClaw gateway and derives a read-only presence snapshot.
+                  Claw3D가 브라우저에서 원격 OpenClaw 게이트웨이에 직접 연결하고 읽기 전용 프레즌스 스냅샷을 만듭니다.
                 </div>
               </div>
               <div>
                 <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-cyan-100/65">
-                  Shared gateway token
+                  공유 게이트웨이 토큰
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="password"
                     value={remoteOfficeTokenDraft}
                     onChange={(event) => setRemoteOfficeTokenDraft(event.target.value)}
-                    placeholder={remoteOfficeTokenConfigured ? "Token configured. Enter a new one to replace it." : "Enter token"}
+                    placeholder={remoteOfficeTokenConfigured ? "토큰이 설정되어 있습니다. 교체하려면 새 토큰을 입력하세요." : "토큰 입력"}
                     className="min-w-0 flex-1 rounded-md border border-cyan-500/10 bg-black/25 px-3 py-2 text-[11px] text-cyan-100 outline-none transition-colors placeholder:text-cyan-100/30 focus:border-cyan-400/30"
                   />
                   <button
@@ -386,7 +391,7 @@ export function SettingsPanel({
                     }}
                     className="rounded-md border border-cyan-500/20 bg-cyan-500/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.14em] text-cyan-100 transition-colors hover:border-cyan-400/40 hover:bg-cyan-500/15"
                   >
-                    Save
+                    저장
                   </button>
                   {remoteOfficeTokenConfigured ? (
                     <button
@@ -397,12 +402,12 @@ export function SettingsPanel({
                       }}
                       className="rounded-md border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.14em] text-rose-100 transition-colors hover:border-rose-400/40 hover:bg-rose-500/15"
                     >
-                      Clear
+                      지우기
                     </button>
                   ) : null}
                 </div>
                 <div className="mt-1 text-[10px] text-white/50">
-                  Optional. Browser-based remote presence and messaging can work without it when the remote gateway already allows your Control UI origin.
+                  선택 사항입니다. 원격 게이트웨이가 현재 Control UI 출처를 이미 허용하면 브라우저 기반 원격 프레즌스와 메시징은 토큰 없이도 동작할 수 있습니다.
                 </div>
               </div>
             </>
@@ -412,9 +417,9 @@ export function SettingsPanel({
       <div className="mt-3 rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[11px] font-medium text-white">Onboarding</div>
+            <div className="text-[11px] font-medium text-white">온보딩</div>
             <div className="mt-1 text-[10px] text-white/75">
-              Re-open the onboarding wizard to test the new-user flow.
+              신규 사용자 흐름을 다시 확인할 수 있도록 온보딩 마법사를 엽니다.
             </div>
           </div>
           <button
@@ -422,7 +427,7 @@ export function SettingsPanel({
             onClick={() => onOpenOnboarding?.()}
             className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-emerald-100 transition-colors hover:border-emerald-400/40 hover:bg-emerald-500/15"
           >
-            Launch wizard
+            마법사 열기
           </button>
         </div>
       </div>
@@ -431,7 +436,7 @@ export function SettingsPanel({
           <button
             type="button"
             role="switch"
-            aria-label="Voice replies"
+            aria-label="음성 답변"
             aria-checked={voiceRepliesEnabled}
             className={`ui-switch self-center ${voiceRepliesEnabled ? "ui-switch--on" : ""}`}
             onClick={() => onVoiceRepliesToggle(!voiceRepliesEnabled)}
@@ -440,20 +445,20 @@ export function SettingsPanel({
             <span className="ui-switch-thumb" />
           </button>
           <div className="flex flex-col">
-            <span className="text-[11px] font-medium text-white">Voice replies</span>
+            <span className="text-[11px] font-medium text-white">음성 답변</span>
             <span className="text-[10px] text-white/80">
-              Play finalized assistant replies with a natural voice.
+              완료된 어시스턴트 답변을 자연스러운 음성으로 재생합니다.
             </span>
           </div>
         </div>
         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
-          {voiceRepliesLoaded ? (voiceRepliesEnabled ? "On" : "Off") : "Loading"}
+          {voiceRepliesLoaded ? (voiceRepliesEnabled ? "켜짐" : "꺼짐") : "불러오는 중"}
         </span>
       </div>
       <div className="mt-3 rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
-        <div className="text-[11px] font-medium text-white">Voice</div>
+        <div className="text-[11px] font-medium text-white">음성</div>
         <div className="mt-1 text-[10px] text-white/75">
-          Choose the voice used for spoken agent replies.
+          에이전트 답변을 읽을 때 사용할 음성을 고릅니다.
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {CURATED_ELEVENLABS_VOICES.map((voice) => {
@@ -483,9 +488,9 @@ export function SettingsPanel({
       <div className="mt-3 rounded-lg border border-cyan-500/10 bg-black/20 px-4 py-3">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="text-[11px] font-medium text-white">Speed</div>
+            <div className="text-[11px] font-medium text-white">속도</div>
             <div className="mt-1 text-[10px] text-white/75">
-              Adjust how fast the selected voice speaks.
+              선택한 음성이 말하는 속도를 조절합니다.
             </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan-200/70">
@@ -505,8 +510,8 @@ export function SettingsPanel({
           className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-cyan-500/15 accent-cyan-400"
         />
         <div className="mt-1 flex items-center justify-between text-[10px] text-white/45">
-          <span>Slower</span>
-          <span>Faster</span>
+          <span>느리게</span>
+          <span>빠르게</span>
         </div>
       </div>
     </div>

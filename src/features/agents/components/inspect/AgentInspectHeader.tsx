@@ -50,7 +50,7 @@ export const AgentInspectHeader = ({
         className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground/55 transition hover:bg-surface-2 hover:text-muted-foreground/85"
         type="button"
         data-testid={closeTestId}
-        aria-label="Close panel"
+        aria-label="패널 닫기"
         disabled={closeDisabled}
         onClick={onClose}
       >

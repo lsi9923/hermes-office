@@ -2,6 +2,11 @@ import type { GatewayStatus } from "@/lib/gateway/GatewayClient";
 import type { StudioGatewayAdapterType } from "@/lib/studio/settings";
 import { X } from "lucide-react";
 import { resolveGatewayStatusBadgeClass, resolveGatewayStatusLabel } from "./colorSemantics";
+import {
+  ADAPTER_BUTTON_LABELS,
+  ADAPTER_HINTS,
+  formatAdapterLabel,
+} from "@/features/office/i18n/koLabels";
 
 type ConnectionPanelProps = {
   gatewayUrl: string;
@@ -62,18 +67,7 @@ export const ConnectionPanel = ({
   const applyOpenClawPreset = () => {
     onAdapterTypeChange("openclaw");
   };
-  const selectedAdapterHint =
-    selectedAdapterType === "openclaw"
-      ? "OpenClaw owns provider/model routing behind the gateway."
-      : selectedAdapterType === "hermes"
-        ? "Hermes owns provider/account routing behind the gateway."
-        : selectedAdapterType === "demo"
-          ? "Demo can seed a local main agent or connect to the mock gateway."
-          : selectedAdapterType === "claw3d"
-            ? "Claw3D runtime keeps Claw3D transcript semantics over direct HTTP."
-            : selectedAdapterType === "local"
-              ? "Local runtime expects a direct orchestrator boundary."
-              : "Custom is a generic runtime endpoint, not a provider-native adapter.";
+  const selectedAdapterHint = ADAPTER_HINTS[selectedAdapterType];
 
   return (
     <div className="fade-up-delay flex flex-col gap-3">
@@ -91,7 +85,7 @@ export const ConnectionPanel = ({
             onClick={isConnected ? onDisconnect : onConnect}
             disabled={isConnecting || !gatewayUrl.trim()}
           >
-            {isConnected ? "Disconnect" : "Connect"}
+            {isConnected ? "연결 끊기" : "연결"}
           </button>
         </div>
         {onClose ? (
@@ -100,16 +94,16 @@ export const ConnectionPanel = ({
             type="button"
             onClick={onClose}
             data-testid="gateway-connection-close"
-            aria-label="Close gateway connection panel"
+            aria-label="게이트웨이 연결 패널 닫기"
           >
             <X className="h-3.5 w-3.5" />
-            Close
+            닫기
           </button>
         ) : null}
       </div>
       <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr]">
         <label className="flex flex-col gap-1 font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground">
-          Upstream URL
+          업스트림 URL
           <input
             className="ui-input h-10 rounded-md px-4 font-sans text-sm text-foreground outline-none"
             type="text"
@@ -120,21 +114,21 @@ export const ConnectionPanel = ({
           />
         </label>
         <label className="flex flex-col gap-1 font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground">
-          {tokenOptional ? "Upstream token (optional)" : "Upstream token"}
+          {tokenOptional ? "업스트림 토큰(선택)" : "업스트림 토큰"}
           <input
             className="ui-input h-10 rounded-md px-4 font-sans text-sm text-foreground outline-none"
             type="password"
             value={token}
             onChange={(event) => onTokenChange(event.target.value)}
-            placeholder={tokenOptional ? "optional token" : "gateway token"}
+            placeholder={tokenOptional ? "선택 토큰" : "게이트웨이 토큰"}
             spellCheck={false}
           />
         </label>
       </div>
       <div className="flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
-        <span className="font-mono">Selected backend: {selectedAdapterType}</span>
-        <span className="font-mono">Active backend: {activeAdapterType}</span>
-        <span>Each backend keeps its own saved URL and token.</span>
+        <span className="font-mono">선택 백엔드: {formatAdapterLabel(selectedAdapterType)}</span>
+        <span className="font-mono">활성 백엔드: {formatAdapterLabel(activeAdapterType)}</span>
+        <span>각 백엔드는 저장된 URL과 토큰을 따로 보관합니다.</span>
       </div>
       <div className="text-[11px] leading-snug text-muted-foreground">
         {selectedAdapterHint}
@@ -145,42 +139,42 @@ export const ConnectionPanel = ({
           type="button"
           onClick={applyDemoPreset}
         >
-          Demo backend
+          {ADAPTER_BUTTON_LABELS.demo}
         </button>
         <button
           className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
           type="button"
           onClick={applyHermesPreset}
         >
-          Hermes backend
+          {ADAPTER_BUTTON_LABELS.hermes}
         </button>
         <button
           className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
           type="button"
           onClick={applyLocalPreset}
         >
-          Local runtime
+          {ADAPTER_BUTTON_LABELS.local}
         </button>
         <button
           className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
           type="button"
           onClick={applyClaw3dPreset}
         >
-          Claw3D runtime
+          {ADAPTER_BUTTON_LABELS.claw3d}
         </button>
         <button
           className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
           type="button"
           onClick={applyCustomPreset}
         >
-          Custom backend
+          {ADAPTER_BUTTON_LABELS.custom}
         </button>
         <button
           className="ui-btn-secondary px-3 py-1.5 text-[11px] font-semibold tracking-[0.05em]"
           type="button"
           onClick={applyOpenClawPreset}
         >
-          OpenClaw backend
+          {ADAPTER_BUTTON_LABELS.openclaw}
         </button>
       </div>
       {error ? (

@@ -264,7 +264,7 @@ export const planRuntimeChatEvent = (
       });
       commands.push({
         kind: "logWarn",
-        message: "No thinking trace extracted from chat event.",
+        message: "채팅 이벤트에서 추론 흔적을 추출하지 못했습니다.",
         meta: {
           sessionKey: payload.sessionKey,
           message: summarizeThinkingMessage(payload.message ?? payload),
@@ -357,7 +357,7 @@ export const planRuntimeChatEvent = (
   if (payload.state === "error") {
     commands.push({
       kind: "appendOutput",
-      line: payload.errorMessage ? `Error: ${payload.errorMessage}` : "Run error.",
+      line: payload.errorMessage ? `오류: ${payload.errorMessage}` : "실행 오류.",
       transcript: {
         source: "runtime-chat",
         runId: payload.runId ?? null,

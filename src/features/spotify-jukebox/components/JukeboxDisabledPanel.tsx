@@ -17,10 +17,10 @@ export function JukeboxDisabledPanel({ onClose, onInstall }: JukeboxDisabledPane
         <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">
           Soundclaw
         </div>
-        <h2 className="mt-1 text-xl font-semibold text-white">Jukebox Not Installed</h2>
+        <h2 className="mt-1 text-xl font-semibold text-white">주크박스가 설치되지 않았습니다</h2>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
-          Install the <span className="text-cyan-400">SOUNDCLAW</span> skill to let your agents
-          pick and play music right from the office jukebox.
+          <span className="text-cyan-400">SOUNDCLAW</span> 스킬을 설치하면 에이전트가
+          오피스 주크박스에서 바로 음악을 고르고 재생할 수 있습니다.
         </p>
 
         <div className="mt-6 flex flex-col gap-3">
@@ -29,14 +29,14 @@ export function JukeboxDisabledPanel({ onClose, onInstall }: JukeboxDisabledPane
             className="rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-medium text-slate-950 transition hover:bg-cyan-400 active:scale-95"
             onClick={onInstall}
           >
-            Install SOUNDCLAW skill
+            SOUNDCLAW 스킬 설치
           </button>
           <button
             type="button"
             className="rounded-xl border border-slate-700/40 px-5 py-2.5 text-sm text-slate-400 transition hover:bg-slate-800/50"
             onClick={onClose}
           >
-            Dismiss
+            닫기
           </button>
         </div>
       </div>

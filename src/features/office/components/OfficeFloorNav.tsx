@@ -12,6 +12,7 @@ import {
   type FloorProvider,
 } from "@/lib/office/floors";
 import type { FloorRosterState } from "@/lib/office/floorRoster";
+import { FLOOR_PROVIDER_LABELS, formatRosterStatus } from "@/features/office/i18n/koLabels";
 
 const DIRECTORY_COLLAPSED_STORAGE_KEY = "claw3d.officeFloorNav.directoryCollapsed";
 
@@ -21,16 +22,6 @@ type OfficeFloorNavProps = {
   onSelectFloor: (floorId: FloorId) => void;
   /** The currently selected adapter — controls which runtime floors are shown */
   activeAdapterType?: FloorProvider | null;
-};
-
-const PROVIDER_LABEL: Record<FloorProvider, string> = {
-  demo: "Demo",
-  openclaw: "OpenClaw",
-  hermes: "Hermes",
-  paperclip: "Paperclip",
-  custom: "Custom",
-  local: "Local",
-  claw3d: "Claw3D",
 };
 
 const renderFloorButton = (params: {
@@ -59,12 +50,12 @@ const renderFloorButton = (params: {
         floor.enabled ? "cursor-pointer" : "cursor-not-allowed opacity-45",
       ].join(" ")}
       aria-pressed={active}
-      aria-label={`Select ${floor.label}`}
+      aria-label={`${floor.label} 선택`}
     >
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
-            {floor.zone === "outside" ? "Destination" : "Floor"}
+            {floor.zone === "outside" ? "목적지" : "층"}
           </div>
           <div className="truncate text-sm font-semibold text-white">{floor.label}</div>
         </div>
@@ -76,17 +67,17 @@ const renderFloorButton = (params: {
               : "border-white/10 bg-white/5 text-white/55",
           ].join(" ")}
         >
-          {PROVIDER_LABEL[floor.provider]}
+          {FLOOR_PROVIDER_LABELS[floor.provider]}
         </span>
       </div>
       <div className="mt-2 flex items-center justify-between gap-2 font-mono text-[10px] text-white/45">
         <span>{floor.shortLabel}</span>
         {floor.enabled ? (
           <span>
-            roster {rosterCount} | {rosterStatus}
+            명단 {rosterCount} | {formatRosterStatus(rosterStatus)}
           </span>
         ) : (
-          <span>Locked</span>
+          <span>잠김</span>
         )}
       </div>
     </button>
@@ -147,10 +138,10 @@ export function OfficeFloorNav({
           aria-expanded={!directoryCollapsed}
           aria-controls="office-floor-directory-body"
           aria-label={
-            directoryCollapsed ? "Expand building directory" : "Collapse building directory"
+            directoryCollapsed ? "건물 목록 펼치기" : "건물 목록 접기"
           }
         >
-          <span>Building Directory</span>
+          <span>건물 목록</span>
           {directoryCollapsed ? (
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
           ) : (
@@ -164,22 +155,22 @@ export function OfficeFloorNav({
                 type="button"
                 className="rounded border border-amber-500/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-amber-100/80 transition-colors hover:border-amber-400/45 hover:text-amber-50"
                 onClick={() => onSelectFloor(getAdjacentEnabledOfficeFloorId(activeFloor.id, -1))}
-                aria-label="Switch to previous enabled floor"
+                aria-label="이전 사용 가능 층으로 이동"
               >
-                Prev
+                이전
               </button>
               <button
                 type="button"
                 className="rounded border border-amber-500/20 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-amber-100/80 transition-colors hover:border-amber-400/45 hover:text-amber-50"
                 onClick={() => onSelectFloor(getAdjacentEnabledOfficeFloorId(activeFloor.id, 1))}
-                aria-label="Switch to next enabled floor"
+                aria-label="다음 사용 가능 층으로 이동"
               >
-                Next
+                다음
               </button>
             </div>
             <div className="mt-3 flex flex-col gap-2">
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                Building
+                건물
               </div>
               {buildingFloors.map((floor) =>
                 renderFloorButton({
@@ -193,7 +184,7 @@ export function OfficeFloorNav({
             {outsideFloors.length > 0 ? (
               <div className="mt-4 flex flex-col gap-2">
                 <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  Outside
+                  외부
                 </div>
                 {outsideFloors.map((floor) =>
                   renderFloorButton({
@@ -211,13 +202,13 @@ export function OfficeFloorNav({
 
       <section className="pointer-events-auto rounded-2xl border border-white/10 bg-black/68 px-3 py-2 shadow-xl backdrop-blur">
         <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-          Current Floor
+          현재 층
         </div>
         <div className="mt-1 text-sm font-semibold text-white">{activeFloor.label}</div>
         <div className="mt-1 flex items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-          <span>{PROVIDER_LABEL[activeFloor.provider]}</span>
+          <span>{FLOOR_PROVIDER_LABELS[activeFloor.provider]}</span>
           <span>
-            roster {activeRoster?.entries.length ?? 0} | {activeRoster?.status ?? "idle"}
+            명단 {activeRoster?.entries.length ?? 0} | {formatRosterStatus(activeRoster?.status ?? "idle")}
           </span>
         </div>
       </section>

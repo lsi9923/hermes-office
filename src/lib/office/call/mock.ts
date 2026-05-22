@@ -70,7 +70,7 @@ export const buildMockPhoneCallScenario = (params: {
     promptText: null,
     spokenText: buildSpokenText(message),
     recipientReply: buildRecipientReply(message),
-    statusLine: `Connected to ${calleeLabel}.`,
+    statusLine: `${calleeLabel}에 연결되었습니다.`,
     voiceAvailable: params.voiceAvailable,
   };
 };

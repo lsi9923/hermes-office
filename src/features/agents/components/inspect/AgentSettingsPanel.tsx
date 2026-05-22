@@ -73,14 +73,14 @@ export type AgentSettingsPanelProps = {
 
 const formatCronStateLine = (job: CronJobSummary): string | null => {
   if (typeof job.state.runningAtMs === "number" && Number.isFinite(job.state.runningAtMs)) {
-    return "Running now";
+    return "지금 실행 중";
   }
   if (typeof job.state.nextRunAtMs === "number" && Number.isFinite(job.state.nextRunAtMs)) {
-    return `Next: ${new Date(job.state.nextRunAtMs).toLocaleString()}`;
+    return `다음: ${new Date(job.state.nextRunAtMs).toLocaleString()}`;
   }
   if (typeof job.state.lastRunAtMs === "number" && Number.isFinite(job.state.lastRunAtMs)) {
     const status = job.state.lastStatus ? `${job.state.lastStatus} ` : "";
-    return `Last: ${status}${new Date(job.state.lastRunAtMs).toLocaleString()}`.trim();
+    return `마지막: ${status}${new Date(job.state.lastRunAtMs).toLocaleString()}`.trim();
   }
   return null;
 };
@@ -106,41 +106,41 @@ type CronTemplateOption = {
 const CRON_TEMPLATE_OPTIONS: CronTemplateOption[] = [
   {
     id: "morning-brief",
-    title: "Morning Brief",
-    description: "Daily status summary with overnight updates.",
+    title: "아침 브리핑",
+    description: "밤사이 업데이트를 포함한 일일 상태 요약입니다.",
     icon: Sun,
   },
   {
     id: "reminder",
-    title: "Reminder",
-    description: "A timed nudge for a specific event or task.",
+    title: "리마인더",
+    description: "특정 이벤트나 작업을 위한 시간 지정 알림입니다.",
     icon: Bell,
   },
   {
     id: "weekly-review",
-    title: "Weekly Review",
-    description: "Recurring synthesis across a longer time window.",
+    title: "주간 리뷰",
+    description: "긴 기간을 주기적으로 종합합니다.",
     icon: CalendarDays,
   },
   {
     id: "inbox-triage",
-    title: "Inbox Triage",
-    description: "Regular sorting and summarizing of incoming updates.",
+    title: "인박스 분류",
+    description: "들어오는 업데이트를 주기적으로 정리하고 요약합니다.",
     icon: ListChecks,
   },
   {
     id: "custom",
-    title: "Custom",
-    description: "Start from a blank flow and choose each setting.",
+    title: "사용자 지정",
+    description: "빈 흐름에서 시작해 각 설정을 직접 고릅니다.",
     icon: ListChecks,
   },
 ];
 
 const TIMED_AUTOMATION_STEP_META: Array<{ title: string; indicator: string }> = [
-  { title: "Choose type", indicator: "Type" },
-  { title: "Define function", indicator: "Function" },
-  { title: "Set timing", indicator: "Timing" },
-  { title: "Review and create", indicator: "Review" },
+  { title: "유형 선택", indicator: "유형" },
+  { title: "기능 정의", indicator: "기능" },
+  { title: "시간 설정", indicator: "시간" },
+  { title: "검토 후 생성", indicator: "검토" },
 ];
 
 const resolveLocalTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -179,8 +179,8 @@ const applyTemplateDefaults = (templateId: CronCreateTemplateId, current: CronCr
     return {
       ...base,
       templateId,
-      name: "Morning brief",
-      taskText: "Summarize overnight updates and priorities.",
+      name: "아침 브리핑",
+      taskText: "밤사이 업데이트와 우선순위를 요약하세요.",
       scheduleKind: "every",
       everyAmount: 1,
       everyUnit: "days",
@@ -191,8 +191,8 @@ const applyTemplateDefaults = (templateId: CronCreateTemplateId, current: CronCr
     return {
       ...base,
       templateId,
-      name: "Reminder",
-      taskText: "Reminder: follow up on today's priority task.",
+      name: "리마인더",
+      taskText: "리마인더: 오늘의 우선순위 작업을 후속 확인하세요.",
       scheduleKind: "at",
       scheduleAt: "",
     };
@@ -201,8 +201,8 @@ const applyTemplateDefaults = (templateId: CronCreateTemplateId, current: CronCr
     return {
       ...base,
       templateId,
-      name: "Weekly review",
-      taskText: "Summarize wins, blockers, and next-week priorities.",
+      name: "주간 리뷰",
+      taskText: "성과, 막힌 항목, 다음 주 우선순위를 요약하세요.",
       scheduleKind: "every",
       everyAmount: 7,
       everyUnit: "days",
@@ -213,8 +213,8 @@ const applyTemplateDefaults = (templateId: CronCreateTemplateId, current: CronCr
     return {
       ...base,
       templateId,
-      name: "Inbox triage",
-      taskText: "Triage unread updates and surface the top actions.",
+      name: "인박스 분류",
+      taskText: "읽지 않은 업데이트를 분류하고 가장 중요한 행동을 뽑아주세요.",
       scheduleKind: "every",
       everyAmount: 30,
       everyUnit: "minutes",
@@ -323,7 +323,7 @@ export const AgentSettingsPanel = ({
         await onUpdateAgentPermissions(draft);
         setPermissionsSaveState("saved");
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to save permissions.";
+        const message = err instanceof Error ? err.message : "권한을 저장하지 못했습니다.";
         setPermissionsSaveState("error");
         setPermissionsSaveError(message);
       } finally {
@@ -424,7 +424,7 @@ export const AgentSettingsPanel = ({
       await onCreateCronJob(payload);
       closeCronCreate();
     } catch (err) {
-      setCronCreateError(err instanceof Error ? err.message : "Failed to create automation.");
+      setCronCreateError(err instanceof Error ? err.message : "자동화를 만들지 못했습니다.");
     }
   };
 
@@ -448,11 +448,11 @@ export const AgentSettingsPanel = ({
 
   const panelLabel =
     mode === "advanced"
-      ? "Advanced"
+      ? "고급"
       : mode === "skills"
-        ? "Skills"
+        ? "스킬"
         : mode === "system"
-          ? "System setup"
+          ? "시스템 설정"
           : "";
   const canOpenControlUi = typeof controlUiUrl === "string" && controlUiUrl.trim().length > 0;
   const timedAutomationStepMeta =
@@ -480,17 +480,17 @@ export const AgentSettingsPanel = ({
             <div className="mt-2 flex flex-col gap-8">
               <div className="px-1 py-1">
                 <div className="sidebar-copy flex flex-col gap-1 text-[11px] text-muted-foreground">
-                  <span className="font-medium text-foreground/88">Run commands</span>
+                  <span className="font-medium text-foreground/88">명령 실행</span>
                   <div
                     className="ui-segment ui-segment-command-mode mt-2 grid-cols-3"
                     role="group"
-                    aria-label="Run commands"
+                    aria-label="명령 실행"
                   >
                     {(
                       [
-                        { id: "off", label: "Off" },
-                        { id: "ask", label: "Ask" },
-                        { id: "auto", label: "Auto" },
+                        { id: "off", label: "끔" },
+                        { id: "ask", label: "묻기" },
+                        { id: "auto", label: "자동" },
                       ] as const
                     ).map((option) => {
                       const selected = permissionsDraftValue.commandMode === option.id;
@@ -498,7 +498,7 @@ export const AgentSettingsPanel = ({
                         <button
                           key={option.id}
                           type="button"
-                          aria-label={`Run commands ${option.label.toLowerCase()}`}
+                          aria-label={`명령 실행 ${option.label}`}
                           aria-pressed={selected}
                           className="ui-segment-item px-3 py-2.5 text-center font-mono text-[11px] font-semibold tracking-[0.04em]"
                           data-active={selected ? "true" : "false"}
@@ -521,7 +521,7 @@ export const AgentSettingsPanel = ({
                   <button
                     type="button"
                     role="switch"
-                    aria-label="Web access"
+                    aria-label="웹 접근"
                     aria-checked={permissionsDraftValue.webAccess}
                     className={`ui-switch self-center ${permissionsDraftValue.webAccess ? "ui-switch--on" : ""}`}
                     onClick={() =>
@@ -534,9 +534,9 @@ export const AgentSettingsPanel = ({
                     <span className="ui-switch-thumb" />
                   </button>
                   <div className="sidebar-copy flex flex-col">
-                    <span className="text-[11px] font-medium text-foreground/88">Web access</span>
+                    <span className="text-[11px] font-medium text-foreground/88">웹 접근</span>
                     <span className="text-[10px] text-muted-foreground/70">
-                      Allows this agent to fetch live web results.
+                      이 에이전트가 실시간 웹 결과를 가져올 수 있게 합니다.
                     </span>
                   </div>
                 </div>
@@ -547,7 +547,7 @@ export const AgentSettingsPanel = ({
                   <button
                     type="button"
                     role="switch"
-                    aria-label="File tools"
+                    aria-label="파일 도구"
                     aria-checked={permissionsDraftValue.fileTools}
                     className={`ui-switch self-center ${permissionsDraftValue.fileTools ? "ui-switch--on" : ""}`}
                     onClick={() =>
@@ -560,9 +560,9 @@ export const AgentSettingsPanel = ({
                     <span className="ui-switch-thumb" />
                   </button>
                   <div className="sidebar-copy flex flex-col">
-                    <span className="text-[11px] font-medium text-foreground/88">File tools</span>
+                    <span className="text-[11px] font-medium text-foreground/88">파일 도구</span>
                     <span className="text-[10px] text-muted-foreground/70">
-                      Lets this agent read and edit files in its workspace.
+                      이 에이전트가 작업 공간의 파일을 읽고 편집할 수 있게 합니다.
                     </span>
                   </div>
                 </div>
@@ -573,7 +573,7 @@ export const AgentSettingsPanel = ({
                   <button
                     type="button"
                     role="switch"
-                    aria-label="Browser automation"
+                    aria-label="브라우저 자동화"
                     aria-checked="false"
                     className="ui-switch self-center"
                     disabled
@@ -581,19 +581,19 @@ export const AgentSettingsPanel = ({
                     <span className="ui-switch-thumb" />
                   </button>
                   <div className="sidebar-copy flex flex-col">
-                    <span className="text-[11px] font-medium text-foreground/88">Browser automation</span>
-                    <span className="text-[10px] text-muted-foreground/70">Coming soon</span>
+                    <span className="text-[11px] font-medium text-foreground/88">브라우저 자동화</span>
+                    <span className="text-[10px] text-muted-foreground/70">준비 중</span>
                   </div>
                 </div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground/55" aria-hidden="true" />
               </div>
             </div>
             <div className="sidebar-copy mt-3 text-[11px] text-muted-foreground">
-              {permissionsSaveState === "saving" ? "Saving..." : null}
-              {permissionsSaveState === "saved" ? "Saved." : null}
+              {permissionsSaveState === "saving" ? "저장 중..." : null}
+              {permissionsSaveState === "saved" ? "저장됨" : null}
               {permissionsSaveState === "error" && permissionsSaveError ? (
                 <span>
-                  Couldn&apos;t save. {permissionsSaveError}{" "}
+                  저장하지 못했습니다. {permissionsSaveError}{" "}
                   <button
                     type="button"
                     className="underline underline-offset-2"
@@ -601,14 +601,14 @@ export const AgentSettingsPanel = ({
                       void runPermissionsSave(permissionsDraftValue);
                     }}
                   >
-                    Retry
+                    다시 시도
                   </button>
                 </span>
               ) : null}
             </div>
             {permissionsSaveState === "error" && !permissionsSaveError ? (
               <div className="ui-alert-danger mt-3 rounded-md px-3 py-2 text-xs">
-                Couldn&apos;t save permissions.
+                권한을 저장하지 못했습니다.
               </div>
             ) : null}
           </section>
@@ -650,19 +650,19 @@ export const AgentSettingsPanel = ({
         {mode === "automations" ? (
           <section className="sidebar-section" data-testid="agent-settings-cron">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="sidebar-section-title">Timed automations</h3>
+              <h3 className="sidebar-section-title">시간 지정 자동화</h3>
               {!cronLoading && !cronError && cronJobs.length > 0 ? (
                 <button
                   className="sidebar-btn-ghost px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-[0.06em] disabled:cursor-not-allowed disabled:opacity-60"
                   type="button"
                   onClick={openCronCreate}
                 >
-                  Create
+                  만들기
                 </button>
               ) : null}
             </div>
             {cronLoading ? (
-              <div className="mt-3 text-[11px] text-muted-foreground">Loading timed automations...</div>
+              <div className="mt-3 text-[11px] text-muted-foreground">시간 지정 자동화를 불러오는 중...</div>
             ) : null}
             {!cronLoading && cronError ? (
               <div className="ui-alert-danger mt-3 rounded-md px-3 py-2 text-xs">
@@ -677,14 +677,14 @@ export const AgentSettingsPanel = ({
                   data-testid="cron-empty-icon"
                 />
                 <div className="sidebar-copy text-[11px] text-muted-foreground/82">
-                  No timed automations for this agent.
+                  이 에이전트에는 시간 지정 자동화가 없습니다.
                 </div>
                 <button
                   className="sidebar-btn-primary mt-2 w-auto min-w-[116px] self-center px-4 py-2 font-mono text-[10px] font-semibold tracking-[0.06em] disabled:cursor-not-allowed disabled:opacity-60"
                   type="button"
                   onClick={openCronCreate}
                 >
-                  Create
+                  만들기
                 </button>
               </div>
             ) : null}
@@ -713,13 +713,13 @@ export const AgentSettingsPanel = ({
                           </div>
                           {!job.enabled ? (
                             <div className="shrink-0 rounded-md bg-muted/50 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground shadow-2xs">
-                              Disabled
+                              비활성
                             </div>
                           ) : null}
                         </div>
                         <div className="mt-1 text-[11px] text-muted-foreground">
                           <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                            Frequency
+                            빈도
                           </span>
                           <div className="break-words">{scheduleText}</div>
                         </div>
@@ -732,7 +732,7 @@ export const AgentSettingsPanel = ({
                           <div className="mt-1 text-[11px] text-muted-foreground">
                             <div className="flex items-center justify-between gap-2">
                               <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                                Task
+                                작업
                               </span>
                               {payloadExpandable ? (
                                 <button
@@ -750,7 +750,7 @@ export const AgentSettingsPanel = ({
                                     });
                                   }}
                                 >
-                                  {expanded ? "Less" : "More"}
+                                  {expanded ? "접기" : "더 보기"}
                                 </button>
                               ) : null}
                             </div>
@@ -764,7 +764,7 @@ export const AgentSettingsPanel = ({
                         <button
                           className="ui-btn-icon h-7 w-7 disabled:cursor-not-allowed disabled:opacity-60"
                           type="button"
-                          aria-label={`Run timed automation ${job.name} now`}
+                          aria-label={`시간 지정 자동화 ${job.name} 지금 실행`}
                           onClick={() => {
                             void onRunCronJob(job.id);
                           }}
@@ -775,7 +775,7 @@ export const AgentSettingsPanel = ({
                         <button
                           className="ui-btn-icon ui-btn-icon-danger h-7 w-7 bg-transparent disabled:cursor-not-allowed disabled:opacity-60"
                           type="button"
-                          aria-label={`Delete timed automation ${job.name}`}
+                          aria-label={`시간 지정 자동화 ${job.name} 삭제`}
                           onClick={() => {
                             void onDeleteCronJob(job.id);
                           }}
@@ -791,9 +791,9 @@ export const AgentSettingsPanel = ({
             ) : null}
             {isOpenClawRuntime ? (
               <section className="sidebar-section" data-testid="agent-settings-heartbeat-coming-soon">
-                <h3 className="sidebar-section-title">Heartbeats</h3>
+                <h3 className="sidebar-section-title">하트비트</h3>
                 <div className="mt-3 text-[11px] text-muted-foreground">
-                  Heartbeat automation controls are coming soon.
+                  하트비트 자동화 제어는 곧 제공됩니다.
                 </div>
               </section>
             ) : null}
@@ -804,14 +804,14 @@ export const AgentSettingsPanel = ({
           <>
             {isOpenClawRuntime ? (
               <section className="sidebar-section mt-8" data-testid="agent-settings-control-ui">
-                <h3 className="sidebar-section-title ui-text-danger">Danger Zone</h3>
+                <h3 className="sidebar-section-title ui-text-danger">위험 구역</h3>
                 <div className="ui-alert-danger mt-3 rounded-md px-3 py-3 text-[11px]">
                   <div className="flex items-start gap-2">
                     <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                     <div className="space-y-1">
-                      <div className="font-medium">Advanced users only.</div>
-                      <div>Open the full OpenClaw Control UI outside Studio.</div>
-                      <div>Changes there can break agent behavior or put Studio out of sync.</div>
+                      <div className="font-medium">고급 사용자 전용입니다.</div>
+                      <div>Studio 밖에서 전체 OpenClaw Control UI를 엽니다.</div>
+                      <div>여기서 변경하면 에이전트 동작이 깨지거나 Studio와 상태가 어긋날 수 있습니다.</div>
                     </div>
                   </div>
                 </div>
@@ -822,7 +822,7 @@ export const AgentSettingsPanel = ({
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Open Full Control UI
+                    전체 Control UI 열기
                     <ExternalLink className="h-3 w-3" aria-hidden="true" />
                   </a>
                 ) : (
@@ -832,10 +832,10 @@ export const AgentSettingsPanel = ({
                       type="button"
                       disabled
                     >
-                      Open Full Control UI
+                      전체 Control UI 열기
                     </button>
                     <div className="mt-2 text-[10px] text-muted-foreground/70">
-                      Control UI link unavailable for this gateway.
+                      이 게이트웨이에서는 Control UI 링크를 사용할 수 없습니다.
                     </div>
                   </>
                 )}
@@ -845,21 +845,21 @@ export const AgentSettingsPanel = ({
             {canDelete ? (
               <section className="sidebar-section mt-8">
                 <div className="text-[11px] text-muted-foreground/68">
-                  Removes the agent from the gateway config and deletes its scheduled automations.
+                  게이트웨이 설정에서 에이전트를 제거하고 예약된 자동화를 삭제합니다.
                 </div>
                 <button
                   className="sidebar-btn-ghost ui-btn-danger mt-3 inline-flex px-3 py-2 font-mono text-[10px] font-semibold tracking-[0.06em]"
                   type="button"
                   onClick={onDelete}
                 >
-                  Delete agent
+                  에이전트 삭제
                 </button>
               </section>
             ) : (
               <section className="sidebar-section mt-8">
-                <h3 className="sidebar-section-title">System agent</h3>
+                <h3 className="sidebar-section-title">시스템 에이전트</h3>
                 <div className="mt-3 text-[11px] text-muted-foreground">
-                  The main agent is reserved and cannot be deleted.
+                  메인 에이전트는 예약되어 있어 삭제할 수 없습니다.
                 </div>
               </section>
             )}
@@ -872,7 +872,7 @@ export const AgentSettingsPanel = ({
           className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 p-4"
           role="dialog"
           aria-modal="true"
-          aria-label="Create automation"
+          aria-label="자동화 만들기"
           onClick={closeCronCreate}
         >
           <div
@@ -882,7 +882,7 @@ export const AgentSettingsPanel = ({
             <div className="flex items-start justify-between gap-3 px-6 py-5">
               <div className="min-w-0">
                 <div className="text-[11px] font-medium tracking-[0.01em] text-muted-foreground/80">
-                  Timed automation composer
+                  시간 지정 자동화 작성기
                 </div>
                 <div className="mt-1 text-base font-semibold text-foreground">
                   {timedAutomationStepMeta.title}
@@ -893,7 +893,7 @@ export const AgentSettingsPanel = ({
                 className="sidebar-btn-ghost px-3 font-mono text-[10px] font-semibold tracking-[0.06em]"
                 onClick={closeCronCreate}
               >
-                Close
+                닫기
               </button>
             </div>
             <div className="space-y-4 px-5 py-5">
@@ -905,7 +905,7 @@ export const AgentSettingsPanel = ({
               {cronCreateStep === 0 ? (
                 <div className="space-y-3">
                   <div className="text-sm text-muted-foreground">
-                    Pick a template to start quickly, or choose Custom.
+                    빠르게 시작할 템플릿을 고르거나 사용자 지정을 선택하세요.
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {CRON_TEMPLATE_OPTIONS.map((option) => {
@@ -939,14 +939,14 @@ export const AgentSettingsPanel = ({
               {cronCreateStep === 1 ? (
                 <div className="space-y-3">
                   <div className="text-sm text-muted-foreground">
-                    Name this automation and describe what it should do.
+                    자동화 이름을 정하고 수행할 작업을 설명하세요.
                   </div>
                   <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                     <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                      Automation name
+                      자동화 이름
                     </span>
                     <input
-                      aria-label="Automation name"
+                      aria-label="자동화 이름"
                       className="h-10 rounded-md border border-border bg-surface-3 px-3 text-sm text-foreground outline-none"
                       value={cronDraft.name}
                       onChange={(event) => updateCronDraft({ name: event.target.value })}
@@ -954,10 +954,10 @@ export const AgentSettingsPanel = ({
                   </label>
                   <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                     <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                      Task
+                      작업
                     </span>
                     <textarea
-                      aria-label="Task"
+                      aria-label="작업"
                       className="min-h-28 rounded-md border border-border bg-surface-3 px-3 py-2 text-sm text-foreground outline-none"
                       value={cronDraft.taskText}
                       onChange={(event) => updateCronDraft({ taskText: event.target.value })}
@@ -967,10 +967,10 @@ export const AgentSettingsPanel = ({
               ) : null}
               {cronCreateStep === 2 ? (
                 <div className="space-y-3">
-                  <div className="text-sm text-muted-foreground">Choose when this should run.</div>
+                  <div className="text-sm text-muted-foreground">언제 실행할지 선택하세요.</div>
                   <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                     <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                      Schedule type
+                      일정 유형
                     </span>
                     <select
                       className="h-10 rounded-md border border-border bg-surface-3 px-3 text-sm text-foreground outline-none"
@@ -981,15 +981,15 @@ export const AgentSettingsPanel = ({
                         })
                       }
                     >
-                      <option value="every">Every</option>
-                      <option value="at">One time</option>
+                      <option value="every">반복</option>
+                      <option value="at">한 번</option>
                     </select>
                   </label>
                   {cronDraft.scheduleKind === "every" ? (
                     <div className="grid gap-2 sm:grid-cols-2">
                       <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                         <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                          Every
+                          반복 간격
                         </span>
                         <input
                           type="number"
@@ -1006,7 +1006,7 @@ export const AgentSettingsPanel = ({
                       </label>
                       <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                         <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                          Unit
+                          단위
                         </span>
                         <select
                           className="h-10 rounded-md border border-border bg-surface-3 px-3 text-sm text-foreground outline-none"
@@ -1017,16 +1017,16 @@ export const AgentSettingsPanel = ({
                             })
                           }
                         >
-                          <option value="minutes">Minutes</option>
-                          <option value="hours">Hours</option>
-                          <option value="days">Days</option>
+                          <option value="minutes">분</option>
+                          <option value="hours">시간</option>
+                          <option value="days">일</option>
                         </select>
                       </label>
                       {cronDraft.everyUnit === "days" ? (
                         <>
                           <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                              Time of day
+                              시간
                             </span>
                             <input
                               type="time"
@@ -1037,7 +1037,7 @@ export const AgentSettingsPanel = ({
                           </label>
                           <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                              Timezone
+                              시간대
                             </span>
                             <input
                               className="h-10 rounded-md border border-border bg-surface-3 px-3 text-sm text-foreground outline-none"
@@ -1054,7 +1054,7 @@ export const AgentSettingsPanel = ({
                   {cronDraft.scheduleKind === "at" ? (
                     <label className="flex flex-col gap-1 text-[11px] text-muted-foreground">
                       <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
-                        Run at
+                        실행 일시
                       </span>
                       <input
                         type="datetime-local"
@@ -1068,23 +1068,29 @@ export const AgentSettingsPanel = ({
               ) : null}
               {cronCreateStep === 3 ? (
                 <div className="space-y-3 text-sm text-muted-foreground">
-                  <div>Review details before creating this automation.</div>
+                  <div>자동화를 만들기 전에 세부 정보를 검토하세요.</div>
                   <div className="ui-card px-3 py-2">
                     <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground">
-                      {cronDraft.name || "Untitled automation"}
+                      {cronDraft.name || "제목 없는 자동화"}
                     </div>
                     <div className="mt-1 text-[11px]">
-                      {cronDraft.taskText || "No task provided."}
+                      {cronDraft.taskText || "작업이 없습니다."}
                     </div>
                     <div className="mt-2 text-[11px]">
-                      Schedule:{" "}
+                      일정:{" "}
                       {cronDraft.scheduleKind === "every"
-                        ? `Every ${cronDraft.everyAmount ?? 0} ${cronDraft.everyUnit ?? "minutes"}${
+                        ? `${cronDraft.everyAmount ?? 0}${
+                            cronDraft.everyUnit === "hours"
+                              ? "시간"
+                              : cronDraft.everyUnit === "days"
+                                ? "일"
+                                : "분"
+                          }마다${
                             cronDraft.everyUnit === "days"
-                              ? ` at ${cronDraft.everyAtTime ?? ""} (${cronDraft.everyTimeZone ?? resolveLocalTimeZone()})`
+                              ? ` ${cronDraft.everyAtTime ?? ""} (${cronDraft.everyTimeZone ?? resolveLocalTimeZone()})`
                               : ""
                           }`
-                        : `At ${cronDraft.scheduleAt ?? ""}`}
+                        : `${cronDraft.scheduleAt ?? ""}`}
                     </div>
                   </div>
                 </div>
@@ -1092,7 +1098,7 @@ export const AgentSettingsPanel = ({
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-border/50 px-5 pb-4 pt-5">
               <div className="text-[11px] text-muted-foreground">
-                {timedAutomationStepMeta.indicator} · Step {cronCreateStep + 1} of 4
+                {timedAutomationStepMeta.indicator} - {cronCreateStep + 1}/4 단계
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -1101,7 +1107,7 @@ export const AgentSettingsPanel = ({
                   onClick={moveCronCreateBack}
                   disabled={cronCreateStep === 0 || cronCreateBusy}
                 >
-                  Back
+                  뒤로
                 </button>
                 {cronCreateStep < 3 ? (
                   <button
@@ -1114,7 +1120,7 @@ export const AgentSettingsPanel = ({
                       (cronCreateStep === 2 && !canMoveToReviewStep)
                     }
                   >
-                    Next
+                    다음
                   </button>
                 ) : null}
                 {cronCreateStep === 3 ? (
@@ -1126,7 +1132,7 @@ export const AgentSettingsPanel = ({
                     }}
                     disabled={cronCreateBusy || !canSubmitCronCreate}
                   >
-                    Create automation
+                    자동화 만들기
                   </button>
                 ) : null}
               </div>
